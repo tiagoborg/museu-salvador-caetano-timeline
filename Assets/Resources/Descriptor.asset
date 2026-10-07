@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9d5ba4c80c8a642b1ef0d56a237681, type: 3}
   m_Name: Descriptor
   m_EditorClassIdentifier: 
-  FullName: Unity Default
+  FullName: Timeline
   Slug: unityDefault.app
-  Client: Gema Digital Agency
-  Year: 2025
+  Client: Museu Salvador Caetano
+  Year: 2026
   Version: 0.56.2
-  Copyright: (c)2025 Gema Digital Agency
+  Copyright: (c)2026 Gema Digital Agency
   DesignWidth: 1920
   DesignHeight: 1080

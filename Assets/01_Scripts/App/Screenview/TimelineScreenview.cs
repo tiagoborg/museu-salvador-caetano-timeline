@@ -73,6 +73,9 @@ public class TimelineScreenview : ScreenView
     private float footerFontSize = 13f;
     [SerializeField]
     private float footerSpacing = 14f;
+    [SerializeField, Range(0f, 1f), Tooltip("Opacity of a switched-off category in the footer. Selected ones "
+        + "are fully opaque; both keep the accent colour.")]
+    private float footerUnselectedAlpha = 0.35f;
 
     [Header("Back button - built at the Home button's position when left empty")]
     [SerializeField]
@@ -120,6 +123,10 @@ public class TimelineScreenview : ScreenView
         }
 
         RefreshLabels();
+
+        // Active before the rebuild, not after: new cards measure their tag text with TMP, which needs
+        // an active hierarchy. The cards it replaces are destroyed by the rebuild.
+        _cards.gameObject.SetActive(true);
         Rebuild(true);
         base.Show();
     }
@@ -127,6 +134,12 @@ public class TimelineScreenview : ScreenView
     public override void Hide()
     {
         StopListening();
+
+        // Hide only fades the screen, so without this every card's slideshow kept running - and loading
+        // textures - while invisible. Inactive cards get no Update.
+        if (_cards != null)
+            _cards.gameObject.SetActive(false);
+
         base.Hide();
     }
 
@@ -392,7 +405,11 @@ public class TimelineScreenview : ScreenView
             string categoryName = categories.TryGetValue(pair.Key, out CategoryVO category)
                 ? TimelineUi.Localized(category.name) : string.Empty;
             pair.Value.text = categoryName.ToUpperInvariant();
-            pair.Value.fontStyle = _activeCategories.Contains(pair.Key) ? FontStyles.Normal : FontStyles.Strikethrough;
+            // Off is shown by opacity only, never by a line through or over the name.
+            Color color = style.accentColor;
+            color.a = _activeCategories.Contains(pair.Key) ? 1f : footerUnselectedAlpha;
+            pair.Value.color = color;
+            pair.Value.fontStyle = FontStyles.Normal;
         }
     }
 

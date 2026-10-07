@@ -81,10 +81,25 @@ public static class TimelineLayoutSelfCheck
         check(TimelineLayout.Step(2, 3, 1) == 0 && TimelineLayout.Step(0, 3, -1) == 2, "step wraps");
         check(TimelineLayout.Step(0, 0, 1) == 0, "step on an empty gallery");
 
-        // One slide per gesture, only past the threshold. Left is next.
-        check(TimelineLayout.SwipeDirection(-59f, 60f) == 0, "below threshold is no swipe");
-        check(TimelineLayout.SwipeDirection(-61f, 60f) == 1, "left drag goes to the next slide");
-        check(TimelineLayout.SwipeDirection(400f, 60f) == -1, "a long right drag is still one step back");
+        // Slideshow: a single image stays put; only two or more cycle and show dots.
+        check(TimelineLayout.Step(0, 1, 1) == 0, "a single image does not advance");
+        check(!TimelineLayout.CyclesSlides(0) && !TimelineLayout.CyclesSlides(1) && TimelineLayout.CyclesSlides(2),
+            "only galleries of two or more cycle and show dots");
+
+        // Per-card interval: sample mapped onto [min, max], bounds in either order, never below 0.1 s.
+        check(TimelineLayout.SlideInterval(0f, 4f, 8f) == 4f && TimelineLayout.SlideInterval(1f, 4f, 8f) == 8f
+            && TimelineLayout.SlideInterval(0.5f, 4f, 8f) == 6f, "interval spans 4..8");
+        check(TimelineLayout.SlideInterval(2f, 4f, 8f) == 8f && TimelineLayout.SlideInterval(0.5f, 8f, 4f) == 6f,
+            "out-of-range sample clamps and swapped bounds still work");
+        check(TimelineLayout.SlideInterval(0f, 0f, 0f) == 0.1f, "interval never reaches zero");
+
+        // Timing: not before due; then one interval later; a long gap restarts instead of bursting.
+        float due = 10f;
+        check(!TimelineLayout.SlideDue(9.9f, ref due, 5f) && due == 10f, "not due early");
+        check(TimelineLayout.SlideDue(12f, ref due, 5f) && due == 15f, "due advances by one interval");
+        due = 10f;
+        check(TimelineLayout.SlideDue(30f, ref due, 5f) && due == 35f, "a missed stretch restarts from now");
+        check(!TimelineLayout.SlideDue(30f, ref due, 5f), "no second advance in the same moment");
 
         // Card size: a fake measure where text needs (chars * size * 0.6 / width) lines of size * 1.2.
         Func<int, Func<float, float, float>> measureOf = chars =>

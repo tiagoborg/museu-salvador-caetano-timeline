@@ -426,20 +426,53 @@ during screen fades.
   localized text fits at full size, measured with the card's own TMP font; otherwise wide, with the
   font shrinking in steps to a minimum. Text that still does not fit ends in an ellipsis and is
   reported at `LogError`, once per event and language.
+- The footer filter shows each category in the accent colour. Selected categories are fully opaque;
+  switched-off ones use `footerUnselectedAlpha` (default 0.35, Inspector range 0–1). The text style
+  is always normal, with no strikethrough.
 - Only four-digit years 1920–9999 are placed; others are excluded from layout and galleries, so a
   malformed year cannot extend the axis. Events the timeline can never show (a `categoryId` missing
   from `categories`, a year outside that range, a null entry) are reported at `LogError` once per screen lifetime. Without that report they
   simply disappear, even with every category on.
 
 **Images are a per-category gallery**, not per event: every image of the category's events in
-chronological then image order, identical URLs kept once. A card opens on its own first image, keeps
-its own position, and cycles by one slide per horizontal swipe on the image. Below two slides the
-image stops claiming drags, so they pan the timeline. Dots show gallery size and position, and shrink
-to fit the card's width for large galleries. Each image fills the photo area's full height at its
-own aspect ratio, left aligned, through a native `AspectRatioFitter` in `HeightControlsWidth` mode. A
-`RectMask2D` clips a wide image on the right. The photo area has no background (a transparent Image,
-kept only as the swipe raycast target and the mask), so a narrow image leaves whatever is behind the
-card showing on its right. Images are never centred and never cropped vertically. Textures come from
+chronological then image order, identical URLs kept once. A card opens on its own first image.
+- **Slideshow:** a gallery of two or more advances by itself, one slide at a time, wrapping from the
+  last image back to the first.
+  - **Crossfade:** each change crossfades over `slideFadeDuration` (default 0.5 s, unscaled; 0 swaps
+    at once) between two cached RawImage layers.
+    - **Blend:** for opaque images, per pixel a lerp from the outgoing image to the incoming one, each transparent
+      outside its own width. It is built from native UI layers, with no shader:
+      - **Overlap:** the incoming image fades 0→1 **above** the outgoing one, which is held at alpha 1.
+        UI blending is source-over, so coverage stays 1 and the colour is `t·in + (1−t)·out`, with no
+        dip toward the background.
+      - **Outgoing wider:** for the duration of the fade, the outgoing layer is cropped (`uvRect`) to
+        the incoming width, at the same scale. A third RawImage, `Texture Strip`, shows the remaining
+        columns at alpha `1 − t`, so that area fades smoothly to the background.
+      - **Incoming wider:** the area only the incoming image covers fades in at alpha `t`.
+      - At the end the outgoing layer and the strip are disabled, with their textures and crop reset.
+  - **Loading:** the current image stays until the next texture has loaded, and a failed load keeps
+    it. The first image of a card appears without a fade.
+  - **Stale callbacks:** a generation token means only the newest texture request can change the
+    photo; older, destroyed-card or disabled-card callbacks are ignored.
+  - **Hold-back and disable:** the next slide waits for a running fade to finish. Disabling the card
+    (the Timeline's `Hide`) ends any fade and cancels the request in flight.
+  - **Timing:** each card samples its own interval when it is bound, uniformly between
+    `slideIntervalMin` and `slideIntervalMax` (default 4–8 s, unscaled time), so cards change out of
+    step. A gap longer than one interval, such as a pause, restarts the timer rather than skipping
+    several slides at once.
+  - **Lifecycle:** the card's `Update` runs only for a cycling gallery. Unity stops it when the card is
+    inactive or destroyed, and every rebuild destroys the cards. `TimelineScreenview.Hide`
+    deactivates the cards' container, so nothing cycles while the screen is hidden. `Show`
+    reactivates it just before rebuilding, so the cards appear fresh, with new intervals.
+- **No interaction:** a drag anywhere on a card, the photo included, pans the timeline. The photo area
+  has no graphic of its own, so nothing on it is a raycast target.
+- **Dots:** they appear only for a gallery of two or more, track the image actually on screen (not
+  one still loading), and shrink to fit
+  the card's width for large galleries. A single image and an empty gallery have no dots.
+- **Fit:** each image fills the photo area's full height at its own aspect ratio, left aligned,
+  through a native `AspectRatioFitter` in `HeightControlsWidth` mode, one per layer. A `RectMask2D` clips a wide
+  image on the right. The photo area has no background, so a narrow image leaves whatever is behind the
+  card showing on its right. Images are never centred and never cropped vertically. Textures come from
 `TextureCacheManager` and are owned by it. The dot discs and axis-marker rings are generated at
 runtime by `TimelineUi.MakeCircleSprite` (optionally with an interior colour) and destroyed by
 `TimelineScreenview`.
@@ -657,4 +690,8 @@ unused. The three stray URP `.asset` files that used to sit here were deleted in
 
 Full register with severities and locations: [known-issues.md](known-issues.md).
 
+
+
+### Timeline project identity
+This project's Unity company name is Museu Salvador Caetano and product name is Timeline. The Windows config helper opens/seeds %USERPROFILE%/AppData/LocalLow/Museu Salvador Caetano/Timeline/StreamingAssets/config, matching that identity. Descriptor metadata names the museum and 2026.
 

@@ -2,28 +2,28 @@
 setlocal
 
 :: Set the target folder path
-set "TARGET_FOLDER=%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\"
+set "TARGET_FOLDER=%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\"
 
 :: Ensure target folder exists
-if not exist "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\" mkdir "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\"
+if not exist "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\" mkdir "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\"
 :: Ensure settings file exists
-if not exist "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\\settings.json" (
-    copy "%~dp0config\settings.json" "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\" /Y
+if not exist "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\\settings.json" (
+    copy "%~dp0config\settings.json" "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\" /Y
 )
 
 :: Ensure appSettings file exists
-if not exist "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\\appSettings.json" (
-    copy "%~dp0config\appSettings.json" "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\" /Y
+if not exist "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\\appSettings.json" (
+    copy "%~dp0config\appSettings.json" "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\" /Y
 )
 
 :: Ensure appData file exists
-if not exist "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\\appData.json" (
-    copy "%~dp0config\appData.json" "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\" /Y
+if not exist "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\\appData.json" (
+    copy "%~dp0config\appData.json" "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\" /Y
 )
 
-explorer "%userprofile%\AppData\LocalLow\Gema Digital Agency\Unity Default\StreamingAssets\config\"
+explorer "%userprofile%\AppData\LocalLow\Museu Salvador Caetano\Timeline\StreamingAssets\config\"
 :: Set the shortcut name
-set "SHORTCUT_NAME=Unity Default Settings"
+set "SHORTCUT_NAME=Timeline Settings"
 
 :: Get the Desktop path for the current user
 set "DESKTOP_PATH=%USERPROFILE%\Desktop"

@@ -158,15 +158,50 @@ public static class TimelineLayout
     }
 
     /// <summary>
-    /// +1 for next (a drag to the left), -1 for previous, 0 below the threshold. Evaluated once, at
-    /// the end of the gesture, so one gesture moves at most one slide however far it travels.
+    /// Whether a gallery cycles and shows slide indicators. A single image has nothing to cycle and no
+    /// dot; an empty gallery has neither.
     /// </summary>
-    public static int SwipeDirection(float dragDeltaX, float threshold)
+    public static bool CyclesSlides(int galleryCount)
     {
-        if (Math.Abs(dragDeltaX) < threshold)
-            return 0;
+        return galleryCount > 1;
+    }
 
-        return dragDeltaX < 0 ? 1 : -1;
+    /// <summary>
+    /// One card's slideshow interval in seconds, from a random sample in [0, 1] mapped onto
+    /// [min, max]. The bounds may be given in either order; the interval is never below 0.1 s.
+    /// </summary>
+    public static float SlideInterval(float sample01, float min, float max)
+    {
+        float low = Math.Min(min, max);
+        float high = Math.Max(min, max);
+        float interval = low + (high - low) * Math.Max(0f, Math.Min(1f, sample01));
+        return Math.Max(0.1f, interval);
+    }
+
+    /// <summary>
+    /// Crossfade progress in [0, 1]: the incoming image's alpha, the outgoing one's being 1 minus it. A
+    /// duration of 0 or less finishes at once.
+    /// </summary>
+    public static float FadeProgress(float elapsed, float duration)
+    {
+        if (duration <= 0f)
+            return 1f;
+
+        return Math.Max(0f, Math.Min(1f, elapsed / duration));
+    }
+
+    /// <summary>
+    /// True when the next slide is due at <paramref name="now"/>, and moves <paramref name="due"/> on by
+    /// one interval. If more than a whole interval was missed - the app was paused, or the card was
+    /// inactive - it restarts from now instead of firing once per missed interval.
+    /// </summary>
+    public static bool SlideDue(float now, ref float due, float interval)
+    {
+        if (now < due)
+            return false;
+
+        due = now - due >= interval ? now + interval : due + interval;
+        return true;
     }
 
     public struct CardFit

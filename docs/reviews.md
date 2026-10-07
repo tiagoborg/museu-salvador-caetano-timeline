@@ -3912,6 +3912,59 @@ register id, because there is no code-backed live case.
 
 ---
 
+### `TimelineCard.ApplyFade()` — the crossfade dipped toward the background
+
+**Status:** Resolved — fixed 2026-10-07, before delivery
+
+**Category:** Bug / Unity-specific
+
+**Original location:** `ApplyFade`, `SetAlpha(outgoing, 1f - t)`
+
+> UI blending is source-over: incoming at t over outgoing at 1 - t covers only 1 - t(1 - t), 0.75 at
+> the midpoint, so every crossfade dims toward the background
+
+**Context:** Both layers fading in opposite directions looks right on paper (alphas summing to 1),
+but the second layer is composited over the first, not added to it. Fixed: the outgoing layer stays
+at alpha 1 beneath the incoming one for the whole fade and is disabled with its texture cleared when
+the fade ends. Composite coverage `t + (1 - t) × 1` is then 1 throughout wherever both opaque images
+overlap. `SelfCheck` asserts that at 11 steps, plus the 0.5-over-1 midpoint.
+
+**Notes:** The same round guarded `OnDisable` against running before `Build` has created the layers.
+
+---
+
+### `TimelineCard.ApplyFade()` — an outgoing-only strip ended abruptly
+
+**Status:** Resolved — fixed 2026-10-07, before delivery
+
+**Category:** Bug
+
+**Original location:** `ApplyFade` after the source-over fix, with the outgoing layer held at 1 for the
+whole fade
+
+> when the outgoing image is wider than the incoming one, the right-hand strip only it covers stays
+> at full opacity and then vanishes in one frame - not the smooth transition the user asked for
+
+**Context:** The source-over fix held the outgoing layer at 1, which is right where both images
+overlap but wrong where only the outgoing one exists. A custom premultiplied-lerp UI shader was
+considered and rejected: it needs a shader asset kept in the build, a material per card, and its own
+`RectMask2D` clipping support. The native alternative gives the same per-pixel result, the lerp from
+outgoing to incoming with each image transparent outside its own width. `BeginStrip` crops the
+outgoing layer to the incoming width (`uvRect` and fitter aspect, same height, so the same scale), and
+a third RawImage, `Texture Strip`, shows the remaining columns with the matching `uvRect`, placed at
+the split. `ApplyFade` takes the strip from 1 to 0 as the incoming image goes from 0 to 1, and at the
+end the strip and the crop are reset. An incoming-wider fade needs no strip: that area fades in at t.
+
+**Notes:**
+- `SelfCheck` asserts the shared holder height, the crop and the strip geometry and UVs, the
+  midpoint (incoming 0.5, outgoing 1, strip 0.5), overlap coverage of 1 and strip alpha 1 − t at 10
+  steps, and the clean reset.
+- **Limits:** it is exact only for opaque images. A transparent pixel in the outgoing image would
+  show through the incoming one in the overlap, so the result is not a true lerp there. Pixel output
+  has not been verified on the GPU.
+
+---
+
 ### `TimelineCard.AddFrame()` — an unsliced frame would cover the card
 
 **Status:** Resolved — fixed 2026-10-07, before delivery
@@ -4001,6 +4054,30 @@ filter tap would otherwise repeat the same errors. The shipped sample data has n
 
 **Context:** Now a `LogError`, once per event and language, naming both. The overflow is
 per-language, so the same event can fit in PT and not in EN.
+
+---
+
+### `TimelineScreenview.Hide()` — card slideshows kept running while the screen was hidden
+
+**Status:** Resolved — fixed 2026-10-07, before delivery
+
+**Category:** Performance / Unity-specific
+
+**Original location:** `Hide()`, which only called `StopListening()` and `base.Hide()`
+
+> Hide only fades the screen, so every card's automatic slideshow keeps running while hidden and can
+> issue texture loads that are not cached
+
+**Context:** `ScreenViewBase.Hide` fades the CanvasGroup and never deactivates the screen, so each
+cycling `TimelineCard.Update` kept advancing slides behind Home or Call. Fixed: `Hide` deactivates
+`_cards` (null-guarded, since `Hide` can run before the first `Show` builds anything), and inactive
+objects get no `Update`. `Show` reactivates it **before** `Rebuild` rather than after, because the new
+cards measure their tag width with TMP during `Bind`, which needs an active hierarchy. The old cards
+are destroyed by that rebuild.
+
+**Notes:** One visible trade-off: the cards disappear at once when Hide starts, instead of fading
+with the 0.125 s screen transition. Session log 2026-10-07, test step 10 of the slideshow plan,
+covers the timer stop and restart.
 
 ---
 
@@ -4195,4 +4272,21 @@ second route, which proves geometry rather than real portrait or wide files.
 **Category:** Documentation
 
 The final doc review found stale manual import/year filename requirements, a pending-verification statement, and an Update description predating the alpha pulse in the session log. Corrected each against the current setup implementation and measured verification results before publication.
+
+
+### Timeline crossfade documentation follow-up
+**Status:** Resolved
+**Category:** Documentation
+The session retained a simultaneous fade-out description, required an enabled layer for empty galleries, and predicted an extra interval after an overdue long fade. Corrected the blend description, limited the layer check to loaded images, and described the next-frame/loading delay.
+
+### TimelineCard.SetAlpha() — Graphic mesh dirtiness during fades
+**Status:** Open — projection, unverified at scale; no action at current content size
+**Category:** Performance
+The performance reviewer observed that Graphic.color marks image vertices dirty during fades. A 300-card projection was not measured; the current content has 30 cards. Renderer alpha or CanvasGroup animation can reduce geometry updates if profiling with real content shows a material cost. No profiler result is claimed.
+
+
+### Width-safe crossfade documentation qualifications
+**Status:** Resolved
+**Category:** Documentation
+Qualified the overview blend as exact for opaque images and aligned the session GPU tolerance with the measured probe (0.025 per channel). The GPU pending statement now points to completed root verification.
 

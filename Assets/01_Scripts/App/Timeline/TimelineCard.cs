@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EnigmaVirtual;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>Card geometry in reference pixels (1920x1080). Every card has the same total height.</summary>
@@ -35,9 +34,13 @@ public class TimelineCardMetrics
     public float dotSize = 6f;
     public float dotSpacing = 6f;
 
-    [Header("Image swipe")]
-    [Tooltip("Horizontal travel, in reference pixels, a drag on the image needs to change slide.")]
-    public float swipeThreshold = 60f;
+    [Header("Image slideshow (unscaled seconds)")]
+    [Tooltip("Each card picks its own interval between these two when it is bound, so cards advance out "
+        + "of step. Applies only to galleries with two or more images.")]
+    public float slideIntervalMin = 4f;
+    public float slideIntervalMax = 8f;
+    [Tooltip("Crossfade between two images. 0 swaps at once. The next slide waits for a fade to finish.")]
+    public float slideFadeDuration = 0.5f;
 
     public float SlotHeight { get { return tagHeight + tagGap + cardHeight; } }
     public float TextSectionHeight { get { return padding * 2f + yearHeight + textAreaHeight + dotsHeight; } }
@@ -62,16 +65,31 @@ public class TimelineCard : MonoBehaviour
     private TextMeshProUGUI _tagText;
     private TextMeshProUGUI _yearText;
     private TextMeshProUGUI _contentText;
-    private RawImage _photo;
-    private AspectRatioFitter _photoFitter;
+    // Two photo layers for the crossfade; _front is the one showing (or fading in).
+    private readonly RawImage[] _layers = new RawImage[2];
+    private readonly AspectRatioFitter[] _fitters = new AspectRatioFitter[2];
+    private readonly float[] _aspects = new float[2];
+    // During a fade to a narrower image: the outgoing image's columns beyond the incoming width.
+    private RawImage _strip;
+    private int _front;
+    private bool _fading;
+    private float _fadeStart;
     private RectTransform _dotsRoot;
     private readonly List<Image> _dots = new List<Image>();
-    private TimelineImageSwipe _swipe;
 
     private List<string> _gallery;
+    // The slide last requested; the one on screen can lag behind it while a texture loads.
     private int _slide;
+    private int _shownSlide = -1;
+    // Generation token: only the newest texture request may change the photo.
+    private int _request;
+    private float _interval;
+    private float _nextSlide;
 
-    public int Slide { get { return _slide; } }
+    /// <summary>The slide whose image is on screen, or -1 before the first one arrives.</summary>
+    public int Slide { get { return _shownSlide; } }
+    public bool IsFading { get { return _fading; } }
+    public float Interval { get { return _interval; } }
 
     public static TimelineCard Create(Transform parent, TimelineStyle style, TimelineCardMetrics metrics,
         float x, float y, bool wide, bool imageOnTop)
@@ -139,31 +157,48 @@ public class TimelineCard : MonoBehaviour
 
         AddFrame(textSection.transform);
 
-        // The photo area: a transparent mask and a RawImage fitted to the area's full height at the
-        // source aspect, left aligned. A wide image is clipped on the right; a narrow one leaves the area
-        // empty on the right, showing whatever is behind the card. Never centred, never cropped
-        // vertically. The transparent Image is the raycast target that delivers swipes.
-        Image photoArea = TimelineUi.MakeImage(body.transform, "Photo", null, Color.clear, true);
-        TimelineUi.TopLeft(photoArea.rectTransform, 0f, imageTop, width, m.ImageHeight);
+        // The photo area: a transparent mask holding two RawImages, so one image can crossfade into the
+        // next. Each is fitted to the area's full height at its own source aspect, left aligned. A wide
+        // image is clipped on the right; a narrow one leaves the area empty on the right, showing
+        // whatever is behind the card. Never centred, never cropped vertically. Not interactive: the area
+        // has no graphic of its own, so a drag here falls through to the Body and pans the timeline.
+        RectTransform photoArea = TimelineUi.Rect(body.transform, "Photo");
+        TimelineUi.TopLeft(photoArea, 0f, imageTop, width, m.ImageHeight);
         photoArea.gameObject.AddComponent<RectMask2D>();
 
-        _photo = TimelineUi.Rect(photoArea.transform, "Texture").gameObject.AddComponent<RawImage>();
-        // Stretched vertically and pinned to the left edge; the fitter sets only the width, from the
-        // height, so it follows the holder if the holder is resized.
-        RectTransform photoRt = _photo.rectTransform;
-        photoRt.anchorMin = new Vector2(0f, 0f);
-        photoRt.anchorMax = new Vector2(0f, 1f);
-        photoRt.pivot = new Vector2(0f, 0.5f);
-        photoRt.anchoredPosition = Vector2.zero;
-        photoRt.sizeDelta = Vector2.zero;
-        _photo.raycastTarget = false;
-        _photo.enabled = false;
-        _photoFitter = _photo.gameObject.AddComponent<AspectRatioFitter>();
-        _photoFitter.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+        for (int i = 0; i < 2; i++)
+        {
+            RawImage layer = TimelineUi.Rect(photoArea, "Texture " + i).gameObject.AddComponent<RawImage>();
+            // Stretched vertically and pinned to the left edge; the fitter sets only the width, from the
+            // height, so it follows the holder if the holder is resized.
+            RectTransform layerRt = layer.rectTransform;
+            layerRt.anchorMin = new Vector2(0f, 0f);
+            layerRt.anchorMax = new Vector2(0f, 1f);
+            layerRt.pivot = new Vector2(0f, 0.5f);
+            layerRt.anchoredPosition = Vector2.zero;
+            layerRt.sizeDelta = Vector2.zero;
+            layer.raycastTarget = false;
+            layer.enabled = false;
 
-        _swipe = photoArea.gameObject.AddComponent<TimelineImageSwipe>();
-        _swipe.threshold = m.swipeThreshold;
-        _swipe.onSwipe = OnSwipe;
+            AspectRatioFitter fitter = layer.gameObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
+
+            _layers[i] = layer;
+            _fitters[i] = fitter;
+        }
+
+        // Positioned per fade by BeginStrip; full height, left anchored, no fitter of its own.
+        _strip = TimelineUi.Rect(photoArea, "Texture Strip").gameObject.AddComponent<RawImage>();
+        RectTransform stripRt = _strip.rectTransform;
+        stripRt.anchorMin = new Vector2(0f, 0f);
+        stripRt.anchorMax = new Vector2(0f, 1f);
+        stripRt.pivot = new Vector2(0f, 0.5f);
+        stripRt.sizeDelta = Vector2.zero;
+        _strip.raycastTarget = false;
+        _strip.enabled = false;
+
+        // No slideshow until Bind has a gallery.
+        enabled = false;
     }
 
     /// <summary>
@@ -193,13 +228,206 @@ public class TimelineCard : MonoBehaviour
         _contentText.text = TimelineUi.Localized(item.content);
 
         _gallery = gallery ?? new List<string>();
-        BuildDots(_gallery.Count);
+        bool cycles = TimelineLayout.CyclesSlides(_gallery.Count);
+        BuildDots(cycles ? _gallery.Count : 0);
 
-        // Below two slides there is nothing to cycle, so the image stops claiming drags and they pan
-        // the timeline instead.
-        _swipe.enabled = _gallery.Count > 1;
+        // Each card samples its own interval, so the slideshows run out of step. Update only runs while
+        // there is something to cycle; Unity stops it when the card is inactive or destroyed.
+        _interval = TimelineLayout.SlideInterval(UnityEngine.Random.value, _metrics.slideIntervalMin,
+            _metrics.slideIntervalMax);
+        _nextSlide = Time.unscaledTime + _interval;
+        enabled = cycles;
 
-        ShowSlide(TimelineLayout.StartSlide(_gallery, item));
+        ResetLayers();
+        RequestSlide(TimelineLayout.StartSlide(_gallery, item));
+    }
+
+    private void Update()
+    {
+        // A running fade holds the next slide back; the overdue advance happens once it ends.
+        if (_fading)
+        {
+            ApplyFade(Time.unscaledTime - _fadeStart);
+            return;
+        }
+
+        if (TimelineLayout.SlideDue(Time.unscaledTime, ref _nextSlide, _interval))
+            RequestSlide(TimelineLayout.Step(_slide, _gallery.Count, 1));
+    }
+
+    private void OnDisable()
+    {
+        // Deactivated - the Timeline screen hides by disabling its cards - so settle on a definite state:
+        // finish any fade, and cancel any request still in flight so it cannot start one while hidden.
+        // Guarded for a disable before Build has created the layers.
+        if (_fading && _layers[0] != null)
+            ApplyFade(float.MaxValue);
+        _request++;
+    }
+
+    /// <summary>Both layers empty and transparent, no fade, nothing shown.</summary>
+    private void ResetLayers()
+    {
+        _fading = false;
+        _shownSlide = -1;
+        _front = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            _layers[i].texture = null;
+            _layers[i].uvRect = FullUv;
+            _layers[i].enabled = false;
+            SetAlpha(_layers[i], 0f);
+        }
+        EndStrip();
+    }
+
+    private static readonly Rect FullUv = new Rect(0f, 0f, 1f, 1f);
+
+    /// <summary>Makes <paramref name="index"/> the target slide and returns the token its texture must carry.</summary>
+    private int BeginRequest(int index)
+    {
+        _slide = index;
+        return ++_request;
+    }
+
+    private void RequestSlide(int index)
+    {
+        if (_gallery.Count == 0)
+            return;
+
+        TextureCacheManager cache = Core.main != null ? Core.main.TextureCacheManager : null;
+        if (cache == null)
+        {
+            Development.LogError("TimelineCard: Core.main.TextureCacheManager is not available, so no "
+                + "timeline image can be shown.");
+            return;
+        }
+
+        int token = BeginRequest(index);
+        string url = _gallery[index];
+
+        // The manager owns and keeps the texture, so cycling back to a slide does not reload it.
+        cache.GetOrSetTexture2D(url, texture => OnTexture(token, index, url, texture), true);
+    }
+
+    /// <summary>
+    /// Applies a loaded texture. The first image appears at once; later ones crossfade over the current
+    /// one. Only the newest request counts, and a failed load keeps the current image.
+    /// </summary>
+    private void OnTexture(int token, int index, string url, Texture2D texture)
+    {
+        // Destroyed by a rebuild, superseded by a newer request, or cancelled by OnDisable.
+        if (this == null || token != _request)
+            return;
+
+        if (texture == null)
+        {
+            Development.LogWarning($"TimelineCard: no texture for [{url}]; keeping the current image.");
+            return;
+        }
+
+        float aspect = texture.height > 0 ? (float)texture.width / texture.height : 1f;
+        bool crossfade = _shownSlide >= 0 && _metrics.slideFadeDuration > 0f;
+
+        if (!crossfade)
+        {
+            // First image, or fades switched off: show it on the front layer and hide the other.
+            ShowOnLayer(_front, texture, aspect, 1f);
+            _layers[1 - _front].enabled = false;
+            _layers[1 - _front].texture = null;
+        }
+        else
+        {
+            // The incoming image goes on the back layer, drawn above the outgoing one, starting clear.
+            int incoming = 1 - _front;
+            ShowOnLayer(incoming, texture, aspect, 0f);
+            _layers[incoming].transform.SetAsLastSibling();
+            _front = incoming;
+            BeginStrip(1 - incoming, aspect);
+            _fading = true;
+            _fadeStart = Time.unscaledTime;
+        }
+
+        _shownSlide = index;
+        for (int i = 0; i < _dots.Count; i++)
+            _dots[i].color = i == index ? _style.dotActiveColor : _style.dotInactiveColor;
+    }
+
+    /// <summary>
+    /// Sets the crossfade <paramref name="elapsed"/> seconds in; ends it at full progress. Per pixel
+    /// this is a lerp from the outgoing to the incoming image, where each is transparent outside its
+    /// own width:
+    /// - Where both images are, the incoming one fades in at t over the outgoing one held at 1.
+    ///   UI blending is source-over, so this gives t·in + (1 - t)·out with full coverage. Fading the
+    ///   outgoing layer too would cover only 1 - t(1 - t), dipping toward the background.
+    /// - Where only the outgoing image is (it is wider), the strip shows those columns at 1 - t.
+    /// - Where only the incoming image is, it fades in at t.
+    /// </summary>
+    private void ApplyFade(float elapsed)
+    {
+        float t = TimelineLayout.FadeProgress(elapsed, _metrics.slideFadeDuration);
+        RawImage incoming = _layers[_front];
+        RawImage outgoing = _layers[1 - _front];
+        SetAlpha(incoming, t);
+        SetAlpha(outgoing, 1f);
+        if (_strip.enabled)
+            SetAlpha(_strip, 1f - t);
+
+        if (t < 1f)
+            return;
+
+        _fading = false;
+        outgoing.enabled = false;
+        outgoing.texture = null;
+        outgoing.uvRect = FullUv;
+        EndStrip();
+    }
+
+    /// <summary>
+    /// When the outgoing image is wider than the incoming one, crops the outgoing layer to the incoming
+    /// width - same height, so the same scale - and shows its remaining columns on the strip.
+    /// </summary>
+    private void BeginStrip(int outgoing, float incomingAspect)
+    {
+        float outgoingAspect = _aspects[outgoing];
+        if (outgoingAspect <= incomingAspect || outgoingAspect <= 0f)
+            return;
+
+        float split = incomingAspect / outgoingAspect;
+        float height = _layers[outgoing].rectTransform.rect.height;
+
+        _layers[outgoing].uvRect = new Rect(0f, 0f, split, 1f);
+        _fitters[outgoing].aspectRatio = incomingAspect;
+
+        _strip.texture = _layers[outgoing].texture;
+        _strip.uvRect = new Rect(split, 0f, 1f - split, 1f);
+        _strip.rectTransform.anchoredPosition = new Vector2(height * incomingAspect, 0f);
+        _strip.rectTransform.sizeDelta = new Vector2(height * (outgoingAspect - incomingAspect), 0f);
+        SetAlpha(_strip, 1f);
+        _strip.enabled = true;
+    }
+
+    private void EndStrip()
+    {
+        _strip.enabled = false;
+        _strip.texture = null;
+    }
+
+    private void ShowOnLayer(int layer, Texture2D texture, float aspect, float alpha)
+    {
+        _layers[layer].texture = texture;
+        _layers[layer].uvRect = FullUv;
+        _aspects[layer] = aspect;
+        _fitters[layer].aspectRatio = aspect;
+        SetAlpha(_layers[layer], alpha);
+        _layers[layer].enabled = true;
+    }
+
+    private static void SetAlpha(RawImage image, float alpha)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
     }
 
     /// <summary>
@@ -234,7 +462,7 @@ public class TimelineCard : MonoBehaviour
 
     private void BuildDots(int count)
     {
-        // One dot is kept, zero hides the row.
+        // Called with 0 for a single image or an empty gallery, which hides the row.
         _dotsRoot.gameObject.SetActive(count > 0);
 
         // Right-aligned as in the design, and shrunk to fit when the category gallery is large, so every
@@ -251,88 +479,122 @@ public class TimelineCard : MonoBehaviour
         }
     }
 
-    private void OnSwipe(int direction)
+#if UNITY_EDITOR
+    /// <summary>
+    /// Crossfade and request-token check, runnable from eval as <c>TimelineCard.SelfCheck()</c> OUTSIDE
+    /// Play mode. Drives a temporary card's texture callbacks directly, without the texture cache, and
+    /// always destroys the card and its textures.
+    /// </summary>
+    public static string SelfCheck()
     {
-        ShowSlide(TimelineLayout.Step(_slide, _gallery.Count, direction));
-    }
+        if (Application.isPlaying)
+            throw new InvalidOperationException("TimelineCard.SelfCheck: exit Play mode first.");
 
-    private void ShowSlide(int index)
-    {
-        _slide = index;
-
-        for (int i = 0; i < _dots.Count; i++)
-            _dots[i].color = i == _slide ? _style.dotActiveColor : _style.dotInactiveColor;
-
-        if (_gallery.Count == 0)
+        int checks = 0;
+        Action<bool, string> check = (condition, what) =>
         {
-            _photo.enabled = false;
-            return;
+            checks++;
+            if (!condition)
+                throw new Exception("TimelineCard self-check FAILED: " + what);
+        };
+
+        // Fade progress: endpoints, midpoint, clamping, and a zero duration finishing at once.
+        check(TimelineLayout.FadeProgress(0f, 0.5f) == 0f && TimelineLayout.FadeProgress(0.5f, 0.5f) == 1f, "fade endpoints");
+        check(Mathf.Abs(TimelineLayout.FadeProgress(0.25f, 0.5f) - 0.5f) < 1e-6f, "fade midpoint");
+        check(TimelineLayout.FadeProgress(-1f, 0.5f) == 0f && TimelineLayout.FadeProgress(9f, 0.5f) == 1f, "fade clamps");
+        check(TimelineLayout.FadeProgress(0f, 0f) == 1f, "duration 0 is an instant swap");
+
+        GameObject parent = new GameObject("TimelineCard SelfCheck", typeof(RectTransform));
+        Texture2D a = new Texture2D(4, 2);
+        Texture2D b = new Texture2D(2, 4);
+        try
+        {
+            TimelineCardMetrics metrics = new TimelineCardMetrics();
+            TimelineCard card = Create(parent.transform, new TimelineStyle(), metrics, 0f, 0f, false, false);
+            card._gallery = new List<string> { "a", "b" };
+            card.ResetLayers();
+
+            // The first image appears at once, on one layer only.
+            card.OnTexture(card.BeginRequest(0), 0, "a", a);
+            RawImage front = card._layers[card._front];
+            check(front.texture == a && front.color.a == 1f && front.enabled && !card._layers[1 - card._front].enabled
+                && !card._fading && card.Slide == 0, "first image is immediate");
+            check(Mathf.Abs(card._fitters[card._front].aspectRatio - 2f) < 1e-6f, "layer fitter takes the texture aspect");
+
+            // A superseded request is ignored, and a failed load keeps the current image.
+            int stale = card.BeginRequest(1);
+            int current = card.BeginRequest(0);
+            card.OnTexture(stale, 1, "b", b);
+            check(card._layers[card._front].texture == a && !card._fading && card.Slide == 0, "stale texture ignored");
+            card.OnTexture(current, 0, "a", null);
+            check(card._layers[card._front].texture == a && card._layers[card._front].color.a == 1f && card.Slide == 0,
+                "failed load keeps the current image");
+
+            // A crossfade: incoming 0 -> 1 over an outgoing layer held at 1; the outgoing clears at the end.
+            card.OnTexture(card.BeginRequest(1), 1, "b", b);
+            RawImage incoming = card._layers[card._front];
+            RawImage outgoing = card._layers[1 - card._front];
+            check(card._fading && incoming.texture == b && incoming.color.a == 0f && outgoing.texture == a
+                && outgoing.color.a == 1f && card.Slide == 1, "fade starts with old opaque, new clear");
+            check(incoming.transform.GetSiblingIndex() > outgoing.transform.GetSiblingIndex(), "incoming draws above");
+
+            // a (aspect 2) is wider than b (aspect 0.5): the outgoing layer is cropped to b's width at the
+            // same scale, and the strip shows the rest of a's columns. Holder height is 146, so the split
+            // is at 146 * 0.5 = 73 and a ends at 146 * 2 = 292.
+            float h = outgoing.rectTransform.rect.height;
+            RawImage strip = card._strip;
+            check(Mathf.Abs(h - metrics.ImageHeight) < 1e-3f && Mathf.Abs(strip.rectTransform.rect.height - h) < 1e-3f,
+                "layers and strip share the holder height");
+            check(outgoing.uvRect == new Rect(0f, 0f, 0.25f, 1f) && Mathf.Abs(card._fitters[1 - card._front].aspectRatio - 0.5f) < 1e-6f,
+                "outgoing cropped to the incoming width at the same scale");
+            check(strip.enabled && strip.texture == a && strip.uvRect == new Rect(0.25f, 0f, 0.75f, 1f)
+                && Mathf.Abs(strip.rectTransform.anchoredPosition.x - h * 0.5f) < 1e-3f
+                && Mathf.Abs(strip.rectTransform.sizeDelta.x - h * 1.5f) < 1e-3f && strip.color.a == 1f,
+                "strip shows the outgoing-only columns, left-aligned after the split");
+
+            card.ApplyFade(metrics.slideFadeDuration * 0.5f);
+            check(Mathf.Abs(incoming.color.a - 0.5f) < 1e-5f && outgoing.color.a == 1f && Mathf.Abs(strip.color.a - 0.5f) < 1e-5f,
+                "fade midpoint: incoming 0.5 over outgoing 1, outgoing-only strip 0.5");
+            for (int s = 0; s < 10; s++)
+            {
+                // Where both images are, source-over coverage stays 1 (no dip); where only the outgoing
+                // one is, it fades 1 -> 0 with the strip; where only the incoming one is, it fades in at t.
+                float t = s / 10f;
+                card.ApplyFade(metrics.slideFadeDuration * t);
+                float composite = incoming.color.a + (1f - incoming.color.a) * outgoing.color.a;
+                check(Mathf.Abs(composite - 1f) < 1e-5f, "overlap coverage 1 at step " + s);
+                check(Mathf.Abs(strip.color.a - (1f - t)) < 1e-5f, "outgoing-only area at 1 - t at step " + s);
+            }
+            card.ApplyFade(metrics.slideFadeDuration);
+            check(!card._fading && incoming.color.a == 1f && !outgoing.enabled && outgoing.texture == null
+                && outgoing.uvRect == new Rect(0f, 0f, 1f, 1f) && !strip.enabled && strip.texture == null, "fade ends clean");
+
+            // Disabling mid-fade settles it and cancels the request in flight.
+            card.OnTexture(card.BeginRequest(0), 0, "a", a);
+            int inFlight = card.BeginRequest(1);
+            check(card._fading, "a second fade is running");
+            check(!card._strip.enabled && card._layers[1 - card._front].uvRect == new Rect(0f, 0f, 1f, 1f),
+                "to a wider image: no strip, outgoing uncropped, the incoming-only area fades in at t");
+            card.OnDisable();
+            check(!card._fading && card._layers[card._front].color.a == 1f && !card._layers[1 - card._front].enabled,
+                "OnDisable finishes the fade");
+            card.OnTexture(inFlight, 1, "b", b);
+            check(card._layers[card._front].texture == a && card.Slide == 0, "a request cancelled by OnDisable is ignored");
+
+            // Duration 0 swaps without a fade.
+            metrics.slideFadeDuration = 0f;
+            card.OnTexture(card.BeginRequest(1), 1, "b", b);
+            check(!card._fading && card._layers[card._front].texture == b && card._layers[card._front].color.a == 1f
+                && !card._layers[1 - card._front].enabled, "duration 0 swaps at once");
+        }
+        finally
+        {
+            UnityEngine.Object.DestroyImmediate(parent);
+            UnityEngine.Object.DestroyImmediate(a);
+            UnityEngine.Object.DestroyImmediate(b);
         }
 
-        TextureCacheManager cache = Core.main != null ? Core.main.TextureCacheManager : null;
-        if (cache == null)
-        {
-            Development.LogError("TimelineCard: Core.main.TextureCacheManager is not available, so no "
-                + "timeline image can be shown.");
-            return;
-        }
-
-        int requested = _slide;
-        string url = _gallery[requested];
-
-        // The manager owns and keeps the texture, so swiping back to a slide does not reload it.
-        cache.GetOrSetTexture2D(url, texture => OnTexture(requested, url, texture), true);
+        return "TimelineCard self-check PASS (" + checks + " checks)";
     }
-
-    private void OnTexture(int requested, string url, Texture2D texture)
-    {
-        // The card can be destroyed by a rebuild, or swiped on, before the texture arrives.
-        if (this == null || requested != _slide)
-            return;
-
-        if (texture == null)
-        {
-            _photo.enabled = false;
-            Development.LogWarning($"TimelineCard: no texture for [{url}].");
-            return;
-        }
-
-        _photo.texture = texture;
-        _photoFitter.aspectRatio = texture.height > 0 ? (float)texture.width / texture.height : 1f;
-        _photo.enabled = true;
-    }
-}
-
-/// <summary>
-/// Swipe on a card's image. Implementing the drag handlers is what makes the image claim the drag:
-/// the EventSystem delivers a drag to the first handler above the pointer, so the timeline's
-/// ScrollRect never sees a drag that starts here. Disable this component and drags pass through.
-/// </summary>
-public class TimelineImageSwipe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-{
-    public float threshold = 60f;
-    public Action<int> onSwipe;
-
-    private Canvas _canvas;
-
-    public void OnBeginDrag(PointerEventData eventData) { }
-
-    public void OnDrag(PointerEventData eventData) { }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (_canvas == null)
-        {
-            Canvas parentCanvas = GetComponentInParent<Canvas>();
-            _canvas = parentCanvas != null ? parentCanvas.rootCanvas : null;
-        }
-
-        // Screen pixels to reference pixels, so the threshold means the same at any resolution.
-        float scale = _canvas != null && _canvas.scaleFactor > 0f ? _canvas.scaleFactor : 1f;
-        int direction = TimelineLayout.SwipeDirection((eventData.position.x - eventData.pressPosition.x) / scale,
-            threshold);
-
-        if (direction != 0 && onSwipe != null)
-            onSwipe(direction);
-    }
+#endif
 }
