@@ -362,8 +362,37 @@ wires the scene side idempotently:
 - wires Home's existing back button only if that field is empty
 - fills empty style references
 - sets the Home and Timeline backgrounds to the design's charcoal `#191919`
+- adds or reuses `CallBackgroundAnimation` on `Call ScreenView`, fills its empty year font, and fills
+  each empty group photo from `Assets/03_Textures/App/call/`, which holds the five original JPGs the
+  user supplied:
+  - **Matching:** 1926 → `Mask Group 1@2x.jpg` and 2026 →
+    `Salvador-Caetano-faz-alianca-com-a-Neolix-para-logistica-inteligente-na-Europa-1_final@2x.jpg`
+    are named explicitly, because those names carry no year. 1946, 1971 and 1982 take the first file,
+    in ordinal order, whose name contains the year (`anossahistoria_<year>@2x.jpg`).
+  - **Import:** only the files a group resolves to are set to Sprite, Single, mipmaps off; nothing
+    else in the folder is touched.
+  - A year with no file is reported and left empty, never given a placeholder.
 
-The setup does not touch Call; its background is authored separately. As of 2026-10-07, the scene
+**Call screen background** (`App/UI/CallBackgroundAnimation.cs`). Five groups, one per dated photo
+(1926, 1946, 1971, 1982, 2026), each with a vertical line, a ring marker and a stacked year.
+- **Layout:** positioned in reference pixels from the static design (Adobe XD, first screen); the
+  positions are serialized and editable per group.
+- **Build:** done in code on the first `Play`, as the first child of `Call ScreenView`, so every
+  authored element (logo, titles, body, start button, language panel, side texts) stays on top and
+  untouched. It is clipped to the screen and nothing in it is a raycast target.
+- **Motion:** each group drifts on its own sine, in unscaled time, bounded by `travel`. The defaults
+  are ±12 px horizontally over a 14 s `periodSeconds`, with a per-group phase. On the same period and
+  phase, each **photo** (only the photo) pulses in opacity between `photoMinAlpha` (default 0.65) and
+  1, following a cosine, so a phase-0 photo starts fully opaque. Lines, markers and years stay
+  opaque. The motion is this project's choice; the design is static.
+- **Lifecycle:** `CallScreenview.Show` calls `Play`, and a repeat call is ignored. `Hide` calls
+  `Stop`, which disables the component, returns every group to its place and every photo to full
+  opacity; `OnDisable` stops it
+  too. The ring sprite is generated and destroyed by the component.
+- **Missing photos:** a group without a photo shows its line and year only. No placeholder is ever
+  substituted.
+
+The setup wires Call's animation, font and photos while leaving its authored background colour unchanged. As of 2026-10-07, the scene
 holds `#191919` on all three screen backgrounds and on the camera's clear colour, which shows
 during screen fades.
 
@@ -627,4 +656,5 @@ unused. The three stray URP `.asset` files that used to sit here were deleted in
 `m_CustomRenderPipeline` is unset (M19).
 
 Full register with severities and locations: [known-issues.md](known-issues.md).
+
 

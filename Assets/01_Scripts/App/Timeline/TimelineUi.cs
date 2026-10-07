@@ -149,8 +149,17 @@ public static class TimelineUi
         if (sprite == null)
             return;
 
-        UnityEngine.Object.Destroy(sprite.texture);
-        UnityEngine.Object.Destroy(sprite);
+        // Destroy is refused outside Play mode, where editor tooling and self-checks run.
+        if (Application.isPlaying)
+        {
+            UnityEngine.Object.Destroy(sprite.texture);
+            UnityEngine.Object.Destroy(sprite);
+        }
+        else
+        {
+            UnityEngine.Object.DestroyImmediate(sprite.texture);
+            UnityEngine.Object.DestroyImmediate(sprite);
+        }
     }
 
     /// <summary>A UI string from the <c>texts</c> block, falling back to the default language.</summary>

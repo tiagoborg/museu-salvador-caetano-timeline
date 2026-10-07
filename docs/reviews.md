@@ -3935,6 +3935,33 @@ without slicing borders.
 
 ---
 
+## `Assets/01_Scripts/App/UI/CallBackgroundAnimation.cs`
+
+Client feature, reviewed before delivery. No register id.
+
+### `CallBackgroundAnimation.Awake()` — could disable an animation that had already started
+
+**Status:** Resolved — fixed 2026-10-07, before delivery
+
+**Category:** Unity-specific / Bug
+
+**Original location:** `Awake`, the unconditional `enabled = false`
+
+> Awake unconditionally sets enabled = false; it can run after Controller.Awake -> Call.Show -> Play
+> and disable an already-playing animation, because Unity does not define Awake order across objects
+
+**Context:** `ScreenControllerBase.Awake` navigates to the start screen, Call, and `CallScreenview.Show`
+calls `Play`. When the component's own `Awake` ran after that, it switched off a playing animation:
+the background stood still on the first screen with nothing logged. `Play` would not restart it,
+because `_playing` stayed true. Fixed: `Awake` disables only when not playing, and `Update` returns
+while not playing, so neither order can leave a stale or stopped state.
+
+**Notes:** `SelfCheck` calls `Awake` explicitly in both orders, since outside Play mode Unity sends
+none: Awake then Play, and Play then Awake. Test plan step 8 in the 2026-10-07 session log is the
+live startup check.
+
+---
+
 ## `Assets/01_Scripts/App/Screenview/TimelineScreenview.cs`
 
 Client feature, reviewed before delivery. No register ids, for the same reason as above.
@@ -4148,3 +4175,24 @@ second route, which proves geometry rather than real portrait or wide files.
 
 **Context:** Root measured exact #191919 live Image colours but captured dark fills at RGB22. The plan now asserts live colour values and visual uniformity; marker centre/stroke capture values were measured separately. The pending-build claim was replaced with completed verification and explicit remaining checks.
 **Resolved in:** 2026-10-07 text-only border follow-up.
+
+## `docs/architecture/overview.md`
+
+### Call animation setup scope
+
+**Status:** Resolved
+**Category:** Documentation
+**Original location:** Line 392
+
+> Setup now wires Call, so saying it does not touch Call is stale.
+
+**Context:** Corrected scope to component/font/photos while retaining authored background colour. The session's obsolete manual-import/year-filename instruction was also removed; explicit original filename mappings and automatic import are documented.
+**Resolved in:** 2026-10-07 Call background follow-up, after doc review.
+
+## Call animation publication documentation review
+
+**Status:** Resolved
+**Category:** Documentation
+
+The final doc review found stale manual import/year filename requirements, a pending-verification statement, and an Update description predating the alpha pulse in the session log. Corrected each against the current setup implementation and measured verification results before publication.
+

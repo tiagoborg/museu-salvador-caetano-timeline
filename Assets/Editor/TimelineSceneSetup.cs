@@ -9,12 +9,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Wires the Home and Timeline screens into <c>Intro.unity</c>. Idempotent: it reuses what exists,
+/// Wires the Home and Timeline screens, and the Call screen's background animation, into
+/// <c>Intro.unity</c>. Idempotent: it reuses what exists,
 /// fills only empty references, and never deletes anything. Run from <c>Gema/Timeline/Setup Scene</c>
 /// or through the pipeline's eval as <c>TimelineSceneSetup.Setup()</c>.
 /// </summary>
 /// <remarks>
-/// The two screen components are App types, and code in <c>Assets/Editor/</c> must not name an App
+/// Those components are App types, and code in <c>Assets/Editor/</c> must not name an App
 /// type - a branch that renames one would break the whole editor assembly. So they are found by name
 /// through <c>TypeCache</c> and configured through <c>SerializedObject</c>, which also gives undo and
 /// prefab-override handling for free.
@@ -29,6 +30,17 @@ public static class TimelineSceneSetup
 
     // The design's charcoal background. Call keeps its own colour.
     private static readonly Color32 Background = new Color32(0x19, 0x19, 0x19, 0xFF);
+
+    private const string CallName = "Call ScreenView";
+    private const string CallBackgroundType = "CallBackgroundAnimation";
+    private const string CallBackgroundFolder = "Assets/03_Textures/App/call";
+
+    // The supplied originals whose file names do not contain their year. The others are found by year.
+    private static readonly Dictionary<string, string> CallPhotoFiles = new Dictionary<string, string>
+    {
+        { "1926", "Mask Group 1@2x.jpg" },
+        { "2026", "Salvador-Caetano-faz-alianca-com-a-Neolix-para-logistica-inteligente-na-Europa-1_final@2x.jpg" },
+    };
 
     private const string HomeType = "HomeScreenview";
     private const string TimelineType = "TimelineScreenview";
@@ -86,12 +98,115 @@ public static class TimelineSceneSetup
         FillStyle(timelineSo, report, TimelineName);
         timelineSo.ApplyModifiedProperties();
 
+        SetupCallBackground(controller.transform, report);
+
         EditorSceneManager.MarkSceneDirty(scene);
         if (!EditorSceneManager.SaveScene(scene))
             throw new InvalidOperationException($"TimelineSceneSetup: saving {ScenePath} failed.");
 
         report.Add("saved " + ScenePath);
         return "TimelineSceneSetup: " + string.Join("; ", report);
+    }
+
+    /// <summary>
+    /// Adds or reuses the Call screen's background animation, and fills only its EMPTY slots: the year
+    /// font, and each group's photo from <see cref="CallBackgroundFolder"/>. Each photo file is found by
+    /// <see cref="ResolveCallPhoto"/> and imported as a single sprite with no mipmaps; no other asset in
+    /// the folder is touched. Never a placeholder - a year with no file is reported and left empty.
+    /// </summary>
+    private static void SetupCallBackground(Transform controller, List<string> report)
+    {
+        Transform call = controller.Find(CallName);
+        if (call == null)
+        {
+            report.Add($"WARNING no [{CallName}] under [{ControllerName}]; Call background skipped");
+            return;
+        }
+
+        Type type = TypeCache.GetTypesDerivedFrom<MonoBehaviour>().FirstOrDefault(t => t.Name == CallBackgroundType);
+        if (type == null)
+            throw new InvalidOperationException($"TimelineSceneSetup: no MonoBehaviour named [{CallBackgroundType}]. "
+                + "Has the App assembly compiled?");
+
+        SerializedObject so = new SerializedObject(EnsureComponent(call.gameObject, type, report));
+        Fill(so, "yearFont", BoldFont, report, CallName);
+
+        // Textures, not sprites: the files arrive imported as Default, and this step is what makes them
+        // sprites. Ordinal sort, so the year lookup picks the same file on every machine.
+        string[] texturePaths = AssetDatabase.IsValidFolder(CallBackgroundFolder)
+            ? AssetDatabase.FindAssets("t:Texture2D", new[] { CallBackgroundFolder })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .OrderBy(p => p, StringComparer.Ordinal)
+                .ToArray()
+            : new string[0];
+
+        SerializedProperty groups = so.FindProperty("groups");
+        List<string> missing = new List<string>();
+        for (int i = 0; i < groups.arraySize; i++)
+        {
+            SerializedProperty group = groups.GetArrayElementAtIndex(i);
+            SerializedProperty photo = group.FindPropertyRelative("photo");
+            string year = group.FindPropertyRelative("year").stringValue;
+
+            if (photo.objectReferenceValue != null)
+                continue;
+
+            string path = ResolveCallPhoto(texturePaths, year);
+            if (path != null)
+                EnsureSingleSprite(path, report);
+
+            Sprite sprite = path != null ? AssetDatabase.LoadAssetAtPath<Sprite>(path) : null;
+            if (sprite == null)
+            {
+                missing.Add(year);
+                continue;
+            }
+
+            photo.objectReferenceValue = sprite;
+            report.Add($"Call photo {year} = {System.IO.Path.GetFileName(path)}");
+        }
+
+        so.ApplyModifiedProperties();
+
+        if (missing.Count > 0)
+            report.Add($"WARNING no photo in {CallBackgroundFolder} for {string.Join(", ", missing)}; "
+                + "those groups show line and year only");
+    }
+
+    /// <summary>
+    /// The photo file for a group year. Two of the supplied originals do not carry their year in the
+    /// name, so those are named explicitly; the rest are the first file, in ordinal order, whose name
+    /// contains the year.
+    /// </summary>
+    private static string ResolveCallPhoto(string[] texturePaths, string year)
+    {
+        string explicitName;
+        if (CallPhotoFiles.TryGetValue(year, out explicitName))
+            return texturePaths.FirstOrDefault(p => System.IO.Path.GetFileName(p) == explicitName);
+
+        return texturePaths.FirstOrDefault(p => System.IO.Path.GetFileNameWithoutExtension(p).Contains(year));
+    }
+
+    /// <summary>
+    /// Imports one texture as a single, unmipped sprite, leaving it alone if it already is one. Applied
+    /// only to the files a group resolves to.
+    /// </summary>
+    private static void EnsureSingleSprite(string path, List<string> report)
+    {
+        TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+        if (importer == null)
+            return;
+
+        if (importer.textureType == TextureImporterType.Sprite
+            && importer.spriteImportMode == SpriteImportMode.Single
+            && !importer.mipmapEnabled)
+            return;
+
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Single;
+        importer.mipmapEnabled = false;
+        importer.SaveAndReimport();
+        report.Add($"imported {System.IO.Path.GetFileName(path)} as Sprite (Single, no mipmaps)");
     }
 
     private static Scene OpenIntro(List<string> report)

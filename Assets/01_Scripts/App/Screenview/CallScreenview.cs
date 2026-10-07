@@ -6,15 +6,37 @@ public class CallScreenview : ScreenView
     [SerializeField]
     private Button startButton;
 
+    private CallBackgroundAnimation _background;
+    private bool _listening;
+
     public override void Show()
     {
         base.Show();
-        startButton.onClick.AddListener(OnStartButtonClicked);
+
+        // Show can arrive while already shown; a second listener would navigate twice per tap.
+        if (!_listening)
+        {
+            startButton.onClick.AddListener(OnStartButtonClicked);
+            _listening = true;
+        }
+
+        if (_background == null)
+            _background = GetComponent<CallBackgroundAnimation>();
+        if (_background != null)
+            _background.Play();
     }
 
     public override void Hide()
     {
-        startButton.onClick.RemoveListener(OnStartButtonClicked);
+        if (_listening)
+        {
+            startButton.onClick.RemoveListener(OnStartButtonClicked);
+            _listening = false;
+        }
+
+        if (_background != null)
+            _background.Stop();
+
         base.Hide();
     }
 
