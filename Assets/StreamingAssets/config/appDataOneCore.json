@@ -1,0 +1,23 @@
+{
+  "modules": [
+    {
+      "content": {
+        "Settings": [
+          {
+            "Key": "rawEnabledLanguages",
+            "value": "pt"
+          }
+        ],
+        "Translations": [
+          {
+            "translation_key": "example",
+            "translation_text": {
+              "pt": "Ipsum Lorem PT",
+              "en": "Ipsum Lorem EN"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

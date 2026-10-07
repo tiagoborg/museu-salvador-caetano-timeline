@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 2322f495988c0bb44aaa22a6f285f7c6
+timeCreated: 1472132200
+licenseType: Pro
+PluginImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
+  isPreloaded: 0
+  isOverridable: 0
+  platformData:
+    Editor:
+      enabled: 1
+      settings:
+        DefaultValueInitialized: true
+    WindowsStoreApps:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+    data:
+      enabled: 0
+      settings: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

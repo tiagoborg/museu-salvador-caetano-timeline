@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782511ba2cbd56945b3eea244a37be6c, type: 3}
+  m_Name: UIGeneratorData
+  m_EditorClassIdentifier: 
+  objectName: Assets/Resources/Demo/logo.json
+  Version: 
+  MainCanvas: 
+  DesignWidth: 1920
+  DesignHeight: 1080
+  dataHasLoaded: 0
+  psdData:
+    Name: UIGenerator
+    version: 1.0
+    assets:
+    - type: canvas
+      name: Gema:Canvas
+      layers:
+      - version: 
+        id: 
+        name: logo.png
+        x: 435
+        y: 359
+        width: 285
+        height: 285
+        centerX: 577.5
+        centerY: 501.5
+        type: image
+        hasSprite: 0
+      - version: 
+        id: 
+        name: g.png
+        x: 807
+        y: 408
+        width: 141
+        height: 187
+        centerX: 877.5
+        centerY: 501.5
+        type: image
+        hasSprite: 0
+      - version: 
+        id: 
+        name: e.png
+        x: 973
+        y: 411
+        width: 117
+        height: 180
+        centerX: 1031.5
+        centerY: 501
+        type: image
+        hasSprite: 0
+      - version: 
+        id: 
+        name: m.png
+        x: 1116
+        y: 411
+        width: 173
+        height: 180
+        centerX: 1202.5
+        centerY: 501
+        type: image
+        hasSprite: 0
+      - version: 
+        id: 
+        name: a.png
+        x: 1309
+        y: 411
+        width: 160
+        height: 180
+        centerX: 1389
+        centerY: 501
+        type: image
+        hasSprite: 0
+      - version: 
+        id: 
+        name: signature.png
+        x: 732
+        y: 891
+        width: 481
+        height: 46
+        centerX: 972.5
+        centerY: 914
+        type: image
+        hasSprite: 0

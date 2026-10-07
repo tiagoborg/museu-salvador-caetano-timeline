@@ -1,0 +1,603 @@
+{
+    "code": 0,
+    "data":
+    {
+        "languages":
+        [
+            "pt",
+            "en"
+        ],
+        "categories":
+        [
+            {
+                "id": 0,
+                "name":
+                {
+                    "pt": "Figuras",
+                    "en": "Figures"
+                }
+            },
+            {
+                "id": 1,
+                "name":
+                {
+                    "pt": "Empresa",
+                    "en": "Company"
+                }
+            },
+            {
+                "id": 2,
+                "name":
+                {
+                    "pt": "Veículos",
+                    "en": "Vehicles"
+                }
+            },
+            {
+                "id": 3,
+                "name":
+                {
+                    "pt": "Responsabilidade Social",
+                    "en": "Social Responsibility"
+                }
+            },
+            {
+                "id": 4,
+                "name":
+                {
+                    "pt": "Distinções",
+                    "en": "Awards"
+                }
+            },
+            {
+                "id": 5,
+                "name":
+                {
+                    "pt": "Competições",
+                    "en": "Competitions"
+                }
+            },
+            {
+                "id": 6,
+                "name":
+                {
+                    "pt": "Mobilidade",
+                    "en": "Mobility"
+                }
+            },
+            {
+                "id": 7,
+                "name":
+                {
+                    "pt": "Inovação",
+                    "en": "Innovation"
+                }
+            },
+            {
+                "id": 8,
+                "name":
+                {
+                    "pt": "Internacionalização",
+                    "en": "Internationalisation"
+                }
+            },
+            {
+                "id": 9,
+                "name":
+                {
+                    "pt": "Publicidade",
+                    "en": "Advertising"
+                }
+            }
+        ],
+        "timeline":
+        [
+            {
+                "id": 0,
+                "categoryId": 0,
+                "year": 1926,
+                "content":
+                {
+                    "pt": "Nascimento de Salvador Fernandes Caetano, em Vila Nova de Gaia",
+                    "en": "Birth of Salvador Fernandes Caetano, in Vila Nova de Gaia"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    },
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 1,
+                "categoryId": 1,
+                "year": 1946,
+                "content":
+                {
+                    "pt": "Fundação da Empresa Martins & Caetano & Irmão, Lda",
+                    "en": "Founding of Martins & Caetano & Irmão, Lda"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "categoryId": 2,
+                "year": 1949,
+                "content":
+                {
+                    "pt": "Exemplo: texto curto de amostra.",
+                    "en": "Sample: short placeholder text."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "categoryId": 6,
+                "year": 1951,
+                "content":
+                {
+                    "pt": "Introdução da técnica mista de construção de carroçarias com perfis em aço e madeira",
+                    "en": "Introduction of the mixed technique of building bodywork with steel and wood profiles"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "categoryId": 6,
+                "year": 1955,
+                "content":
+                {
+                    "pt": "Exemplo: evento de amostra para preencher a segunda linha da década.",
+                    "en": "Sample: placeholder event filling the second row of the decade."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "categoryId": 2,
+                "year": 1956,
+                "content":
+                {
+                    "pt": "FIAT: Primeiro autocarro carroçado pela Salvador Caetano, desenhado por Salvador Caetano (construído para a Agência AVIC, em Viana do Castelo)",
+                    "en": "FIAT: First coach bodied by Salvador Caetano, designed by Salvador Caetano (built for the AVIC agency, in Viana do Castelo)"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    },
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "categoryId": 1,
+                "year": 1958,
+                "content":
+                {
+                    "pt": "Exemplo: texto de amostra de comprimento médio para a segunda coluna, a confirmar com o cliente.",
+                    "en": "Sample: medium-length placeholder text for the second column, to be confirmed with the client."
+                },
+                "images":
+                []
+            },
+            {
+                "id": 7,
+                "categoryId": 9,
+                "year": 1959,
+                "content":
+                {
+                    "pt": "Exemplo: amostra na terceira coluna da década de 1950.",
+                    "en": "Sample: placeholder in the third column of the 1950s."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 8,
+                "categoryId": 1,
+                "year": 1964,
+                "content":
+                {
+                    "pt": "Criação da Transmotor – Sociedade Comercial e Industrial de Veículos de Transporte e Motores, S.A.R.L. para importação e comercialização de veículos pesados, incluindo camiões e chassis para autocarros. Trabalhava, sobretudo, com as marcas britânicas Leyland e Albion.",
+                    "en": "Creation of Transmotor – Sociedade Comercial e Industrial de Veículos de Transporte e Motores, S.A.R.L. to import and sell heavy vehicles, including lorries and coach chassis. It worked mainly with the British brands Leyland and Albion."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 9,
+                "categoryId": 1,
+                "year": 1965,
+                "content":
+                {
+                    "pt": "Início da unidade fabril de Oliveira do Douro, em Vila Nova de Gaia",
+                    "en": "Start of the Oliveira do Douro factory, in Vila Nova de Gaia"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 10,
+                "categoryId": 6,
+                "year": 1965,
+                "content":
+                {
+                    "pt": "Introdução da fibra de vidro nos autocarros",
+                    "en": "Introduction of fibreglass in coaches"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 11,
+                "categoryId": 1,
+                "year": 1966,
+                "content":
+                {
+                    "pt": "Empresa passa a designar-se Salvador Caetano – Empresa Metalúrgica e Veículos de Transporte SARL",
+                    "en": "The company is renamed Salvador Caetano – Empresa Metalúrgica e Veículos de Transporte SARL"
+                },
+                "images":
+                []
+            },
+            {
+                "id": 12,
+                "categoryId": 7,
+                "year": 1968,
+                "content":
+                {
+                    "pt": "Exemplo: texto de amostra longo para testar a largura larga e a redução limitada do tamanho de letra. Este conteúdo não é histórico e serve apenas para verificar a paginação do cartão, o corte de linhas, a legibilidade e o comportamento do layout em português com acentuação e palavras compridas.",
+                    "en": "Sample: long placeholder text to exercise the wide card and the bounded font-size reduction. This content is not historical and exists only to check card layout, line breaking, legibility and layout behaviour with long words and several sentences of text."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    },
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 13,
+                "categoryId": 5,
+                "year": 1969,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Competições.",
+                    "en": "Sample: Competitions placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 14,
+                "categoryId": 8,
+                "year": 1971,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Internacionalização com texto curto.",
+                    "en": "Sample: short Internationalisation placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 15,
+                "categoryId": 3,
+                "year": 1975,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Responsabilidade Social, sem imagens associadas.",
+                    "en": "Sample: Social Responsibility placeholder with no images."
+                },
+                "images":
+                []
+            },
+            {
+                "id": 16,
+                "categoryId": 2,
+                "year": 1978,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Veículos.",
+                    "en": "Sample: Vehicles placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 17,
+                "categoryId": 4,
+                "year": 1979,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Distinções de comprimento médio, para ocupar a segunda linha.",
+                    "en": "Sample: medium-length Awards placeholder occupying the second row."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 18,
+                "categoryId": 7,
+                "year": 1982,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Inovação.",
+                    "en": "Sample: Innovation placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 19,
+                "categoryId": 0,
+                "year": 1986,
+                "content":
+                {
+                    "pt": "Salvador Caetano distinguido com a Medalha de Ouro de Mérito, atribuída pela Câmara Municipal de Gaia",
+                    "en": "Salvador Caetano awarded the Gold Medal of Merit by the Gaia City Council"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 20,
+                "categoryId": 0,
+                "year": 1988,
+                "content":
+                {
+                    "pt": "Salvador Caetano distinguido pelo Governo Japonês com a condecoração da \"Ordem do Tesouro Sagrado – Raio de Ouro com Laço\"",
+                    "en": "Salvador Caetano honoured by the Japanese Government with the \"Order of the Sacred Treasure – Gold Rays with Rosette\""
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 21,
+                "categoryId": 0,
+                "year": 1991,
+                "content":
+                {
+                    "pt": "Salvador Caetano distinguido com a Medalha de Mérito Municipal, atribuída pela Câmara Municipal de Ovar",
+                    "en": "Salvador Caetano awarded the Municipal Medal of Merit by the Ovar City Council"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 22,
+                "categoryId": 4,
+                "year": 1994,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Distinções.",
+                    "en": "Sample: Awards placeholder."
+                },
+                "images":
+                []
+            },
+            {
+                "id": 23,
+                "categoryId": 0,
+                "year": 1996,
+                "content":
+                {
+                    "pt": "Salvador Caetano condecorado pelo Governo Português pelos 50 anos da atividade empresarial",
+                    "en": "Salvador Caetano decorated by the Portuguese Government for 50 years of business activity"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 24,
+                "categoryId": 9,
+                "year": 1998,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Publicidade com texto médio para a coluna seguinte da década.",
+                    "en": "Sample: medium Advertising placeholder for the next column of the decade."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 25,
+                "categoryId": 6,
+                "year": 2003,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Mobilidade.",
+                    "en": "Sample: Mobility placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 26,
+                "categoryId": 8,
+                "year": 2005,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Internacionalização de comprimento médio, sem dados reais.",
+                    "en": "Sample: medium-length Internationalisation placeholder with no real data."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 27,
+                "categoryId": 5,
+                "year": 2007,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Competições.",
+                    "en": "Sample: Competitions placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            },
+            {
+                "id": 28,
+                "categoryId": 3,
+                "year": 2010,
+                "content":
+                {
+                    "pt": "Exemplo: amostra de Responsabilidade Social.",
+                    "en": "Sample: Social Responsibility placeholder."
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder2.jpg"
+                    }
+                ]
+            },
+            {
+                "id": 29,
+                "categoryId": 0,
+                "year": 2011,
+                "content":
+                {
+                    "pt": "Falecimento de Salvador Caetano",
+                    "en": "Death of Salvador Caetano"
+                },
+                "images":
+                [
+                    {
+                        "url": "placeholder.png"
+                    }
+                ]
+            }
+        ],
+        "texts":
+        {
+            "callTitle0":
+            {
+                "pt": "A nossa",
+                "en": "Our"
+            },
+            "callTitle1":
+            {
+                "pt": "história",
+                "en": "history"
+            },
+            "callContent":
+            {
+                "pt": "De uma pequena fábrica de carroçarias em Gaia a um grupo internacional com mais de 100 empresas, a Salvador Caetano constrói o futuro há 100 anos.",
+                "en": "From a small coachbuilding factory in Gaia to an international group with more than 100 companies, Salvador Caetano has been building the future for 100 years."
+            },
+            "start":
+            {
+                "pt": "— Iniciar —",
+                "en": "— Start —"
+            },
+            "chronology":
+            {
+                "pt": "CRONOLOGIA",
+                "en": "CHRONOLOGY"
+            },
+            "allCategories":
+            {
+                "pt": "Todas as categorias",
+                "en": "All categories"
+            }
+        }
+    }
+}

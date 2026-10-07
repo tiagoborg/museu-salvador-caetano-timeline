@@ -1,0 +1,399 @@
+{
+    "EditorSettings":
+    {
+        "isActive": true,
+        "password": "gema",
+        "touchTime": 5,
+        "autoHideTime": 30
+    },
+    "DebugSettings":
+    {
+        "Console":
+        {
+            "isActive": true,
+            "shakeToOpen": true,
+            "toggleKeyCode": 9,
+            "restrictLogCount": true,
+            "maxLogCount": 1000
+        },
+        "Notifications":
+        {
+            "isActive": true,
+            "successTimeout": 5,
+            "warningTimeout": 6,
+            "errorTimeout": 10,
+            "infoTimeout": 5
+        }
+    },
+    "AppData":
+    {
+        "isActive": true,
+        "useLocalAppData": true,
+        "doLogs": true,
+        "timeout": 30,
+        "Cache":
+        {
+            "AssetDownload":
+            {
+                "isActive": false,
+                "doLogs": false,
+                "cleanUnlistedAssets": false,
+                "downloadThreads": 1,
+                "timeout": 60
+            },
+            "TextureCache":
+            {
+                "isActive": false,
+                "doLogs": false,
+                "showErrorImage": false,
+                "cacheThreads": 5,
+                "timeout": 60
+            }
+        },
+        "oneCoreDataModel":
+        {
+            "isActive": false,
+            "idContent": 0
+        },
+        "remoteSettings":
+        {
+            "hostUrl": "",
+            "dataJsonPath": "api/entrance?pc=2",
+            "assetsPath": "",
+            "usePersistentDataPath": false
+        },
+        "localSettings":
+        {
+            "hostUrl": "",
+            "dataJsonPath": "appData.json",
+            "assetsPath": "assets/",
+            "usePersistentDataPath": false
+        }
+    },
+    "Activity":
+    {
+        "isActive": false,
+        "useMouse": true,
+        "useKeyBoard": true,
+        "timeOut": 10
+    },
+    "Sockets":
+    {
+        "isActive": false,
+        "autoConnect": true,
+        "autoSignIn": false,
+        "doLogs": true,
+        "socketServerIp": "127.0.0.1",
+        "socketServerPort": 1300,
+        "showNotifications": true,
+        "keepAliveTime": 3,
+        "reconnectTime": 10,
+        "keepAliveMsg": "ping",
+        "broadcastPrefix": "&"
+    },
+    "OneCore":
+    {
+        "isActive": false,
+        "apiPort": 6400,
+        "doLogs": false,
+        "Authentication":
+        {
+            "tags":
+            [
+                "tester"
+            ],
+            "key": "vkzy6v1LAUdr4m9qtGH0LBKu8gVJ8CoihgR6ge0k"
+        },
+        "ConnectCommands":
+        [
+            {
+                "type": "broadcast",
+                "tag": "porta",
+                "format": 1,
+                "message": "",
+                "command_data": null
+            }
+        ],
+        "DisconnectCommands":
+        [
+            {
+                "type": "broadcast",
+                "tag": "porta",
+                "format": 0,
+                "message": "END_COUNTDOWN",
+                "command_data": null
+            }
+        ],
+        "autoConnect": true,
+        "autoSignIn": true,
+        "socketServerIp": "127.0.0.1",
+        "socketServerPort": 6501,
+        "showNotifications": true,
+        "keepAliveTime": 3,
+        "reconnectTime": 10,
+        "keepAliveMsg": "ping",
+        "broadcastPrefix": "&"
+    },
+    "Phidgets":
+    {
+        "isActive": false,
+        "phidgets":
+        [
+            {
+                "isActive": true,
+                "name": "Phidget 0",
+                "serialNumber": 642622,
+                "boardType": "InterfaceKit",
+                "digitalInputs":
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    false,
+                    false,
+                    false
+                ],
+                "digitalOutputs":
+                [
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    false,
+                    false,
+                    false
+                ],
+                "voltageInputs":
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                "voltageRatioInputs":
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                "voltageSensorType":
+                [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "voltageRatioSensorType":
+                [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "minValues":
+                [],
+                "maxValues":
+                [],
+                "doLogs": true,
+                "enableDigitalOutputsOnStart": false
+            },
+            {
+                "isActive": false,
+                "name": "Phidget 1",
+                "serialNumber": 385440,
+                "boardType": "InterfaceKit",
+                "digitalInputs":
+                [
+                    false,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    false
+                ],
+                "digitalOutputs":
+                [
+                    false,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    false
+                ],
+                "voltageInputs":
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                "voltageRatioInputs":
+                [
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false
+                ],
+                "voltageSensorType":
+                [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "voltageRatioSensorType":
+                [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "minValues":
+                [],
+                "maxValues":
+                []
+            },
+            {
+                "isActive": false,
+                "name": "Bridge 0",
+                "serialNumber": 568471,
+                "boardType": "Bridge",
+                "voltageRatioInputs":
+                [
+                    true,
+                    false,
+                    false,
+                    false
+                ],
+                "minValues":
+                [],
+                "maxValues":
+                []
+            }
+        ]
+    },
+    "Api":
+    {
+        "isActive": false,
+        "doLogs": false,
+        "api_Host": "http://127.0.0.1/api.php",
+        "api_Dev_Host": "http://127.0.0.1/api.php",
+        "maxNumberOfDisplayErrors": 3,
+        "timeout": 30
+    },
+    "OSC":
+    {
+        "isActive": false,
+        "useBurst": true,
+        "serverIp": "127.0.0.1",
+        "serverPort": 7000,
+        "doLogs": true,
+        "startMessages":
+        [
+            "/composition/layers/2/clips/1/connect|1"
+        ],
+        "closeMessages":
+        [
+            "/composition/layers/2/clips/2/connect|1"
+        ]
+    },
+    "SerialPorts":
+    {
+        "isActive": false,
+        "doLogs": true,
+        "serialPorts":
+        [
+            {
+                "name": "ComPort",
+                "isActive": true,
+                "doLogs": true,
+                "showNotifications": true,
+                "comPort": "COM7",
+                "baudRate": 9600
+            }
+        ]
+    },
+    "System":
+    {
+        "frameRate": "60",
+        "doLogs": false,
+        "mouseVisibility": true,
+        "showImageDownloadError": true,
+        "Windows":
+        {
+            "skipAssetValidationKeyCode": 107,
+            "Processes":
+            {
+                "explorerProcess": "explorer",
+                "killExplorer": false,
+                "restoreExplorerOnQuit": true,
+                "killProcesses":
+                [
+                    ""
+                ]
+            },
+            "Presentation":
+            {
+                "minimizeWindow": false,
+                "bringToFront": false,
+                "bringToFrontTimeInterval": 15.0
+            },
+            "KeyLogger":
+            {
+                "isActive": false,
+                "workInBackround": true
+            },
+            "Screen":
+            {
+                "forceResolution": false,
+                "fullScreen": true,
+                "width": 1920,
+                "height": 1080
+            }
+        },
+        "AndroidSettings":
+        {
+            "sleepTimeout": -1
+        }
+    }
+}

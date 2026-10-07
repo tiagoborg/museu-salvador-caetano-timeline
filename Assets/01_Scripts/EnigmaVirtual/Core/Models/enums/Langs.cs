@@ -1,0 +1,38 @@
+﻿namespace EnigmaVirtual
+{
+    [System.Serializable]
+    public enum Langs
+    {
+        PT,
+        EN,
+        ES,
+        DE,
+        FR,
+        AK,
+        AR,
+        BR,
+        CZ,
+        DA,
+        EL,
+        FI,
+        HU,
+        IS,
+        IT,
+        IW,
+        JA,
+        KO,
+        LT,
+        LV,
+        MY,
+        NL,
+        NO,
+        PL,
+        RO,
+        RU,
+        SR,
+        SV,
+        TR,
+        UK,
+        ZH
+    }
+}

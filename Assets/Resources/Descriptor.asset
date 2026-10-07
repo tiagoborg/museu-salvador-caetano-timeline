@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca9d5ba4c80c8a642b1ef0d56a237681, type: 3}
+  m_Name: Descriptor
+  m_EditorClassIdentifier: 
+  FullName: Unity Default
+  Slug: unityDefault.app
+  Client: Gema Digital Agency
+  Year: 2025
+  Version: 0.56.2
+  Copyright: (c)2025 Gema Digital Agency
+  DesignWidth: 1920
+  DesignHeight: 1080
