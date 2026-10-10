@@ -4501,7 +4501,7 @@ through. Now a `_disabling` guard tells "slideshow stopped" from "card deactivat
 **Category:** Unity-specific
 **Original location:** Editor.log native crash stack at GfxVersionList::Impl::ReleaseFromGfxVersionList / BufferD3D12 destructor
 
-The Editor crashed on its native D3D12 graphics worker immediately after the deliberately missing-file download check completed. The log also recorded imports of temporary test media under Assets. Neither observation proves a code or engine root cause. Preserved the crash dump/log, moved fixture downloads to Library to remove import churn, and prepared a temporary DX11 comparison. Project graphics settings were not changed; implementation stability is not yet certified.
+The Editor crashed on its native D3D12 graphics worker immediately after the deliberately missing-file download check completed. The log also recorded imports of temporary test media under Assets. Neither observation proves a code or engine root cause. Preserved the crash dump/log, moved fixture downloads to Library to remove import churn, and prepared a temporary DX11 comparison. Project graphics settings were not changed. The October 10 comparison passed cold/warm/missing/offline cases and a five-minute scrolling soak under the normal DX12 split-jobs configuration, with fixture downloads outside Assets. All13activecards had images afterwards. It did not reproduce the native crash; import churn remains a hypothesis, not an established cause. A 5.9-second diagnostic-interval stall also prevents treating this mixed-workload sample as clean performance qualification. Original crash cause and deployment stability remain unverified.
 
 
 ### Scaling documentation qualifications
