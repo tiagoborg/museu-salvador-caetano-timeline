@@ -77,6 +77,14 @@ public class TimelineScreenview : ScreenView
         + "are fully opaque; both keep the accent colour.")]
     private float footerUnselectedAlpha = 0.35f;
 
+    [Header("Images")]
+    [SerializeField, Range(128, 256), Tooltip("Decoded texture budget. Off-screen images are released first; "
+        + "images on screen are never dropped, and exceeding the budget with them alone is logged.")]
+    private int textureBudgetMiB = 256;
+    [SerializeField, Min(0f), Tooltip("Cards this far outside the viewport (reference px) already load, so "
+        + "images are ready when they scroll in.")]
+    private float visibilityMargin = 480f;
+
     [Header("Back button - built at the Home button's position when left empty")]
     [SerializeField]
     private Button backButton;
@@ -96,6 +104,56 @@ public class TimelineScreenview : ScreenView
     private RectTransform _footer;
     private TextMeshProUGUI _header;
     private TextMeshProUGUI _measure;
+
+    private TimelineTextureCache _textureCache;
+    private float _nextReconcile;
+    /// <summary>
+    /// One laid-out event. The layout covers every event; a card view exists only while the event is in
+    /// view (plus the margin), and goes back to the pool when it leaves.
+    /// </summary>
+    private sealed class EventSlot
+    {
+        public TimelineItemVO item;
+        public string categoryName;
+        public List<string> gallery;
+        public float x, y, fontSize;
+        public bool wide, imageOnTop;
+        // The slide on screen when the view last left, so re-entry resumes it; -1 means the event's own.
+        public int retainedSlide = -1;
+        public TimelineCard view;
+        public float Right(TimelineCardMetrics m) { return x + (wide ? m.wideWidth : m.narrowWidth); }
+    }
+
+    private readonly List<EventSlot> _slots = new List<EventSlot>();
+    // Released views, inactive and holding no texture, by geometry kind: (wide, image on top).
+    private readonly List<TimelineCard>[] _pool = { new List<TimelineCard>(), new List<TimelineCard>(),
+        new List<TimelineCard>(), new List<TimelineCard>() };
+
+    /// <summary>For measurement tools.</summary>
+    public TimelineTextureCache TextureCache { get { return _textureCache; } }
+    public int LayoutEventCount { get { return _slots.Count; } }
+
+    public int ActiveCardCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (EventSlot slot in _slots)
+                if (slot.view != null) n++;
+            return n;
+        }
+    }
+
+    public int PooledCardCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (List<TimelineCard> pool in _pool)
+                n += pool.Count;
+            return n;
+        }
+    }
 
     public override void SetData<T>(T data)
     {
@@ -124,8 +182,8 @@ public class TimelineScreenview : ScreenView
 
         RefreshLabels();
 
-        // Active before the rebuild, not after: new cards measure their tag text with TMP, which needs
-        // an active hierarchy. The cards it replaces are destroyed by the rebuild.
+        // Active before the rebuild, not after: cards measure their tag text with TMP when bound, which
+        // needs an active hierarchy.
         _cards.gameObject.SetActive(true);
         Rebuild(true);
         base.Show();
@@ -136,16 +194,29 @@ public class TimelineScreenview : ScreenView
         StopListening();
 
         // Hide only fades the screen, so without this every card's slideshow kept running - and loading
-        // textures - while invisible. Inactive cards get no Update.
+        // textures - while invisible. Releasing first cancels queued loads and frees every lease.
+        ReleaseCards();
         if (_cards != null)
             _cards.gameObject.SetActive(false);
 
         base.Hide();
     }
 
+    private void OnDisable()
+    {
+        // Deactivated without Hide: cancel every request and free every lease. On reactivation LateUpdate
+        // marks the cards in view again; Show re-adds the listeners.
+        StopListening();
+        ReleaseCards(false);
+    }
+
     private void OnDestroy()
     {
         StopListening();
+
+        // Consumers first, so no RawImage still shows a texture the cache is about to destroy.
+        ReleaseCards(false);
+        _textureCache?.Dispose();
 
         // Generated in BuildChrome, so this screen owns them.
         TimelineUi.DestroySprite(style.discSprite);
@@ -199,6 +270,11 @@ public class TimelineScreenview : ScreenView
         style.discSprite = TimelineUi.MakeCircleSprite(64, 0f);
         // Both colours baked in, and the marker drawn untinted, so the interior is exactly the background.
         style.ringSprite = TimelineUi.MakeCircleSprite(64, 0.2f, style.backgroundColor, style.lineColor);
+        // Loads run as coroutines on the persistent MainController, not on this screen: deactivating the
+        // screen would stop them mid-flight, and a stopped load never frees its slot. This screen is the
+        // host only where no Core is running (isolated editor checks).
+        MonoBehaviour loadHost = Core.main != null ? (MonoBehaviour)Core.main : this;
+        _textureCache = new TimelineTextureCache(loadHost, textureBudgetMiB * 1024L * 1024L);
 
         // Scroll area across the full width, from the top of the screen to below the decade labels.
         RectTransform scrollRt = TimelineUi.Rect(transform, "Timeline Scroll");
@@ -437,10 +513,12 @@ public class TimelineScreenview : ScreenView
         if (data == null)
             return; // AppData.Current reports the misconfiguration itself.
 
+        // Card views go back to the pool - released, so no lease or queued load survives - and are reused,
+        // never destroyed here. The lines are a few dozen plain objects and are rebuilt.
+        ReleaseCards();
+        _slots.Clear();
         for (int i = _lines.childCount - 1; i >= 0; i--)
             Destroy(_lines.GetChild(i).gameObject);
-        for (int i = _cards.childCount - 1; i >= 0; i--)
-            Destroy(_cards.GetChild(i).gameObject);
 
         TimelineItemVO[] all = data.timeline ?? new TimelineItemVO[0];
         Dictionary<int, CategoryVO> categories = CategoriesById();
@@ -462,8 +540,7 @@ public class TimelineScreenview : ScreenView
         float x = contentLeft;
         List<float> columnWidths = new List<float>();
 
-        // ponytail: every card is destroyed and rebuilt on each filter or language change. Fine for a
-        // few hundred events; pool the cards if the content grows well past that.
+        // Every event is laid out (its text is measured for the card width); only those in view get a card.
         for (int decade = TimelineLayout.FirstDecade; decade <= lastDecade; decade += 10)
         {
             DrawBoundary(x, decade);
@@ -493,13 +570,19 @@ public class TimelineScreenview : ScreenView
                     TimelineItemVO item = items[i];
                     float y = firstRowTop + TimelineLayout.RowOf(i) * rowPitch;
 
-                    TimelineCard view = TimelineCard.Create(_cards, style, card, columnX, y, fits[i].wide,
-                        TimelineLayout.ImageOnTop(column));
-
-                    string categoryName = categories.TryGetValue(item.categoryId, out CategoryVO category)
-                        ? TimelineUi.Localized(category.name) : string.Empty;
                     galleries.TryGetValue(item.categoryId, out List<string> gallery);
-                    view.Bind(item, categoryName, gallery, fits[i].fontSize);
+                    _slots.Add(new EventSlot
+                    {
+                        item = item,
+                        categoryName = categories.TryGetValue(item.categoryId, out CategoryVO category)
+                            ? TimelineUi.Localized(category.name) : string.Empty,
+                        gallery = gallery,
+                        x = columnX,
+                        y = y,
+                        fontSize = fits[i].fontSize,
+                        wide = fits[i].wide,
+                        imageOnTop = TimelineLayout.ImageOnTop(column),
+                    });
                 }
 
                 columnX += columnWidths[column] + columnGap;
@@ -523,6 +606,116 @@ public class TimelineScreenview : ScreenView
         {
             _scroll.StopMovement();
             _content.anchoredPosition = Vector2.zero;
+        }
+
+        UpdateVisibility();
+    }
+
+    private void LateUpdate()
+    {
+        // Hidden: Hide released the cards and they stay out of view until the next Show rebuilds them.
+        if (_cards != null && _cards.gameObject.activeSelf && _slots.Count > 0)
+            UpdateVisibility();
+
+        // Also while hidden but active: the retained unpinned textures must fit the budget too. A texture's
+        // measured size can grow after it loads, so re-measure at 1 Hz, not every frame. An inactive screen
+        // gets no LateUpdate; its entries keep their sizes and are reconciled once it is active again.
+        if (Time.unscaledTime >= _nextReconcile)
+        {
+            _nextReconcile = Time.unscaledTime + 1f;
+            _textureCache?.ReconcileBytes();
+        }
+    }
+
+    /// <summary>
+    /// Gives a card to every event in view - with <c>visibilityMargin</c> on both sides as a preload zone -
+    /// and takes it back from every event that left, from the layout spans and the scroll offset. Leaving
+    /// views are returned first, so the arriving ones reuse them in the same frame and the pool never
+    /// grows past the most cards of one kind ever in view together. No allocation once the pool is warm.
+    /// </summary>
+    private void UpdateVisibility()
+    {
+        float offset = _content.anchoredPosition.x;
+        float left = -visibilityMargin;
+        float right = _scroll.viewport.rect.width + visibilityMargin;
+
+        for (int pass = 0; pass < 2; pass++)
+        {
+            foreach (EventSlot slot in _slots)
+            {
+                bool visible = slot.Right(card) + offset > left && slot.x + offset < right;
+                if (pass == 0 && !visible && slot.view != null)
+                    ReturnView(slot);
+                else if (pass == 1 && visible)
+                {
+                    if (slot.view == null)
+                        TakeView(slot);
+                    else
+                        slot.view.SetVisible(true); // no-op unless released in place by OnDisable
+                }
+            }
+        }
+    }
+
+    private static int Kind(bool wide, bool imageOnTop)
+    {
+        return (wide ? 2 : 0) + (imageOnTop ? 1 : 0);
+    }
+
+    private void TakeView(EventSlot slot)
+    {
+        List<TimelineCard> pool = _pool[Kind(slot.wide, slot.imageOnTop)];
+        TimelineCard view = null;
+        while (view == null && pool.Count > 0)
+        {
+            view = pool[pool.Count - 1];
+            pool.RemoveAt(pool.Count - 1);
+        }
+
+        if (view == null)
+            view = TimelineCard.Create(_cards, style, card, _textureCache, slot.x, slot.y, slot.wide, slot.imageOnTop);
+
+        // Active before Bind: the tag is measured with TMP. Bind releases anything the view still held.
+        view.gameObject.SetActive(true);
+        view.MoveTo(slot.x, slot.y);
+        view.Bind(slot.item, slot.categoryName, slot.gallery, slot.fontSize, slot.retainedSlide);
+        view.SetVisible(true);
+        slot.view = view;
+    }
+
+    private void ReturnView(EventSlot slot)
+    {
+        TimelineCard view = slot.view;
+        slot.view = null;
+        if (view == null)
+            return; // destroyed with the scene
+
+        slot.retainedSlide = view.RetainedSlide;
+        view.Release();
+        view.gameObject.SetActive(false);
+        _pool[Kind(view.Wide, view.ImageOnTop)].Add(view);
+    }
+
+    /// <summary>
+    /// Cancels every view's requests, clears its images and releases its leases. Idempotent. With
+    /// <paramref name="toPool"/> the views also go back to the pool. Without it they stay assigned and
+    /// active - Unity refuses SetActive while the screen itself is being deactivated or destroyed - and
+    /// UpdateVisibility makes them load again on reactivation.
+    /// </summary>
+    private void ReleaseCards(bool toPool = true)
+    {
+        foreach (EventSlot slot in _slots)
+        {
+            if (slot.view == null)
+                continue;
+            if (toPool)
+            {
+                ReturnView(slot);
+                continue;
+            }
+
+            slot.retainedSlide = slot.view.RetainedSlide;
+            slot.view.Release();
         }
     }
 

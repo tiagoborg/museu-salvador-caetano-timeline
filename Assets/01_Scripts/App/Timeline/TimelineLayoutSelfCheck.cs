@@ -136,6 +136,14 @@ public static class TimelineLayoutSelfCheck
         check(TimelineLayout.FitDots(1, inner, 6f, 6f).size == 6f, "a single dot is kept at full size");
         check(TimelineLayout.FitDots(0, inner, 6f, 6f).size == 0f, "no gallery, no dots");
 
+        // Bounded indicator: dots only for 2..max images; past max a counter; never both, never for 0 or 1.
+        check(TimelineLayout.IndicatorDots(0, 5) == 0 && TimelineLayout.IndicatorDots(1, 5) == 0
+            && !TimelineLayout.IndicatorCounter(1, 5), "0 or 1 image: no indicator");
+        check(TimelineLayout.IndicatorDots(2, 5) == 2 && TimelineLayout.IndicatorDots(5, 5) == 5
+            && !TimelineLayout.IndicatorCounter(5, 5), "up to max: one dot per image");
+        check(TimelineLayout.IndicatorDots(6, 5) == 0 && TimelineLayout.IndicatorCounter(6, 5)
+            && TimelineLayout.IndicatorDots(100, 5) == 0 && TimelineLayout.IndicatorCounter(100, 5), "past max: counter, no dots");
+
         // Decade width: a strip when empty, columns plus padding otherwise.
         check(TimelineLayout.DecadeWidth(new List<float>(), 50f, 20f, 18f, 18f) == 50f, "empty decade is a strip");
         check(TimelineLayout.DecadeWidth(new List<float> { 260f, 380f }, 50f, 20f, 18f, 18f) == 696f, "two-column decade width");

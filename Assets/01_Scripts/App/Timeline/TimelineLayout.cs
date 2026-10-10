@@ -167,6 +167,20 @@ public static class TimelineLayout
     }
 
     /// <summary>
+    /// Slide indicator dots: one per image for a small gallery, none for 0 or 1 image, and none past
+    /// <paramref name="maxDots"/> - a larger gallery shows a "current / total" counter instead.
+    /// </summary>
+    public static int IndicatorDots(int galleryCount, int maxDots)
+    {
+        return CyclesSlides(galleryCount) && galleryCount <= maxDots ? galleryCount : 0;
+    }
+
+    public static bool IndicatorCounter(int galleryCount, int maxDots)
+    {
+        return CyclesSlides(galleryCount) && galleryCount > maxDots;
+    }
+
+    /// <summary>
     /// One card's slideshow interval in seconds, from a random sample in [0, 1] mapped onto
     /// [min, max]. The bounds may be given in either order; the interval is never below 0.1 s.
     /// </summary>

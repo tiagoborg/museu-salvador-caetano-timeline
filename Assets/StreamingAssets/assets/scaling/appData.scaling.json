@@ -1,0 +1,4209 @@
+{
+  "code": 0,
+  "data": {
+    "languages": [
+      "pt",
+      "en"
+    ],
+    "categories": [
+      {
+        "id": 0,
+        "name": {
+          "pt": "Figuras",
+          "en": "Figures"
+        }
+      },
+      {
+        "id": 1,
+        "name": {
+          "pt": "Empresa",
+          "en": "Company"
+        }
+      },
+      {
+        "id": 2,
+        "name": {
+          "pt": "Veículos",
+          "en": "Vehicles"
+        }
+      },
+      {
+        "id": 3,
+        "name": {
+          "pt": "Responsabilidade Social",
+          "en": "Social Responsibility"
+        }
+      },
+      {
+        "id": 4,
+        "name": {
+          "pt": "Distinções",
+          "en": "Awards"
+        }
+      },
+      {
+        "id": 5,
+        "name": {
+          "pt": "Competições",
+          "en": "Competitions"
+        }
+      },
+      {
+        "id": 6,
+        "name": {
+          "pt": "Mobilidade",
+          "en": "Mobility"
+        }
+      },
+      {
+        "id": 7,
+        "name": {
+          "pt": "Inovação",
+          "en": "Innovation"
+        }
+      },
+      {
+        "id": 8,
+        "name": {
+          "pt": "Internacionalização",
+          "en": "Internationalisation"
+        }
+      },
+      {
+        "id": 9,
+        "name": {
+          "pt": "Publicidade",
+          "en": "Advertising"
+        }
+      }
+    ],
+    "timeline": [
+      {
+        "id": 0,
+        "categoryId": 0,
+        "year": 1920,
+        "content": {
+          "pt": "Exemplo 000: evento curto.",
+          "en": "Sample 000: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e000_i0.png"
+          },
+          {
+            "url": "scaling/c0_e000_i1.png"
+          },
+          {
+            "url": "scaling/c0_e000_i2.png"
+          },
+          {
+            "url": "scaling/c0_e000_i3.png"
+          },
+          {
+            "url": "scaling/c0_e000_i4.png"
+          },
+          {
+            "url": "scaling/c0_e000_i5.png"
+          },
+          {
+            "url": "scaling/c0_e000_i6.png"
+          },
+          {
+            "url": "scaling/c0_e000_i7.png"
+          },
+          {
+            "url": "scaling/c0_e000_i8.png"
+          },
+          {
+            "url": "scaling/c0_e000_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "categoryId": 1,
+        "year": 1921,
+        "content": {
+          "pt": "Exemplo 001: inauguração de uma oficina na área de Empresa, com apresentação ao público.",
+          "en": "Sample 001: opening of a workshop in the Company area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e001_i0.png"
+          },
+          {
+            "url": "scaling/c1_e001_i1.png"
+          },
+          {
+            "url": "scaling/c1_e001_i2.png"
+          },
+          {
+            "url": "scaling/c1_e001_i3.png"
+          },
+          {
+            "url": "scaling/c1_e001_i4.png"
+          },
+          {
+            "url": "scaling/c1_e001_i5.png"
+          },
+          {
+            "url": "scaling/c1_e001_i6.png"
+          },
+          {
+            "url": "scaling/c1_e001_i7.png"
+          },
+          {
+            "url": "scaling/c1_e001_i8.png"
+          },
+          {
+            "url": "scaling/c1_e001_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "categoryId": 2,
+        "year": 1922,
+        "content": {
+          "pt": "Exemplo 002: um texto longo de teste de escala em Veículos. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 002: a long scaling test text in Vehicles. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e002_i0.png"
+          },
+          {
+            "url": "scaling/c2_e002_i1.png"
+          },
+          {
+            "url": "scaling/c2_e002_i2.png"
+          },
+          {
+            "url": "scaling/c2_e002_i3.png"
+          },
+          {
+            "url": "scaling/c2_e002_i4.png"
+          },
+          {
+            "url": "scaling/c2_e002_i5.png"
+          },
+          {
+            "url": "scaling/c2_e002_i6.png"
+          },
+          {
+            "url": "scaling/c2_e002_i7.png"
+          },
+          {
+            "url": "scaling/c2_e002_i8.png"
+          },
+          {
+            "url": "scaling/c2_e002_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "categoryId": 3,
+        "year": 1923,
+        "content": {
+          "pt": "Exemplo 003: evento curto.",
+          "en": "Sample 003: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e003_i0.png"
+          },
+          {
+            "url": "scaling/c3_e003_i1.png"
+          },
+          {
+            "url": "scaling/c3_e003_i2.png"
+          },
+          {
+            "url": "scaling/c3_e003_i3.png"
+          },
+          {
+            "url": "scaling/c3_e003_i4.png"
+          },
+          {
+            "url": "scaling/c3_e003_i5.png"
+          },
+          {
+            "url": "scaling/c3_e003_i6.png"
+          },
+          {
+            "url": "scaling/c3_e003_i7.png"
+          },
+          {
+            "url": "scaling/c3_e003_i8.png"
+          },
+          {
+            "url": "scaling/c3_e003_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "categoryId": 4,
+        "year": 1924,
+        "content": {
+          "pt": "Exemplo 004: inauguração de uma oficina na área de Distinções, com apresentação ao público.",
+          "en": "Sample 004: opening of a workshop in the Awards area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e004_i0.png"
+          },
+          {
+            "url": "scaling/c4_e004_i1.png"
+          },
+          {
+            "url": "scaling/c4_e004_i2.png"
+          },
+          {
+            "url": "scaling/c4_e004_i3.png"
+          },
+          {
+            "url": "scaling/c4_e004_i4.png"
+          },
+          {
+            "url": "scaling/c4_e004_i5.png"
+          },
+          {
+            "url": "scaling/c4_e004_i6.png"
+          },
+          {
+            "url": "scaling/c4_e004_i7.png"
+          },
+          {
+            "url": "scaling/c4_e004_i8.png"
+          },
+          {
+            "url": "scaling/c4_e004_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "categoryId": 5,
+        "year": 1925,
+        "content": {
+          "pt": "Exemplo 005: um texto longo de teste de escala em Competições. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 005: a long scaling test text in Competitions. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e005_i0.png"
+          },
+          {
+            "url": "scaling/c5_e005_i1.png"
+          },
+          {
+            "url": "scaling/c5_e005_i2.png"
+          },
+          {
+            "url": "scaling/c5_e005_i3.png"
+          },
+          {
+            "url": "scaling/c5_e005_i4.png"
+          },
+          {
+            "url": "scaling/c5_e005_i5.png"
+          },
+          {
+            "url": "scaling/c5_e005_i6.png"
+          },
+          {
+            "url": "scaling/c5_e005_i7.png"
+          },
+          {
+            "url": "scaling/c5_e005_i8.png"
+          },
+          {
+            "url": "scaling/c5_e005_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "categoryId": 6,
+        "year": 1926,
+        "content": {
+          "pt": "Exemplo 006: evento curto.",
+          "en": "Sample 006: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e006_i0.png"
+          },
+          {
+            "url": "scaling/c6_e006_i1.png"
+          },
+          {
+            "url": "scaling/c6_e006_i2.png"
+          },
+          {
+            "url": "scaling/c6_e006_i3.png"
+          },
+          {
+            "url": "scaling/c6_e006_i4.png"
+          },
+          {
+            "url": "scaling/c6_e006_i5.png"
+          },
+          {
+            "url": "scaling/c6_e006_i6.png"
+          },
+          {
+            "url": "scaling/c6_e006_i7.png"
+          },
+          {
+            "url": "scaling/c6_e006_i8.png"
+          },
+          {
+            "url": "scaling/c6_e006_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "categoryId": 7,
+        "year": 1927,
+        "content": {
+          "pt": "Exemplo 007: inauguração de uma oficina na área de Inovação, com apresentação ao público.",
+          "en": "Sample 007: opening of a workshop in the Innovation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e007_i0.png"
+          },
+          {
+            "url": "scaling/c7_e007_i1.png"
+          },
+          {
+            "url": "scaling/c7_e007_i2.png"
+          },
+          {
+            "url": "scaling/c7_e007_i3.png"
+          },
+          {
+            "url": "scaling/c7_e007_i4.png"
+          },
+          {
+            "url": "scaling/c7_e007_i5.png"
+          },
+          {
+            "url": "scaling/c7_e007_i6.png"
+          },
+          {
+            "url": "scaling/c7_e007_i7.png"
+          },
+          {
+            "url": "scaling/c7_e007_i8.png"
+          },
+          {
+            "url": "scaling/c7_e007_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "categoryId": 8,
+        "year": 1929,
+        "content": {
+          "pt": "Exemplo 008: um texto longo de teste de escala em Internacionalização. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 008: a long scaling test text in Internationalisation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e008_i0.png"
+          },
+          {
+            "url": "scaling/c8_e008_i1.png"
+          },
+          {
+            "url": "scaling/c8_e008_i2.png"
+          },
+          {
+            "url": "scaling/c8_e008_i3.png"
+          },
+          {
+            "url": "scaling/c8_e008_i4.png"
+          },
+          {
+            "url": "scaling/c8_e008_i5.png"
+          },
+          {
+            "url": "scaling/c8_e008_i6.png"
+          },
+          {
+            "url": "scaling/c8_e008_i7.png"
+          },
+          {
+            "url": "scaling/c8_e008_i8.png"
+          },
+          {
+            "url": "scaling/c8_e008_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "categoryId": 9,
+        "year": 1930,
+        "content": {
+          "pt": "Exemplo 009: evento curto.",
+          "en": "Sample 009: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e009_i0.png"
+          },
+          {
+            "url": "scaling/c9_e009_i1.png"
+          },
+          {
+            "url": "scaling/c9_e009_i2.png"
+          },
+          {
+            "url": "scaling/c9_e009_i3.png"
+          },
+          {
+            "url": "scaling/c9_e009_i4.png"
+          },
+          {
+            "url": "scaling/c9_e009_i5.png"
+          },
+          {
+            "url": "scaling/c9_e009_i6.png"
+          },
+          {
+            "url": "scaling/c9_e009_i7.png"
+          },
+          {
+            "url": "scaling/c9_e009_i8.png"
+          },
+          {
+            "url": "scaling/c9_e009_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "categoryId": 0,
+        "year": 1931,
+        "content": {
+          "pt": "Exemplo 010: inauguração de uma oficina na área de Figuras, com apresentação ao público.",
+          "en": "Sample 010: opening of a workshop in the Figures area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e010_i0.png"
+          },
+          {
+            "url": "scaling/c0_e010_i1.png"
+          },
+          {
+            "url": "scaling/c0_e010_i2.png"
+          },
+          {
+            "url": "scaling/c0_e010_i3.png"
+          },
+          {
+            "url": "scaling/c0_e010_i4.png"
+          },
+          {
+            "url": "scaling/c0_e010_i5.png"
+          },
+          {
+            "url": "scaling/c0_e010_i6.png"
+          },
+          {
+            "url": "scaling/c0_e010_i7.png"
+          },
+          {
+            "url": "scaling/c0_e010_i8.png"
+          },
+          {
+            "url": "scaling/c0_e010_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "categoryId": 1,
+        "year": 1932,
+        "content": {
+          "pt": "Exemplo 011: um texto longo de teste de escala em Empresa. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 011: a long scaling test text in Company. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e011_i0.png"
+          },
+          {
+            "url": "scaling/c1_e011_i1.png"
+          },
+          {
+            "url": "scaling/c1_e011_i2.png"
+          },
+          {
+            "url": "scaling/c1_e011_i3.png"
+          },
+          {
+            "url": "scaling/c1_e011_i4.png"
+          },
+          {
+            "url": "scaling/c1_e011_i5.png"
+          },
+          {
+            "url": "scaling/c1_e011_i6.png"
+          },
+          {
+            "url": "scaling/c1_e011_i7.png"
+          },
+          {
+            "url": "scaling/c1_e011_i8.png"
+          },
+          {
+            "url": "scaling/c1_e011_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "categoryId": 2,
+        "year": 1933,
+        "content": {
+          "pt": "Exemplo 012: evento curto.",
+          "en": "Sample 012: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e012_i0.png"
+          },
+          {
+            "url": "scaling/c2_e012_i1.png"
+          },
+          {
+            "url": "scaling/c2_e012_i2.png"
+          },
+          {
+            "url": "scaling/c2_e012_i3.png"
+          },
+          {
+            "url": "scaling/c2_e012_i4.png"
+          },
+          {
+            "url": "scaling/c2_e012_i5.png"
+          },
+          {
+            "url": "scaling/c2_e012_i6.png"
+          },
+          {
+            "url": "scaling/c2_e012_i7.png"
+          },
+          {
+            "url": "scaling/c2_e012_i8.png"
+          },
+          {
+            "url": "scaling/c2_e012_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "categoryId": 3,
+        "year": 1934,
+        "content": {
+          "pt": "Exemplo 013: inauguração de uma oficina na área de Responsabilidade Social, com apresentação ao público.",
+          "en": "Sample 013: opening of a workshop in the Social Responsibility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e013_i0.png"
+          },
+          {
+            "url": "scaling/c3_e013_i1.png"
+          },
+          {
+            "url": "scaling/c3_e013_i2.png"
+          },
+          {
+            "url": "scaling/c3_e013_i3.png"
+          },
+          {
+            "url": "scaling/c3_e013_i4.png"
+          },
+          {
+            "url": "scaling/c3_e013_i5.png"
+          },
+          {
+            "url": "scaling/c3_e013_i6.png"
+          },
+          {
+            "url": "scaling/c3_e013_i7.png"
+          },
+          {
+            "url": "scaling/c3_e013_i8.png"
+          },
+          {
+            "url": "scaling/c3_e013_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "categoryId": 4,
+        "year": 1935,
+        "content": {
+          "pt": "Exemplo 014: um texto longo de teste de escala em Distinções. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 014: a long scaling test text in Awards. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e014_i0.png"
+          },
+          {
+            "url": "scaling/c4_e014_i1.png"
+          },
+          {
+            "url": "scaling/c4_e014_i2.png"
+          },
+          {
+            "url": "scaling/c4_e014_i3.png"
+          },
+          {
+            "url": "scaling/c4_e014_i4.png"
+          },
+          {
+            "url": "scaling/c4_e014_i5.png"
+          },
+          {
+            "url": "scaling/c4_e014_i6.png"
+          },
+          {
+            "url": "scaling/c4_e014_i7.png"
+          },
+          {
+            "url": "scaling/c4_e014_i8.png"
+          },
+          {
+            "url": "scaling/c4_e014_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "categoryId": 5,
+        "year": 1936,
+        "content": {
+          "pt": "Exemplo 015: evento curto.",
+          "en": "Sample 015: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e015_i0.png"
+          },
+          {
+            "url": "scaling/c5_e015_i1.png"
+          },
+          {
+            "url": "scaling/c5_e015_i2.png"
+          },
+          {
+            "url": "scaling/c5_e015_i3.png"
+          },
+          {
+            "url": "scaling/c5_e015_i4.png"
+          },
+          {
+            "url": "scaling/c5_e015_i5.png"
+          },
+          {
+            "url": "scaling/c5_e015_i6.png"
+          },
+          {
+            "url": "scaling/c5_e015_i7.png"
+          },
+          {
+            "url": "scaling/c5_e015_i8.png"
+          },
+          {
+            "url": "scaling/c5_e015_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "categoryId": 6,
+        "year": 1937,
+        "content": {
+          "pt": "Exemplo 016: inauguração de uma oficina na área de Mobilidade, com apresentação ao público.",
+          "en": "Sample 016: opening of a workshop in the Mobility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e016_i0.png"
+          },
+          {
+            "url": "scaling/c6_e016_i1.png"
+          },
+          {
+            "url": "scaling/c6_e016_i2.png"
+          },
+          {
+            "url": "scaling/c6_e016_i3.png"
+          },
+          {
+            "url": "scaling/c6_e016_i4.png"
+          },
+          {
+            "url": "scaling/c6_e016_i5.png"
+          },
+          {
+            "url": "scaling/c6_e016_i6.png"
+          },
+          {
+            "url": "scaling/c6_e016_i7.png"
+          },
+          {
+            "url": "scaling/c6_e016_i8.png"
+          },
+          {
+            "url": "scaling/c6_e016_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "categoryId": 7,
+        "year": 1938,
+        "content": {
+          "pt": "Exemplo 017: um texto longo de teste de escala em Inovação. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 017: a long scaling test text in Innovation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e017_i0.png"
+          },
+          {
+            "url": "scaling/c7_e017_i1.png"
+          },
+          {
+            "url": "scaling/c7_e017_i2.png"
+          },
+          {
+            "url": "scaling/c7_e017_i3.png"
+          },
+          {
+            "url": "scaling/c7_e017_i4.png"
+          },
+          {
+            "url": "scaling/c7_e017_i5.png"
+          },
+          {
+            "url": "scaling/c7_e017_i6.png"
+          },
+          {
+            "url": "scaling/c7_e017_i7.png"
+          },
+          {
+            "url": "scaling/c7_e017_i8.png"
+          },
+          {
+            "url": "scaling/c7_e017_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "categoryId": 8,
+        "year": 1939,
+        "content": {
+          "pt": "Exemplo 018: evento curto.",
+          "en": "Sample 018: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e018_i0.png"
+          },
+          {
+            "url": "scaling/c8_e018_i1.png"
+          },
+          {
+            "url": "scaling/c8_e018_i2.png"
+          },
+          {
+            "url": "scaling/c8_e018_i3.png"
+          },
+          {
+            "url": "scaling/c8_e018_i4.png"
+          },
+          {
+            "url": "scaling/c8_e018_i5.png"
+          },
+          {
+            "url": "scaling/c8_e018_i6.png"
+          },
+          {
+            "url": "scaling/c8_e018_i7.png"
+          },
+          {
+            "url": "scaling/c8_e018_i8.png"
+          },
+          {
+            "url": "scaling/c8_e018_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "categoryId": 9,
+        "year": 1940,
+        "content": {
+          "pt": "Exemplo 019: inauguração de uma oficina na área de Publicidade, com apresentação ao público.",
+          "en": "Sample 019: opening of a workshop in the Advertising area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e019_i0.png"
+          },
+          {
+            "url": "scaling/c9_e019_i1.png"
+          },
+          {
+            "url": "scaling/c9_e019_i2.png"
+          },
+          {
+            "url": "scaling/c9_e019_i3.png"
+          },
+          {
+            "url": "scaling/c9_e019_i4.png"
+          },
+          {
+            "url": "scaling/c9_e019_i5.png"
+          },
+          {
+            "url": "scaling/c9_e019_i6.png"
+          },
+          {
+            "url": "scaling/c9_e019_i7.png"
+          },
+          {
+            "url": "scaling/c9_e019_i8.png"
+          },
+          {
+            "url": "scaling/c9_e019_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "categoryId": 0,
+        "year": 1941,
+        "content": {
+          "pt": "Exemplo 020: um texto longo de teste de escala em Figuras. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 020: a long scaling test text in Figures. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e020_i0.png"
+          },
+          {
+            "url": "scaling/c0_e020_i1.png"
+          },
+          {
+            "url": "scaling/c0_e020_i2.png"
+          },
+          {
+            "url": "scaling/c0_e020_i3.png"
+          },
+          {
+            "url": "scaling/c0_e020_i4.png"
+          },
+          {
+            "url": "scaling/c0_e020_i5.png"
+          },
+          {
+            "url": "scaling/c0_e020_i6.png"
+          },
+          {
+            "url": "scaling/c0_e020_i7.png"
+          },
+          {
+            "url": "scaling/c0_e020_i8.png"
+          },
+          {
+            "url": "scaling/c0_e020_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "categoryId": 1,
+        "year": 1942,
+        "content": {
+          "pt": "Exemplo 021: evento curto.",
+          "en": "Sample 021: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e021_i0.png"
+          },
+          {
+            "url": "scaling/c1_e021_i1.png"
+          },
+          {
+            "url": "scaling/c1_e021_i2.png"
+          },
+          {
+            "url": "scaling/c1_e021_i3.png"
+          },
+          {
+            "url": "scaling/c1_e021_i4.png"
+          },
+          {
+            "url": "scaling/c1_e021_i5.png"
+          },
+          {
+            "url": "scaling/c1_e021_i6.png"
+          },
+          {
+            "url": "scaling/c1_e021_i7.png"
+          },
+          {
+            "url": "scaling/c1_e021_i8.png"
+          },
+          {
+            "url": "scaling/c1_e021_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "categoryId": 2,
+        "year": 1944,
+        "content": {
+          "pt": "Exemplo 022: inauguração de uma oficina na área de Veículos, com apresentação ao público.",
+          "en": "Sample 022: opening of a workshop in the Vehicles area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e022_i0.png"
+          },
+          {
+            "url": "scaling/c2_e022_i1.png"
+          },
+          {
+            "url": "scaling/c2_e022_i2.png"
+          },
+          {
+            "url": "scaling/c2_e022_i3.png"
+          },
+          {
+            "url": "scaling/c2_e022_i4.png"
+          },
+          {
+            "url": "scaling/c2_e022_i5.png"
+          },
+          {
+            "url": "scaling/c2_e022_i6.png"
+          },
+          {
+            "url": "scaling/c2_e022_i7.png"
+          },
+          {
+            "url": "scaling/c2_e022_i8.png"
+          },
+          {
+            "url": "scaling/c2_e022_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "categoryId": 3,
+        "year": 1945,
+        "content": {
+          "pt": "Exemplo 023: um texto longo de teste de escala em Responsabilidade Social. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 023: a long scaling test text in Social Responsibility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e023_i0.png"
+          },
+          {
+            "url": "scaling/c3_e023_i1.png"
+          },
+          {
+            "url": "scaling/c3_e023_i2.png"
+          },
+          {
+            "url": "scaling/c3_e023_i3.png"
+          },
+          {
+            "url": "scaling/c3_e023_i4.png"
+          },
+          {
+            "url": "scaling/c3_e023_i5.png"
+          },
+          {
+            "url": "scaling/c3_e023_i6.png"
+          },
+          {
+            "url": "scaling/c3_e023_i7.png"
+          },
+          {
+            "url": "scaling/c3_e023_i8.png"
+          },
+          {
+            "url": "scaling/c3_e023_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "categoryId": 4,
+        "year": 1946,
+        "content": {
+          "pt": "Exemplo 024: evento curto.",
+          "en": "Sample 024: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e024_i0.png"
+          },
+          {
+            "url": "scaling/c4_e024_i1.png"
+          },
+          {
+            "url": "scaling/c4_e024_i2.png"
+          },
+          {
+            "url": "scaling/c4_e024_i3.png"
+          },
+          {
+            "url": "scaling/c4_e024_i4.png"
+          },
+          {
+            "url": "scaling/c4_e024_i5.png"
+          },
+          {
+            "url": "scaling/c4_e024_i6.png"
+          },
+          {
+            "url": "scaling/c4_e024_i7.png"
+          },
+          {
+            "url": "scaling/c4_e024_i8.png"
+          },
+          {
+            "url": "scaling/c4_e024_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "categoryId": 5,
+        "year": 1947,
+        "content": {
+          "pt": "Exemplo 025: inauguração de uma oficina na área de Competições, com apresentação ao público.",
+          "en": "Sample 025: opening of a workshop in the Competitions area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e025_i0.png"
+          },
+          {
+            "url": "scaling/c5_e025_i1.png"
+          },
+          {
+            "url": "scaling/c5_e025_i2.png"
+          },
+          {
+            "url": "scaling/c5_e025_i3.png"
+          },
+          {
+            "url": "scaling/c5_e025_i4.png"
+          },
+          {
+            "url": "scaling/c5_e025_i5.png"
+          },
+          {
+            "url": "scaling/c5_e025_i6.png"
+          },
+          {
+            "url": "scaling/c5_e025_i7.png"
+          },
+          {
+            "url": "scaling/c5_e025_i8.png"
+          },
+          {
+            "url": "scaling/c5_e025_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "categoryId": 6,
+        "year": 1948,
+        "content": {
+          "pt": "Exemplo 026: um texto longo de teste de escala em Mobilidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 026: a long scaling test text in Mobility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e026_i0.png"
+          },
+          {
+            "url": "scaling/c6_e026_i1.png"
+          },
+          {
+            "url": "scaling/c6_e026_i2.png"
+          },
+          {
+            "url": "scaling/c6_e026_i3.png"
+          },
+          {
+            "url": "scaling/c6_e026_i4.png"
+          },
+          {
+            "url": "scaling/c6_e026_i5.png"
+          },
+          {
+            "url": "scaling/c6_e026_i6.png"
+          },
+          {
+            "url": "scaling/c6_e026_i7.png"
+          },
+          {
+            "url": "scaling/c6_e026_i8.png"
+          },
+          {
+            "url": "scaling/c6_e026_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 27,
+        "categoryId": 7,
+        "year": 1949,
+        "content": {
+          "pt": "Exemplo 027: evento curto.",
+          "en": "Sample 027: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e027_i0.png"
+          },
+          {
+            "url": "scaling/c7_e027_i1.png"
+          },
+          {
+            "url": "scaling/c7_e027_i2.png"
+          },
+          {
+            "url": "scaling/c7_e027_i3.png"
+          },
+          {
+            "url": "scaling/c7_e027_i4.png"
+          },
+          {
+            "url": "scaling/c7_e027_i5.png"
+          },
+          {
+            "url": "scaling/c7_e027_i6.png"
+          },
+          {
+            "url": "scaling/c7_e027_i7.png"
+          },
+          {
+            "url": "scaling/c7_e027_i8.png"
+          },
+          {
+            "url": "scaling/c7_e027_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 28,
+        "categoryId": 8,
+        "year": 1950,
+        "content": {
+          "pt": "Exemplo 028: inauguração de uma oficina na área de Internacionalização, com apresentação ao público.",
+          "en": "Sample 028: opening of a workshop in the Internationalisation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e028_i0.png"
+          },
+          {
+            "url": "scaling/c8_e028_i1.png"
+          },
+          {
+            "url": "scaling/c8_e028_i2.png"
+          },
+          {
+            "url": "scaling/c8_e028_i3.png"
+          },
+          {
+            "url": "scaling/c8_e028_i4.png"
+          },
+          {
+            "url": "scaling/c8_e028_i5.png"
+          },
+          {
+            "url": "scaling/c8_e028_i6.png"
+          },
+          {
+            "url": "scaling/c8_e028_i7.png"
+          },
+          {
+            "url": "scaling/c8_e028_i8.png"
+          },
+          {
+            "url": "scaling/c8_e028_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 29,
+        "categoryId": 9,
+        "year": 1951,
+        "content": {
+          "pt": "Exemplo 029: um texto longo de teste de escala em Publicidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 029: a long scaling test text in Advertising. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e029_i0.png"
+          },
+          {
+            "url": "scaling/c9_e029_i1.png"
+          },
+          {
+            "url": "scaling/c9_e029_i2.png"
+          },
+          {
+            "url": "scaling/c9_e029_i3.png"
+          },
+          {
+            "url": "scaling/c9_e029_i4.png"
+          },
+          {
+            "url": "scaling/c9_e029_i5.png"
+          },
+          {
+            "url": "scaling/c9_e029_i6.png"
+          },
+          {
+            "url": "scaling/c9_e029_i7.png"
+          },
+          {
+            "url": "scaling/c9_e029_i8.png"
+          },
+          {
+            "url": "scaling/c9_e029_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "categoryId": 0,
+        "year": 1952,
+        "content": {
+          "pt": "Exemplo 030: evento curto.",
+          "en": "Sample 030: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e030_i0.png"
+          },
+          {
+            "url": "scaling/c0_e030_i1.png"
+          },
+          {
+            "url": "scaling/c0_e030_i2.png"
+          },
+          {
+            "url": "scaling/c0_e030_i3.png"
+          },
+          {
+            "url": "scaling/c0_e030_i4.png"
+          },
+          {
+            "url": "scaling/c0_e030_i5.png"
+          },
+          {
+            "url": "scaling/c0_e030_i6.png"
+          },
+          {
+            "url": "scaling/c0_e030_i7.png"
+          },
+          {
+            "url": "scaling/c0_e030_i8.png"
+          },
+          {
+            "url": "scaling/c0_e030_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "categoryId": 1,
+        "year": 1953,
+        "content": {
+          "pt": "Exemplo 031: inauguração de uma oficina na área de Empresa, com apresentação ao público.",
+          "en": "Sample 031: opening of a workshop in the Company area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e031_i0.png"
+          },
+          {
+            "url": "scaling/c1_e031_i1.png"
+          },
+          {
+            "url": "scaling/c1_e031_i2.png"
+          },
+          {
+            "url": "scaling/c1_e031_i3.png"
+          },
+          {
+            "url": "scaling/c1_e031_i4.png"
+          },
+          {
+            "url": "scaling/c1_e031_i5.png"
+          },
+          {
+            "url": "scaling/c1_e031_i6.png"
+          },
+          {
+            "url": "scaling/c1_e031_i7.png"
+          },
+          {
+            "url": "scaling/c1_e031_i8.png"
+          },
+          {
+            "url": "scaling/c1_e031_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "categoryId": 2,
+        "year": 1954,
+        "content": {
+          "pt": "Exemplo 032: um texto longo de teste de escala em Veículos. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 032: a long scaling test text in Vehicles. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e032_i0.png"
+          },
+          {
+            "url": "scaling/c2_e032_i1.png"
+          },
+          {
+            "url": "scaling/c2_e032_i2.png"
+          },
+          {
+            "url": "scaling/c2_e032_i3.png"
+          },
+          {
+            "url": "scaling/c2_e032_i4.png"
+          },
+          {
+            "url": "scaling/c2_e032_i5.png"
+          },
+          {
+            "url": "scaling/c2_e032_i6.png"
+          },
+          {
+            "url": "scaling/c2_e032_i7.png"
+          },
+          {
+            "url": "scaling/c2_e032_i8.png"
+          },
+          {
+            "url": "scaling/c2_e032_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "categoryId": 3,
+        "year": 1955,
+        "content": {
+          "pt": "Exemplo 033: evento curto.",
+          "en": "Sample 033: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e033_i0.png"
+          },
+          {
+            "url": "scaling/c3_e033_i1.png"
+          },
+          {
+            "url": "scaling/c3_e033_i2.png"
+          },
+          {
+            "url": "scaling/c3_e033_i3.png"
+          },
+          {
+            "url": "scaling/c3_e033_i4.png"
+          },
+          {
+            "url": "scaling/c3_e033_i5.png"
+          },
+          {
+            "url": "scaling/c3_e033_i6.png"
+          },
+          {
+            "url": "scaling/c3_e033_i7.png"
+          },
+          {
+            "url": "scaling/c3_e033_i8.png"
+          },
+          {
+            "url": "scaling/c3_e033_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "categoryId": 4,
+        "year": 1956,
+        "content": {
+          "pt": "Exemplo 034: inauguração de uma oficina na área de Distinções, com apresentação ao público.",
+          "en": "Sample 034: opening of a workshop in the Awards area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e034_i0.png"
+          },
+          {
+            "url": "scaling/c4_e034_i1.png"
+          },
+          {
+            "url": "scaling/c4_e034_i2.png"
+          },
+          {
+            "url": "scaling/c4_e034_i3.png"
+          },
+          {
+            "url": "scaling/c4_e034_i4.png"
+          },
+          {
+            "url": "scaling/c4_e034_i5.png"
+          },
+          {
+            "url": "scaling/c4_e034_i6.png"
+          },
+          {
+            "url": "scaling/c4_e034_i7.png"
+          },
+          {
+            "url": "scaling/c4_e034_i8.png"
+          },
+          {
+            "url": "scaling/c4_e034_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "categoryId": 5,
+        "year": 1957,
+        "content": {
+          "pt": "Exemplo 035: um texto longo de teste de escala em Competições. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 035: a long scaling test text in Competitions. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e035_i0.png"
+          },
+          {
+            "url": "scaling/c5_e035_i1.png"
+          },
+          {
+            "url": "scaling/c5_e035_i2.png"
+          },
+          {
+            "url": "scaling/c5_e035_i3.png"
+          },
+          {
+            "url": "scaling/c5_e035_i4.png"
+          },
+          {
+            "url": "scaling/c5_e035_i5.png"
+          },
+          {
+            "url": "scaling/c5_e035_i6.png"
+          },
+          {
+            "url": "scaling/c5_e035_i7.png"
+          },
+          {
+            "url": "scaling/c5_e035_i8.png"
+          },
+          {
+            "url": "scaling/c5_e035_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 36,
+        "categoryId": 6,
+        "year": 1959,
+        "content": {
+          "pt": "Exemplo 036: evento curto.",
+          "en": "Sample 036: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e036_i0.png"
+          },
+          {
+            "url": "scaling/c6_e036_i1.png"
+          },
+          {
+            "url": "scaling/c6_e036_i2.png"
+          },
+          {
+            "url": "scaling/c6_e036_i3.png"
+          },
+          {
+            "url": "scaling/c6_e036_i4.png"
+          },
+          {
+            "url": "scaling/c6_e036_i5.png"
+          },
+          {
+            "url": "scaling/c6_e036_i6.png"
+          },
+          {
+            "url": "scaling/c6_e036_i7.png"
+          },
+          {
+            "url": "scaling/c6_e036_i8.png"
+          },
+          {
+            "url": "scaling/c6_e036_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 37,
+        "categoryId": 7,
+        "year": 1960,
+        "content": {
+          "pt": "Exemplo 037: inauguração de uma oficina na área de Inovação, com apresentação ao público.",
+          "en": "Sample 037: opening of a workshop in the Innovation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e037_i0.png"
+          },
+          {
+            "url": "scaling/c7_e037_i1.png"
+          },
+          {
+            "url": "scaling/c7_e037_i2.png"
+          },
+          {
+            "url": "scaling/c7_e037_i3.png"
+          },
+          {
+            "url": "scaling/c7_e037_i4.png"
+          },
+          {
+            "url": "scaling/c7_e037_i5.png"
+          },
+          {
+            "url": "scaling/c7_e037_i6.png"
+          },
+          {
+            "url": "scaling/c7_e037_i7.png"
+          },
+          {
+            "url": "scaling/c7_e037_i8.png"
+          },
+          {
+            "url": "scaling/c7_e037_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 38,
+        "categoryId": 8,
+        "year": 1961,
+        "content": {
+          "pt": "Exemplo 038: um texto longo de teste de escala em Internacionalização. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 038: a long scaling test text in Internationalisation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e038_i0.png"
+          },
+          {
+            "url": "scaling/c8_e038_i1.png"
+          },
+          {
+            "url": "scaling/c8_e038_i2.png"
+          },
+          {
+            "url": "scaling/c8_e038_i3.png"
+          },
+          {
+            "url": "scaling/c8_e038_i4.png"
+          },
+          {
+            "url": "scaling/c8_e038_i5.png"
+          },
+          {
+            "url": "scaling/c8_e038_i6.png"
+          },
+          {
+            "url": "scaling/c8_e038_i7.png"
+          },
+          {
+            "url": "scaling/c8_e038_i8.png"
+          },
+          {
+            "url": "scaling/c8_e038_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 39,
+        "categoryId": 9,
+        "year": 1962,
+        "content": {
+          "pt": "Exemplo 039: evento curto.",
+          "en": "Sample 039: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e039_i0.png"
+          },
+          {
+            "url": "scaling/c9_e039_i1.png"
+          },
+          {
+            "url": "scaling/c9_e039_i2.png"
+          },
+          {
+            "url": "scaling/c9_e039_i3.png"
+          },
+          {
+            "url": "scaling/c9_e039_i4.png"
+          },
+          {
+            "url": "scaling/c9_e039_i5.png"
+          },
+          {
+            "url": "scaling/c9_e039_i6.png"
+          },
+          {
+            "url": "scaling/c9_e039_i7.png"
+          },
+          {
+            "url": "scaling/c9_e039_i8.png"
+          },
+          {
+            "url": "scaling/c9_e039_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "categoryId": 0,
+        "year": 1963,
+        "content": {
+          "pt": "Exemplo 040: inauguração de uma oficina na área de Figuras, com apresentação ao público.",
+          "en": "Sample 040: opening of a workshop in the Figures area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e040_i0.png"
+          },
+          {
+            "url": "scaling/c0_e040_i1.png"
+          },
+          {
+            "url": "scaling/c0_e040_i2.png"
+          },
+          {
+            "url": "scaling/c0_e040_i3.png"
+          },
+          {
+            "url": "scaling/c0_e040_i4.png"
+          },
+          {
+            "url": "scaling/c0_e040_i5.png"
+          },
+          {
+            "url": "scaling/c0_e040_i6.png"
+          },
+          {
+            "url": "scaling/c0_e040_i7.png"
+          },
+          {
+            "url": "scaling/c0_e040_i8.png"
+          },
+          {
+            "url": "scaling/c0_e040_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 41,
+        "categoryId": 1,
+        "year": 1964,
+        "content": {
+          "pt": "Exemplo 041: um texto longo de teste de escala em Empresa. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 041: a long scaling test text in Company. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e041_i0.png"
+          },
+          {
+            "url": "scaling/c1_e041_i1.png"
+          },
+          {
+            "url": "scaling/c1_e041_i2.png"
+          },
+          {
+            "url": "scaling/c1_e041_i3.png"
+          },
+          {
+            "url": "scaling/c1_e041_i4.png"
+          },
+          {
+            "url": "scaling/c1_e041_i5.png"
+          },
+          {
+            "url": "scaling/c1_e041_i6.png"
+          },
+          {
+            "url": "scaling/c1_e041_i7.png"
+          },
+          {
+            "url": "scaling/c1_e041_i8.png"
+          },
+          {
+            "url": "scaling/c1_e041_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 42,
+        "categoryId": 2,
+        "year": 1965,
+        "content": {
+          "pt": "Exemplo 042: evento curto.",
+          "en": "Sample 042: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e042_i0.png"
+          },
+          {
+            "url": "scaling/c2_e042_i1.png"
+          },
+          {
+            "url": "scaling/c2_e042_i2.png"
+          },
+          {
+            "url": "scaling/c2_e042_i3.png"
+          },
+          {
+            "url": "scaling/c2_e042_i4.png"
+          },
+          {
+            "url": "scaling/c2_e042_i5.png"
+          },
+          {
+            "url": "scaling/c2_e042_i6.png"
+          },
+          {
+            "url": "scaling/c2_e042_i7.png"
+          },
+          {
+            "url": "scaling/c2_e042_i8.png"
+          },
+          {
+            "url": "scaling/c2_e042_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 43,
+        "categoryId": 3,
+        "year": 1966,
+        "content": {
+          "pt": "Exemplo 043: inauguração de uma oficina na área de Responsabilidade Social, com apresentação ao público.",
+          "en": "Sample 043: opening of a workshop in the Social Responsibility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e043_i0.png"
+          },
+          {
+            "url": "scaling/c3_e043_i1.png"
+          },
+          {
+            "url": "scaling/c3_e043_i2.png"
+          },
+          {
+            "url": "scaling/c3_e043_i3.png"
+          },
+          {
+            "url": "scaling/c3_e043_i4.png"
+          },
+          {
+            "url": "scaling/c3_e043_i5.png"
+          },
+          {
+            "url": "scaling/c3_e043_i6.png"
+          },
+          {
+            "url": "scaling/c3_e043_i7.png"
+          },
+          {
+            "url": "scaling/c3_e043_i8.png"
+          },
+          {
+            "url": "scaling/c3_e043_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 44,
+        "categoryId": 4,
+        "year": 1967,
+        "content": {
+          "pt": "Exemplo 044: um texto longo de teste de escala em Distinções. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 044: a long scaling test text in Awards. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e044_i0.png"
+          },
+          {
+            "url": "scaling/c4_e044_i1.png"
+          },
+          {
+            "url": "scaling/c4_e044_i2.png"
+          },
+          {
+            "url": "scaling/c4_e044_i3.png"
+          },
+          {
+            "url": "scaling/c4_e044_i4.png"
+          },
+          {
+            "url": "scaling/c4_e044_i5.png"
+          },
+          {
+            "url": "scaling/c4_e044_i6.png"
+          },
+          {
+            "url": "scaling/c4_e044_i7.png"
+          },
+          {
+            "url": "scaling/c4_e044_i8.png"
+          },
+          {
+            "url": "scaling/c4_e044_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 45,
+        "categoryId": 5,
+        "year": 1968,
+        "content": {
+          "pt": "Exemplo 045: evento curto.",
+          "en": "Sample 045: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e045_i0.png"
+          },
+          {
+            "url": "scaling/c5_e045_i1.png"
+          },
+          {
+            "url": "scaling/c5_e045_i2.png"
+          },
+          {
+            "url": "scaling/c5_e045_i3.png"
+          },
+          {
+            "url": "scaling/c5_e045_i4.png"
+          },
+          {
+            "url": "scaling/c5_e045_i5.png"
+          },
+          {
+            "url": "scaling/c5_e045_i6.png"
+          },
+          {
+            "url": "scaling/c5_e045_i7.png"
+          },
+          {
+            "url": "scaling/c5_e045_i8.png"
+          },
+          {
+            "url": "scaling/c5_e045_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 46,
+        "categoryId": 6,
+        "year": 1969,
+        "content": {
+          "pt": "Exemplo 046: inauguração de uma oficina na área de Mobilidade, com apresentação ao público.",
+          "en": "Sample 046: opening of a workshop in the Mobility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e046_i0.png"
+          },
+          {
+            "url": "scaling/c6_e046_i1.png"
+          },
+          {
+            "url": "scaling/c6_e046_i2.png"
+          },
+          {
+            "url": "scaling/c6_e046_i3.png"
+          },
+          {
+            "url": "scaling/c6_e046_i4.png"
+          },
+          {
+            "url": "scaling/c6_e046_i5.png"
+          },
+          {
+            "url": "scaling/c6_e046_i6.png"
+          },
+          {
+            "url": "scaling/c6_e046_i7.png"
+          },
+          {
+            "url": "scaling/c6_e046_i8.png"
+          },
+          {
+            "url": "scaling/c6_e046_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "categoryId": 7,
+        "year": 1970,
+        "content": {
+          "pt": "Exemplo 047: um texto longo de teste de escala em Inovação. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 047: a long scaling test text in Innovation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e047_i0.png"
+          },
+          {
+            "url": "scaling/c7_e047_i1.png"
+          },
+          {
+            "url": "scaling/c7_e047_i2.png"
+          },
+          {
+            "url": "scaling/c7_e047_i3.png"
+          },
+          {
+            "url": "scaling/c7_e047_i4.png"
+          },
+          {
+            "url": "scaling/c7_e047_i5.png"
+          },
+          {
+            "url": "scaling/c7_e047_i6.png"
+          },
+          {
+            "url": "scaling/c7_e047_i7.png"
+          },
+          {
+            "url": "scaling/c7_e047_i8.png"
+          },
+          {
+            "url": "scaling/c7_e047_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 48,
+        "categoryId": 8,
+        "year": 1971,
+        "content": {
+          "pt": "Exemplo 048: evento curto.",
+          "en": "Sample 048: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e048_i0.png"
+          },
+          {
+            "url": "scaling/c8_e048_i1.png"
+          },
+          {
+            "url": "scaling/c8_e048_i2.png"
+          },
+          {
+            "url": "scaling/c8_e048_i3.png"
+          },
+          {
+            "url": "scaling/c8_e048_i4.png"
+          },
+          {
+            "url": "scaling/c8_e048_i5.png"
+          },
+          {
+            "url": "scaling/c8_e048_i6.png"
+          },
+          {
+            "url": "scaling/c8_e048_i7.png"
+          },
+          {
+            "url": "scaling/c8_e048_i8.png"
+          },
+          {
+            "url": "scaling/c8_e048_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 49,
+        "categoryId": 9,
+        "year": 1972,
+        "content": {
+          "pt": "Exemplo 049: inauguração de uma oficina na área de Publicidade, com apresentação ao público.",
+          "en": "Sample 049: opening of a workshop in the Advertising area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e049_i0.png"
+          },
+          {
+            "url": "scaling/c9_e049_i1.png"
+          },
+          {
+            "url": "scaling/c9_e049_i2.png"
+          },
+          {
+            "url": "scaling/c9_e049_i3.png"
+          },
+          {
+            "url": "scaling/c9_e049_i4.png"
+          },
+          {
+            "url": "scaling/c9_e049_i5.png"
+          },
+          {
+            "url": "scaling/c9_e049_i6.png"
+          },
+          {
+            "url": "scaling/c9_e049_i7.png"
+          },
+          {
+            "url": "scaling/c9_e049_i8.png"
+          },
+          {
+            "url": "scaling/c9_e049_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 50,
+        "categoryId": 0,
+        "year": 1974,
+        "content": {
+          "pt": "Exemplo 050: um texto longo de teste de escala em Figuras. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 050: a long scaling test text in Figures. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e050_i0.png"
+          },
+          {
+            "url": "scaling/c0_e050_i1.png"
+          },
+          {
+            "url": "scaling/c0_e050_i2.png"
+          },
+          {
+            "url": "scaling/c0_e050_i3.png"
+          },
+          {
+            "url": "scaling/c0_e050_i4.png"
+          },
+          {
+            "url": "scaling/c0_e050_i5.png"
+          },
+          {
+            "url": "scaling/c0_e050_i6.png"
+          },
+          {
+            "url": "scaling/c0_e050_i7.png"
+          },
+          {
+            "url": "scaling/c0_e050_i8.png"
+          },
+          {
+            "url": "scaling/c0_e050_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 51,
+        "categoryId": 1,
+        "year": 1975,
+        "content": {
+          "pt": "Exemplo 051: evento curto.",
+          "en": "Sample 051: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e051_i0.png"
+          },
+          {
+            "url": "scaling/c1_e051_i1.png"
+          },
+          {
+            "url": "scaling/c1_e051_i2.png"
+          },
+          {
+            "url": "scaling/c1_e051_i3.png"
+          },
+          {
+            "url": "scaling/c1_e051_i4.png"
+          },
+          {
+            "url": "scaling/c1_e051_i5.png"
+          },
+          {
+            "url": "scaling/c1_e051_i6.png"
+          },
+          {
+            "url": "scaling/c1_e051_i7.png"
+          },
+          {
+            "url": "scaling/c1_e051_i8.png"
+          },
+          {
+            "url": "scaling/c1_e051_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 52,
+        "categoryId": 2,
+        "year": 1976,
+        "content": {
+          "pt": "Exemplo 052: inauguração de uma oficina na área de Veículos, com apresentação ao público.",
+          "en": "Sample 052: opening of a workshop in the Vehicles area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e052_i0.png"
+          },
+          {
+            "url": "scaling/c2_e052_i1.png"
+          },
+          {
+            "url": "scaling/c2_e052_i2.png"
+          },
+          {
+            "url": "scaling/c2_e052_i3.png"
+          },
+          {
+            "url": "scaling/c2_e052_i4.png"
+          },
+          {
+            "url": "scaling/c2_e052_i5.png"
+          },
+          {
+            "url": "scaling/c2_e052_i6.png"
+          },
+          {
+            "url": "scaling/c2_e052_i7.png"
+          },
+          {
+            "url": "scaling/c2_e052_i8.png"
+          },
+          {
+            "url": "scaling/c2_e052_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 53,
+        "categoryId": 3,
+        "year": 1977,
+        "content": {
+          "pt": "Exemplo 053: um texto longo de teste de escala em Responsabilidade Social. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 053: a long scaling test text in Social Responsibility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e053_i0.png"
+          },
+          {
+            "url": "scaling/c3_e053_i1.png"
+          },
+          {
+            "url": "scaling/c3_e053_i2.png"
+          },
+          {
+            "url": "scaling/c3_e053_i3.png"
+          },
+          {
+            "url": "scaling/c3_e053_i4.png"
+          },
+          {
+            "url": "scaling/c3_e053_i5.png"
+          },
+          {
+            "url": "scaling/c3_e053_i6.png"
+          },
+          {
+            "url": "scaling/c3_e053_i7.png"
+          },
+          {
+            "url": "scaling/c3_e053_i8.png"
+          },
+          {
+            "url": "scaling/c3_e053_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 54,
+        "categoryId": 4,
+        "year": 1978,
+        "content": {
+          "pt": "Exemplo 054: evento curto.",
+          "en": "Sample 054: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e054_i0.png"
+          },
+          {
+            "url": "scaling/c4_e054_i1.png"
+          },
+          {
+            "url": "scaling/c4_e054_i2.png"
+          },
+          {
+            "url": "scaling/c4_e054_i3.png"
+          },
+          {
+            "url": "scaling/c4_e054_i4.png"
+          },
+          {
+            "url": "scaling/c4_e054_i5.png"
+          },
+          {
+            "url": "scaling/c4_e054_i6.png"
+          },
+          {
+            "url": "scaling/c4_e054_i7.png"
+          },
+          {
+            "url": "scaling/c4_e054_i8.png"
+          },
+          {
+            "url": "scaling/c4_e054_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 55,
+        "categoryId": 5,
+        "year": 1979,
+        "content": {
+          "pt": "Exemplo 055: inauguração de uma oficina na área de Competições, com apresentação ao público.",
+          "en": "Sample 055: opening of a workshop in the Competitions area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e055_i0.png"
+          },
+          {
+            "url": "scaling/c5_e055_i1.png"
+          },
+          {
+            "url": "scaling/c5_e055_i2.png"
+          },
+          {
+            "url": "scaling/c5_e055_i3.png"
+          },
+          {
+            "url": "scaling/c5_e055_i4.png"
+          },
+          {
+            "url": "scaling/c5_e055_i5.png"
+          },
+          {
+            "url": "scaling/c5_e055_i6.png"
+          },
+          {
+            "url": "scaling/c5_e055_i7.png"
+          },
+          {
+            "url": "scaling/c5_e055_i8.png"
+          },
+          {
+            "url": "scaling/c5_e055_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 56,
+        "categoryId": 6,
+        "year": 1980,
+        "content": {
+          "pt": "Exemplo 056: um texto longo de teste de escala em Mobilidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 056: a long scaling test text in Mobility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e056_i0.png"
+          },
+          {
+            "url": "scaling/c6_e056_i1.png"
+          },
+          {
+            "url": "scaling/c6_e056_i2.png"
+          },
+          {
+            "url": "scaling/c6_e056_i3.png"
+          },
+          {
+            "url": "scaling/c6_e056_i4.png"
+          },
+          {
+            "url": "scaling/c6_e056_i5.png"
+          },
+          {
+            "url": "scaling/c6_e056_i6.png"
+          },
+          {
+            "url": "scaling/c6_e056_i7.png"
+          },
+          {
+            "url": "scaling/c6_e056_i8.png"
+          },
+          {
+            "url": "scaling/c6_e056_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 57,
+        "categoryId": 7,
+        "year": 1981,
+        "content": {
+          "pt": "Exemplo 057: evento curto.",
+          "en": "Sample 057: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e057_i0.png"
+          },
+          {
+            "url": "scaling/c7_e057_i1.png"
+          },
+          {
+            "url": "scaling/c7_e057_i2.png"
+          },
+          {
+            "url": "scaling/c7_e057_i3.png"
+          },
+          {
+            "url": "scaling/c7_e057_i4.png"
+          },
+          {
+            "url": "scaling/c7_e057_i5.png"
+          },
+          {
+            "url": "scaling/c7_e057_i6.png"
+          },
+          {
+            "url": "scaling/c7_e057_i7.png"
+          },
+          {
+            "url": "scaling/c7_e057_i8.png"
+          },
+          {
+            "url": "scaling/c7_e057_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 58,
+        "categoryId": 8,
+        "year": 1982,
+        "content": {
+          "pt": "Exemplo 058: inauguração de uma oficina na área de Internacionalização, com apresentação ao público.",
+          "en": "Sample 058: opening of a workshop in the Internationalisation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e058_i0.png"
+          },
+          {
+            "url": "scaling/c8_e058_i1.png"
+          },
+          {
+            "url": "scaling/c8_e058_i2.png"
+          },
+          {
+            "url": "scaling/c8_e058_i3.png"
+          },
+          {
+            "url": "scaling/c8_e058_i4.png"
+          },
+          {
+            "url": "scaling/c8_e058_i5.png"
+          },
+          {
+            "url": "scaling/c8_e058_i6.png"
+          },
+          {
+            "url": "scaling/c8_e058_i7.png"
+          },
+          {
+            "url": "scaling/c8_e058_i8.png"
+          },
+          {
+            "url": "scaling/c8_e058_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 59,
+        "categoryId": 9,
+        "year": 1983,
+        "content": {
+          "pt": "Exemplo 059: um texto longo de teste de escala em Publicidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 059: a long scaling test text in Advertising. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e059_i0.png"
+          },
+          {
+            "url": "scaling/c9_e059_i1.png"
+          },
+          {
+            "url": "scaling/c9_e059_i2.png"
+          },
+          {
+            "url": "scaling/c9_e059_i3.png"
+          },
+          {
+            "url": "scaling/c9_e059_i4.png"
+          },
+          {
+            "url": "scaling/c9_e059_i5.png"
+          },
+          {
+            "url": "scaling/c9_e059_i6.png"
+          },
+          {
+            "url": "scaling/c9_e059_i7.png"
+          },
+          {
+            "url": "scaling/c9_e059_i8.png"
+          },
+          {
+            "url": "scaling/c9_e059_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 60,
+        "categoryId": 0,
+        "year": 1984,
+        "content": {
+          "pt": "Exemplo 060: evento curto.",
+          "en": "Sample 060: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e060_i0.png"
+          },
+          {
+            "url": "scaling/c0_e060_i1.png"
+          },
+          {
+            "url": "scaling/c0_e060_i2.png"
+          },
+          {
+            "url": "scaling/c0_e060_i3.png"
+          },
+          {
+            "url": "scaling/c0_e060_i4.png"
+          },
+          {
+            "url": "scaling/c0_e060_i5.png"
+          },
+          {
+            "url": "scaling/c0_e060_i6.png"
+          },
+          {
+            "url": "scaling/c0_e060_i7.png"
+          },
+          {
+            "url": "scaling/c0_e060_i8.png"
+          },
+          {
+            "url": "scaling/c0_e060_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 61,
+        "categoryId": 1,
+        "year": 1985,
+        "content": {
+          "pt": "Exemplo 061: inauguração de uma oficina na área de Empresa, com apresentação ao público.",
+          "en": "Sample 061: opening of a workshop in the Company area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e061_i0.png"
+          },
+          {
+            "url": "scaling/c1_e061_i1.png"
+          },
+          {
+            "url": "scaling/c1_e061_i2.png"
+          },
+          {
+            "url": "scaling/c1_e061_i3.png"
+          },
+          {
+            "url": "scaling/c1_e061_i4.png"
+          },
+          {
+            "url": "scaling/c1_e061_i5.png"
+          },
+          {
+            "url": "scaling/c1_e061_i6.png"
+          },
+          {
+            "url": "scaling/c1_e061_i7.png"
+          },
+          {
+            "url": "scaling/c1_e061_i8.png"
+          },
+          {
+            "url": "scaling/c1_e061_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 62,
+        "categoryId": 2,
+        "year": 1986,
+        "content": {
+          "pt": "Exemplo 062: um texto longo de teste de escala em Veículos. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 062: a long scaling test text in Vehicles. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e062_i0.png"
+          },
+          {
+            "url": "scaling/c2_e062_i1.png"
+          },
+          {
+            "url": "scaling/c2_e062_i2.png"
+          },
+          {
+            "url": "scaling/c2_e062_i3.png"
+          },
+          {
+            "url": "scaling/c2_e062_i4.png"
+          },
+          {
+            "url": "scaling/c2_e062_i5.png"
+          },
+          {
+            "url": "scaling/c2_e062_i6.png"
+          },
+          {
+            "url": "scaling/c2_e062_i7.png"
+          },
+          {
+            "url": "scaling/c2_e062_i8.png"
+          },
+          {
+            "url": "scaling/c2_e062_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 63,
+        "categoryId": 3,
+        "year": 1987,
+        "content": {
+          "pt": "Exemplo 063: evento curto.",
+          "en": "Sample 063: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e063_i0.png"
+          },
+          {
+            "url": "scaling/c3_e063_i1.png"
+          },
+          {
+            "url": "scaling/c3_e063_i2.png"
+          },
+          {
+            "url": "scaling/c3_e063_i3.png"
+          },
+          {
+            "url": "scaling/c3_e063_i4.png"
+          },
+          {
+            "url": "scaling/c3_e063_i5.png"
+          },
+          {
+            "url": "scaling/c3_e063_i6.png"
+          },
+          {
+            "url": "scaling/c3_e063_i7.png"
+          },
+          {
+            "url": "scaling/c3_e063_i8.png"
+          },
+          {
+            "url": "scaling/c3_e063_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 64,
+        "categoryId": 4,
+        "year": 1989,
+        "content": {
+          "pt": "Exemplo 064: inauguração de uma oficina na área de Distinções, com apresentação ao público.",
+          "en": "Sample 064: opening of a workshop in the Awards area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e064_i0.png"
+          },
+          {
+            "url": "scaling/c4_e064_i1.png"
+          },
+          {
+            "url": "scaling/c4_e064_i2.png"
+          },
+          {
+            "url": "scaling/c4_e064_i3.png"
+          },
+          {
+            "url": "scaling/c4_e064_i4.png"
+          },
+          {
+            "url": "scaling/c4_e064_i5.png"
+          },
+          {
+            "url": "scaling/c4_e064_i6.png"
+          },
+          {
+            "url": "scaling/c4_e064_i7.png"
+          },
+          {
+            "url": "scaling/c4_e064_i8.png"
+          },
+          {
+            "url": "scaling/c4_e064_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 65,
+        "categoryId": 5,
+        "year": 1990,
+        "content": {
+          "pt": "Exemplo 065: um texto longo de teste de escala em Competições. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 065: a long scaling test text in Competitions. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e065_i0.png"
+          },
+          {
+            "url": "scaling/c5_e065_i1.png"
+          },
+          {
+            "url": "scaling/c5_e065_i2.png"
+          },
+          {
+            "url": "scaling/c5_e065_i3.png"
+          },
+          {
+            "url": "scaling/c5_e065_i4.png"
+          },
+          {
+            "url": "scaling/c5_e065_i5.png"
+          },
+          {
+            "url": "scaling/c5_e065_i6.png"
+          },
+          {
+            "url": "scaling/c5_e065_i7.png"
+          },
+          {
+            "url": "scaling/c5_e065_i8.png"
+          },
+          {
+            "url": "scaling/c5_e065_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 66,
+        "categoryId": 6,
+        "year": 1991,
+        "content": {
+          "pt": "Exemplo 066: evento curto.",
+          "en": "Sample 066: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e066_i0.png"
+          },
+          {
+            "url": "scaling/c6_e066_i1.png"
+          },
+          {
+            "url": "scaling/c6_e066_i2.png"
+          },
+          {
+            "url": "scaling/c6_e066_i3.png"
+          },
+          {
+            "url": "scaling/c6_e066_i4.png"
+          },
+          {
+            "url": "scaling/c6_e066_i5.png"
+          },
+          {
+            "url": "scaling/c6_e066_i6.png"
+          },
+          {
+            "url": "scaling/c6_e066_i7.png"
+          },
+          {
+            "url": "scaling/c6_e066_i8.png"
+          },
+          {
+            "url": "scaling/c6_e066_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 67,
+        "categoryId": 7,
+        "year": 1992,
+        "content": {
+          "pt": "Exemplo 067: inauguração de uma oficina na área de Inovação, com apresentação ao público.",
+          "en": "Sample 067: opening of a workshop in the Innovation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e067_i0.png"
+          },
+          {
+            "url": "scaling/c7_e067_i1.png"
+          },
+          {
+            "url": "scaling/c7_e067_i2.png"
+          },
+          {
+            "url": "scaling/c7_e067_i3.png"
+          },
+          {
+            "url": "scaling/c7_e067_i4.png"
+          },
+          {
+            "url": "scaling/c7_e067_i5.png"
+          },
+          {
+            "url": "scaling/c7_e067_i6.png"
+          },
+          {
+            "url": "scaling/c7_e067_i7.png"
+          },
+          {
+            "url": "scaling/c7_e067_i8.png"
+          },
+          {
+            "url": "scaling/c7_e067_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 68,
+        "categoryId": 8,
+        "year": 1993,
+        "content": {
+          "pt": "Exemplo 068: um texto longo de teste de escala em Internacionalização. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 068: a long scaling test text in Internationalisation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e068_i0.png"
+          },
+          {
+            "url": "scaling/c8_e068_i1.png"
+          },
+          {
+            "url": "scaling/c8_e068_i2.png"
+          },
+          {
+            "url": "scaling/c8_e068_i3.png"
+          },
+          {
+            "url": "scaling/c8_e068_i4.png"
+          },
+          {
+            "url": "scaling/c8_e068_i5.png"
+          },
+          {
+            "url": "scaling/c8_e068_i6.png"
+          },
+          {
+            "url": "scaling/c8_e068_i7.png"
+          },
+          {
+            "url": "scaling/c8_e068_i8.png"
+          },
+          {
+            "url": "scaling/c8_e068_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 69,
+        "categoryId": 9,
+        "year": 1994,
+        "content": {
+          "pt": "Exemplo 069: evento curto.",
+          "en": "Sample 069: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e069_i0.png"
+          },
+          {
+            "url": "scaling/c9_e069_i1.png"
+          },
+          {
+            "url": "scaling/c9_e069_i2.png"
+          },
+          {
+            "url": "scaling/c9_e069_i3.png"
+          },
+          {
+            "url": "scaling/c9_e069_i4.png"
+          },
+          {
+            "url": "scaling/c9_e069_i5.png"
+          },
+          {
+            "url": "scaling/c9_e069_i6.png"
+          },
+          {
+            "url": "scaling/c9_e069_i7.png"
+          },
+          {
+            "url": "scaling/c9_e069_i8.png"
+          },
+          {
+            "url": "scaling/c9_e069_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 70,
+        "categoryId": 0,
+        "year": 1995,
+        "content": {
+          "pt": "Exemplo 070: inauguração de uma oficina na área de Figuras, com apresentação ao público.",
+          "en": "Sample 070: opening of a workshop in the Figures area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e070_i0.png"
+          },
+          {
+            "url": "scaling/c0_e070_i1.png"
+          },
+          {
+            "url": "scaling/c0_e070_i2.png"
+          },
+          {
+            "url": "scaling/c0_e070_i3.png"
+          },
+          {
+            "url": "scaling/c0_e070_i4.png"
+          },
+          {
+            "url": "scaling/c0_e070_i5.png"
+          },
+          {
+            "url": "scaling/c0_e070_i6.png"
+          },
+          {
+            "url": "scaling/c0_e070_i7.png"
+          },
+          {
+            "url": "scaling/c0_e070_i8.png"
+          },
+          {
+            "url": "scaling/c0_e070_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 71,
+        "categoryId": 1,
+        "year": 1996,
+        "content": {
+          "pt": "Exemplo 071: um texto longo de teste de escala em Empresa. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 071: a long scaling test text in Company. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e071_i0.png"
+          },
+          {
+            "url": "scaling/c1_e071_i1.png"
+          },
+          {
+            "url": "scaling/c1_e071_i2.png"
+          },
+          {
+            "url": "scaling/c1_e071_i3.png"
+          },
+          {
+            "url": "scaling/c1_e071_i4.png"
+          },
+          {
+            "url": "scaling/c1_e071_i5.png"
+          },
+          {
+            "url": "scaling/c1_e071_i6.png"
+          },
+          {
+            "url": "scaling/c1_e071_i7.png"
+          },
+          {
+            "url": "scaling/c1_e071_i8.png"
+          },
+          {
+            "url": "scaling/c1_e071_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 72,
+        "categoryId": 2,
+        "year": 1997,
+        "content": {
+          "pt": "Exemplo 072: evento curto.",
+          "en": "Sample 072: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e072_i0.png"
+          },
+          {
+            "url": "scaling/c2_e072_i1.png"
+          },
+          {
+            "url": "scaling/c2_e072_i2.png"
+          },
+          {
+            "url": "scaling/c2_e072_i3.png"
+          },
+          {
+            "url": "scaling/c2_e072_i4.png"
+          },
+          {
+            "url": "scaling/c2_e072_i5.png"
+          },
+          {
+            "url": "scaling/c2_e072_i6.png"
+          },
+          {
+            "url": "scaling/c2_e072_i7.png"
+          },
+          {
+            "url": "scaling/c2_e072_i8.png"
+          },
+          {
+            "url": "scaling/c2_e072_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 73,
+        "categoryId": 3,
+        "year": 1998,
+        "content": {
+          "pt": "Exemplo 073: inauguração de uma oficina na área de Responsabilidade Social, com apresentação ao público.",
+          "en": "Sample 073: opening of a workshop in the Social Responsibility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e073_i0.png"
+          },
+          {
+            "url": "scaling/c3_e073_i1.png"
+          },
+          {
+            "url": "scaling/c3_e073_i2.png"
+          },
+          {
+            "url": "scaling/c3_e073_i3.png"
+          },
+          {
+            "url": "scaling/c3_e073_i4.png"
+          },
+          {
+            "url": "scaling/c3_e073_i5.png"
+          },
+          {
+            "url": "scaling/c3_e073_i6.png"
+          },
+          {
+            "url": "scaling/c3_e073_i7.png"
+          },
+          {
+            "url": "scaling/c3_e073_i8.png"
+          },
+          {
+            "url": "scaling/c3_e073_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 74,
+        "categoryId": 4,
+        "year": 1999,
+        "content": {
+          "pt": "Exemplo 074: um texto longo de teste de escala em Distinções. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 074: a long scaling test text in Awards. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e074_i0.png"
+          },
+          {
+            "url": "scaling/c4_e074_i1.png"
+          },
+          {
+            "url": "scaling/c4_e074_i2.png"
+          },
+          {
+            "url": "scaling/c4_e074_i3.png"
+          },
+          {
+            "url": "scaling/c4_e074_i4.png"
+          },
+          {
+            "url": "scaling/c4_e074_i5.png"
+          },
+          {
+            "url": "scaling/c4_e074_i6.png"
+          },
+          {
+            "url": "scaling/c4_e074_i7.png"
+          },
+          {
+            "url": "scaling/c4_e074_i8.png"
+          },
+          {
+            "url": "scaling/c4_e074_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 75,
+        "categoryId": 5,
+        "year": 2000,
+        "content": {
+          "pt": "Exemplo 075: evento curto.",
+          "en": "Sample 075: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e075_i0.png"
+          },
+          {
+            "url": "scaling/c5_e075_i1.png"
+          },
+          {
+            "url": "scaling/c5_e075_i2.png"
+          },
+          {
+            "url": "scaling/c5_e075_i3.png"
+          },
+          {
+            "url": "scaling/c5_e075_i4.png"
+          },
+          {
+            "url": "scaling/c5_e075_i5.png"
+          },
+          {
+            "url": "scaling/c5_e075_i6.png"
+          },
+          {
+            "url": "scaling/c5_e075_i7.png"
+          },
+          {
+            "url": "scaling/c5_e075_i8.png"
+          },
+          {
+            "url": "scaling/c5_e075_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 76,
+        "categoryId": 6,
+        "year": 2001,
+        "content": {
+          "pt": "Exemplo 076: inauguração de uma oficina na área de Mobilidade, com apresentação ao público.",
+          "en": "Sample 076: opening of a workshop in the Mobility area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e076_i0.png"
+          },
+          {
+            "url": "scaling/c6_e076_i1.png"
+          },
+          {
+            "url": "scaling/c6_e076_i2.png"
+          },
+          {
+            "url": "scaling/c6_e076_i3.png"
+          },
+          {
+            "url": "scaling/c6_e076_i4.png"
+          },
+          {
+            "url": "scaling/c6_e076_i5.png"
+          },
+          {
+            "url": "scaling/c6_e076_i6.png"
+          },
+          {
+            "url": "scaling/c6_e076_i7.png"
+          },
+          {
+            "url": "scaling/c6_e076_i8.png"
+          },
+          {
+            "url": "scaling/c6_e076_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 77,
+        "categoryId": 7,
+        "year": 2002,
+        "content": {
+          "pt": "Exemplo 077: um texto longo de teste de escala em Inovação. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 077: a long scaling test text in Innovation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e077_i0.png"
+          },
+          {
+            "url": "scaling/c7_e077_i1.png"
+          },
+          {
+            "url": "scaling/c7_e077_i2.png"
+          },
+          {
+            "url": "scaling/c7_e077_i3.png"
+          },
+          {
+            "url": "scaling/c7_e077_i4.png"
+          },
+          {
+            "url": "scaling/c7_e077_i5.png"
+          },
+          {
+            "url": "scaling/c7_e077_i6.png"
+          },
+          {
+            "url": "scaling/c7_e077_i7.png"
+          },
+          {
+            "url": "scaling/c7_e077_i8.png"
+          },
+          {
+            "url": "scaling/c7_e077_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 78,
+        "categoryId": 8,
+        "year": 2004,
+        "content": {
+          "pt": "Exemplo 078: evento curto.",
+          "en": "Sample 078: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e078_i0.png"
+          },
+          {
+            "url": "scaling/c8_e078_i1.png"
+          },
+          {
+            "url": "scaling/c8_e078_i2.png"
+          },
+          {
+            "url": "scaling/c8_e078_i3.png"
+          },
+          {
+            "url": "scaling/c8_e078_i4.png"
+          },
+          {
+            "url": "scaling/c8_e078_i5.png"
+          },
+          {
+            "url": "scaling/c8_e078_i6.png"
+          },
+          {
+            "url": "scaling/c8_e078_i7.png"
+          },
+          {
+            "url": "scaling/c8_e078_i8.png"
+          },
+          {
+            "url": "scaling/c8_e078_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 79,
+        "categoryId": 9,
+        "year": 2005,
+        "content": {
+          "pt": "Exemplo 079: inauguração de uma oficina na área de Publicidade, com apresentação ao público.",
+          "en": "Sample 079: opening of a workshop in the Advertising area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e079_i0.png"
+          },
+          {
+            "url": "scaling/c9_e079_i1.png"
+          },
+          {
+            "url": "scaling/c9_e079_i2.png"
+          },
+          {
+            "url": "scaling/c9_e079_i3.png"
+          },
+          {
+            "url": "scaling/c9_e079_i4.png"
+          },
+          {
+            "url": "scaling/c9_e079_i5.png"
+          },
+          {
+            "url": "scaling/c9_e079_i6.png"
+          },
+          {
+            "url": "scaling/c9_e079_i7.png"
+          },
+          {
+            "url": "scaling/c9_e079_i8.png"
+          },
+          {
+            "url": "scaling/c9_e079_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 80,
+        "categoryId": 0,
+        "year": 2006,
+        "content": {
+          "pt": "Exemplo 080: um texto longo de teste de escala em Figuras. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 080: a long scaling test text in Figures. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e080_i0.png"
+          },
+          {
+            "url": "scaling/c0_e080_i1.png"
+          },
+          {
+            "url": "scaling/c0_e080_i2.png"
+          },
+          {
+            "url": "scaling/c0_e080_i3.png"
+          },
+          {
+            "url": "scaling/c0_e080_i4.png"
+          },
+          {
+            "url": "scaling/c0_e080_i5.png"
+          },
+          {
+            "url": "scaling/c0_e080_i6.png"
+          },
+          {
+            "url": "scaling/c0_e080_i7.png"
+          },
+          {
+            "url": "scaling/c0_e080_i8.png"
+          },
+          {
+            "url": "scaling/c0_e080_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 81,
+        "categoryId": 1,
+        "year": 2007,
+        "content": {
+          "pt": "Exemplo 081: evento curto.",
+          "en": "Sample 081: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e081_i0.png"
+          },
+          {
+            "url": "scaling/c1_e081_i1.png"
+          },
+          {
+            "url": "scaling/c1_e081_i2.png"
+          },
+          {
+            "url": "scaling/c1_e081_i3.png"
+          },
+          {
+            "url": "scaling/c1_e081_i4.png"
+          },
+          {
+            "url": "scaling/c1_e081_i5.png"
+          },
+          {
+            "url": "scaling/c1_e081_i6.png"
+          },
+          {
+            "url": "scaling/c1_e081_i7.png"
+          },
+          {
+            "url": "scaling/c1_e081_i8.png"
+          },
+          {
+            "url": "scaling/c1_e081_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 82,
+        "categoryId": 2,
+        "year": 2008,
+        "content": {
+          "pt": "Exemplo 082: inauguração de uma oficina na área de Veículos, com apresentação ao público.",
+          "en": "Sample 082: opening of a workshop in the Vehicles area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e082_i0.png"
+          },
+          {
+            "url": "scaling/c2_e082_i1.png"
+          },
+          {
+            "url": "scaling/c2_e082_i2.png"
+          },
+          {
+            "url": "scaling/c2_e082_i3.png"
+          },
+          {
+            "url": "scaling/c2_e082_i4.png"
+          },
+          {
+            "url": "scaling/c2_e082_i5.png"
+          },
+          {
+            "url": "scaling/c2_e082_i6.png"
+          },
+          {
+            "url": "scaling/c2_e082_i7.png"
+          },
+          {
+            "url": "scaling/c2_e082_i8.png"
+          },
+          {
+            "url": "scaling/c2_e082_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 83,
+        "categoryId": 3,
+        "year": 2009,
+        "content": {
+          "pt": "Exemplo 083: um texto longo de teste de escala em Responsabilidade Social. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 083: a long scaling test text in Social Responsibility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e083_i0.png"
+          },
+          {
+            "url": "scaling/c3_e083_i1.png"
+          },
+          {
+            "url": "scaling/c3_e083_i2.png"
+          },
+          {
+            "url": "scaling/c3_e083_i3.png"
+          },
+          {
+            "url": "scaling/c3_e083_i4.png"
+          },
+          {
+            "url": "scaling/c3_e083_i5.png"
+          },
+          {
+            "url": "scaling/c3_e083_i6.png"
+          },
+          {
+            "url": "scaling/c3_e083_i7.png"
+          },
+          {
+            "url": "scaling/c3_e083_i8.png"
+          },
+          {
+            "url": "scaling/c3_e083_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 84,
+        "categoryId": 4,
+        "year": 2010,
+        "content": {
+          "pt": "Exemplo 084: evento curto.",
+          "en": "Sample 084: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e084_i0.png"
+          },
+          {
+            "url": "scaling/c4_e084_i1.png"
+          },
+          {
+            "url": "scaling/c4_e084_i2.png"
+          },
+          {
+            "url": "scaling/c4_e084_i3.png"
+          },
+          {
+            "url": "scaling/c4_e084_i4.png"
+          },
+          {
+            "url": "scaling/c4_e084_i5.png"
+          },
+          {
+            "url": "scaling/c4_e084_i6.png"
+          },
+          {
+            "url": "scaling/c4_e084_i7.png"
+          },
+          {
+            "url": "scaling/c4_e084_i8.png"
+          },
+          {
+            "url": "scaling/c4_e084_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 85,
+        "categoryId": 5,
+        "year": 2011,
+        "content": {
+          "pt": "Exemplo 085: inauguração de uma oficina na área de Competições, com apresentação ao público.",
+          "en": "Sample 085: opening of a workshop in the Competitions area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e085_i0.png"
+          },
+          {
+            "url": "scaling/c5_e085_i1.png"
+          },
+          {
+            "url": "scaling/c5_e085_i2.png"
+          },
+          {
+            "url": "scaling/c5_e085_i3.png"
+          },
+          {
+            "url": "scaling/c5_e085_i4.png"
+          },
+          {
+            "url": "scaling/c5_e085_i5.png"
+          },
+          {
+            "url": "scaling/c5_e085_i6.png"
+          },
+          {
+            "url": "scaling/c5_e085_i7.png"
+          },
+          {
+            "url": "scaling/c5_e085_i8.png"
+          },
+          {
+            "url": "scaling/c5_e085_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 86,
+        "categoryId": 6,
+        "year": 2012,
+        "content": {
+          "pt": "Exemplo 086: um texto longo de teste de escala em Mobilidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 086: a long scaling test text in Mobility. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e086_i0.png"
+          },
+          {
+            "url": "scaling/c6_e086_i1.png"
+          },
+          {
+            "url": "scaling/c6_e086_i2.png"
+          },
+          {
+            "url": "scaling/c6_e086_i3.png"
+          },
+          {
+            "url": "scaling/c6_e086_i4.png"
+          },
+          {
+            "url": "scaling/c6_e086_i5.png"
+          },
+          {
+            "url": "scaling/c6_e086_i6.png"
+          },
+          {
+            "url": "scaling/c6_e086_i7.png"
+          },
+          {
+            "url": "scaling/c6_e086_i8.png"
+          },
+          {
+            "url": "scaling/c6_e086_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 87,
+        "categoryId": 7,
+        "year": 2013,
+        "content": {
+          "pt": "Exemplo 087: evento curto.",
+          "en": "Sample 087: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e087_i0.png"
+          },
+          {
+            "url": "scaling/c7_e087_i1.png"
+          },
+          {
+            "url": "scaling/c7_e087_i2.png"
+          },
+          {
+            "url": "scaling/c7_e087_i3.png"
+          },
+          {
+            "url": "scaling/c7_e087_i4.png"
+          },
+          {
+            "url": "scaling/c7_e087_i5.png"
+          },
+          {
+            "url": "scaling/c7_e087_i6.png"
+          },
+          {
+            "url": "scaling/c7_e087_i7.png"
+          },
+          {
+            "url": "scaling/c7_e087_i8.png"
+          },
+          {
+            "url": "scaling/c7_e087_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 88,
+        "categoryId": 8,
+        "year": 2014,
+        "content": {
+          "pt": "Exemplo 088: inauguração de uma oficina na área de Internacionalização, com apresentação ao público.",
+          "en": "Sample 088: opening of a workshop in the Internationalisation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e088_i0.png"
+          },
+          {
+            "url": "scaling/c8_e088_i1.png"
+          },
+          {
+            "url": "scaling/c8_e088_i2.png"
+          },
+          {
+            "url": "scaling/c8_e088_i3.png"
+          },
+          {
+            "url": "scaling/c8_e088_i4.png"
+          },
+          {
+            "url": "scaling/c8_e088_i5.png"
+          },
+          {
+            "url": "scaling/c8_e088_i6.png"
+          },
+          {
+            "url": "scaling/c8_e088_i7.png"
+          },
+          {
+            "url": "scaling/c8_e088_i8.png"
+          },
+          {
+            "url": "scaling/c8_e088_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 89,
+        "categoryId": 9,
+        "year": 2015,
+        "content": {
+          "pt": "Exemplo 089: um texto longo de teste de escala em Publicidade. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 089: a long scaling test text in Advertising. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e089_i0.png"
+          },
+          {
+            "url": "scaling/c9_e089_i1.png"
+          },
+          {
+            "url": "scaling/c9_e089_i2.png"
+          },
+          {
+            "url": "scaling/c9_e089_i3.png"
+          },
+          {
+            "url": "scaling/c9_e089_i4.png"
+          },
+          {
+            "url": "scaling/c9_e089_i5.png"
+          },
+          {
+            "url": "scaling/c9_e089_i6.png"
+          },
+          {
+            "url": "scaling/c9_e089_i7.png"
+          },
+          {
+            "url": "scaling/c9_e089_i8.png"
+          },
+          {
+            "url": "scaling/c9_e089_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 90,
+        "categoryId": 0,
+        "year": 2016,
+        "content": {
+          "pt": "Exemplo 090: evento curto.",
+          "en": "Sample 090: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c0_e090_i0.png"
+          },
+          {
+            "url": "scaling/c0_e090_i1.png"
+          },
+          {
+            "url": "scaling/c0_e090_i2.png"
+          },
+          {
+            "url": "scaling/c0_e090_i3.png"
+          },
+          {
+            "url": "scaling/c0_e090_i4.png"
+          },
+          {
+            "url": "scaling/c0_e090_i5.png"
+          },
+          {
+            "url": "scaling/c0_e090_i6.png"
+          },
+          {
+            "url": "scaling/c0_e090_i7.png"
+          },
+          {
+            "url": "scaling/c0_e090_i8.png"
+          },
+          {
+            "url": "scaling/c0_e090_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 91,
+        "categoryId": 1,
+        "year": 2017,
+        "content": {
+          "pt": "Exemplo 091: inauguração de uma oficina na área de Empresa, com apresentação ao público.",
+          "en": "Sample 091: opening of a workshop in the Company area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c1_e091_i0.png"
+          },
+          {
+            "url": "scaling/c1_e091_i1.png"
+          },
+          {
+            "url": "scaling/c1_e091_i2.png"
+          },
+          {
+            "url": "scaling/c1_e091_i3.png"
+          },
+          {
+            "url": "scaling/c1_e091_i4.png"
+          },
+          {
+            "url": "scaling/c1_e091_i5.png"
+          },
+          {
+            "url": "scaling/c1_e091_i6.png"
+          },
+          {
+            "url": "scaling/c1_e091_i7.png"
+          },
+          {
+            "url": "scaling/c1_e091_i8.png"
+          },
+          {
+            "url": "scaling/c1_e091_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 92,
+        "categoryId": 2,
+        "year": 2019,
+        "content": {
+          "pt": "Exemplo 092: um texto longo de teste de escala em Veículos. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 092: a long scaling test text in Vehicles. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c2_e092_i0.png"
+          },
+          {
+            "url": "scaling/c2_e092_i1.png"
+          },
+          {
+            "url": "scaling/c2_e092_i2.png"
+          },
+          {
+            "url": "scaling/c2_e092_i3.png"
+          },
+          {
+            "url": "scaling/c2_e092_i4.png"
+          },
+          {
+            "url": "scaling/c2_e092_i5.png"
+          },
+          {
+            "url": "scaling/c2_e092_i6.png"
+          },
+          {
+            "url": "scaling/c2_e092_i7.png"
+          },
+          {
+            "url": "scaling/c2_e092_i8.png"
+          },
+          {
+            "url": "scaling/c2_e092_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 93,
+        "categoryId": 3,
+        "year": 2020,
+        "content": {
+          "pt": "Exemplo 093: evento curto.",
+          "en": "Sample 093: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c3_e093_i0.png"
+          },
+          {
+            "url": "scaling/c3_e093_i1.png"
+          },
+          {
+            "url": "scaling/c3_e093_i2.png"
+          },
+          {
+            "url": "scaling/c3_e093_i3.png"
+          },
+          {
+            "url": "scaling/c3_e093_i4.png"
+          },
+          {
+            "url": "scaling/c3_e093_i5.png"
+          },
+          {
+            "url": "scaling/c3_e093_i6.png"
+          },
+          {
+            "url": "scaling/c3_e093_i7.png"
+          },
+          {
+            "url": "scaling/c3_e093_i8.png"
+          },
+          {
+            "url": "scaling/c3_e093_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 94,
+        "categoryId": 4,
+        "year": 2021,
+        "content": {
+          "pt": "Exemplo 094: inauguração de uma oficina na área de Distinções, com apresentação ao público.",
+          "en": "Sample 094: opening of a workshop in the Awards area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c4_e094_i0.png"
+          },
+          {
+            "url": "scaling/c4_e094_i1.png"
+          },
+          {
+            "url": "scaling/c4_e094_i2.png"
+          },
+          {
+            "url": "scaling/c4_e094_i3.png"
+          },
+          {
+            "url": "scaling/c4_e094_i4.png"
+          },
+          {
+            "url": "scaling/c4_e094_i5.png"
+          },
+          {
+            "url": "scaling/c4_e094_i6.png"
+          },
+          {
+            "url": "scaling/c4_e094_i7.png"
+          },
+          {
+            "url": "scaling/c4_e094_i8.png"
+          },
+          {
+            "url": "scaling/c4_e094_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 95,
+        "categoryId": 5,
+        "year": 2022,
+        "content": {
+          "pt": "Exemplo 095: um texto longo de teste de escala em Competições. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 095: a long scaling test text in Competitions. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c5_e095_i0.png"
+          },
+          {
+            "url": "scaling/c5_e095_i1.png"
+          },
+          {
+            "url": "scaling/c5_e095_i2.png"
+          },
+          {
+            "url": "scaling/c5_e095_i3.png"
+          },
+          {
+            "url": "scaling/c5_e095_i4.png"
+          },
+          {
+            "url": "scaling/c5_e095_i5.png"
+          },
+          {
+            "url": "scaling/c5_e095_i6.png"
+          },
+          {
+            "url": "scaling/c5_e095_i7.png"
+          },
+          {
+            "url": "scaling/c5_e095_i8.png"
+          },
+          {
+            "url": "scaling/c5_e095_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 96,
+        "categoryId": 6,
+        "year": 2023,
+        "content": {
+          "pt": "Exemplo 096: evento curto.",
+          "en": "Sample 096: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c6_e096_i0.png"
+          },
+          {
+            "url": "scaling/c6_e096_i1.png"
+          },
+          {
+            "url": "scaling/c6_e096_i2.png"
+          },
+          {
+            "url": "scaling/c6_e096_i3.png"
+          },
+          {
+            "url": "scaling/c6_e096_i4.png"
+          },
+          {
+            "url": "scaling/c6_e096_i5.png"
+          },
+          {
+            "url": "scaling/c6_e096_i6.png"
+          },
+          {
+            "url": "scaling/c6_e096_i7.png"
+          },
+          {
+            "url": "scaling/c6_e096_i8.png"
+          },
+          {
+            "url": "scaling/c6_e096_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 97,
+        "categoryId": 7,
+        "year": 2024,
+        "content": {
+          "pt": "Exemplo 097: inauguração de uma oficina na área de Inovação, com apresentação ao público.",
+          "en": "Sample 097: opening of a workshop in the Innovation area, presented to the public."
+        },
+        "images": [
+          {
+            "url": "scaling/c7_e097_i0.png"
+          },
+          {
+            "url": "scaling/c7_e097_i1.png"
+          },
+          {
+            "url": "scaling/c7_e097_i2.png"
+          },
+          {
+            "url": "scaling/c7_e097_i3.png"
+          },
+          {
+            "url": "scaling/c7_e097_i4.png"
+          },
+          {
+            "url": "scaling/c7_e097_i5.png"
+          },
+          {
+            "url": "scaling/c7_e097_i6.png"
+          },
+          {
+            "url": "scaling/c7_e097_i7.png"
+          },
+          {
+            "url": "scaling/c7_e097_i8.png"
+          },
+          {
+            "url": "scaling/c7_e097_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 98,
+        "categoryId": 8,
+        "year": 2025,
+        "content": {
+          "pt": "Exemplo 098: um texto longo de teste de escala em Internacionalização. Descreve a expansão da atividade, a contratação de novos colaboradores e a participação em exposições nacionais.",
+          "en": "Sample 098: a long scaling test text in Internationalisation. It describes the growth of the business, the hiring of new staff and the presence at national trade exhibitions."
+        },
+        "images": [
+          {
+            "url": "scaling/c8_e098_i0.png"
+          },
+          {
+            "url": "scaling/c8_e098_i1.png"
+          },
+          {
+            "url": "scaling/c8_e098_i2.png"
+          },
+          {
+            "url": "scaling/c8_e098_i3.png"
+          },
+          {
+            "url": "scaling/c8_e098_i4.png"
+          },
+          {
+            "url": "scaling/c8_e098_i5.png"
+          },
+          {
+            "url": "scaling/c8_e098_i6.png"
+          },
+          {
+            "url": "scaling/c8_e098_i7.png"
+          },
+          {
+            "url": "scaling/c8_e098_i8.png"
+          },
+          {
+            "url": "scaling/c8_e098_i9.png"
+          }
+        ]
+      },
+      {
+        "id": 99,
+        "categoryId": 9,
+        "year": 2026,
+        "content": {
+          "pt": "Exemplo 099: evento curto.",
+          "en": "Sample 099: short event."
+        },
+        "images": [
+          {
+            "url": "scaling/c9_e099_i0.png"
+          },
+          {
+            "url": "scaling/c9_e099_i1.png"
+          },
+          {
+            "url": "scaling/c9_e099_i2.png"
+          },
+          {
+            "url": "scaling/c9_e099_i3.png"
+          },
+          {
+            "url": "scaling/c9_e099_i4.png"
+          },
+          {
+            "url": "scaling/c9_e099_i5.png"
+          },
+          {
+            "url": "scaling/c9_e099_i6.png"
+          },
+          {
+            "url": "scaling/c9_e099_i7.png"
+          },
+          {
+            "url": "scaling/c9_e099_i8.png"
+          },
+          {
+            "url": "scaling/c9_e099_i9.png"
+          }
+        ]
+      }
+    ],
+    "texts": {
+      "callTitle0": {
+        "pt": "A nossa",
+        "en": "Our"
+      },
+      "callTitle1": {
+        "pt": "história",
+        "en": "history"
+      },
+      "callContent": {
+        "pt": "De uma pequena fábrica de carroçarias em Gaia a um grupo internacional com mais de 100 empresas, a Salvador Caetano constrói o futuro há 100 anos.",
+        "en": "From a small coachbuilding factory in Gaia to an international group with more than 100 companies, Salvador Caetano has been building the future for 100 years."
+      },
+      "start": {
+        "pt": "— Iniciar —",
+        "en": "— Start —"
+      },
+      "chronology": {
+        "pt": "CRONOLOGIA",
+        "en": "CHRONOLOGY"
+      },
+      "allCategories": {
+        "pt": "Todas as categorias",
+        "en": "All categories"
+      }
+    }
+  }
+}

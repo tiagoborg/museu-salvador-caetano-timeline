@@ -3888,7 +3888,14 @@ most two slides. It is covered only by the self-check.
 
 ### `TimelineCard.Bind()` / `ShowSlide()` — cost scales with the category gallery
 
-**Status:** Open — projection, unverified; no action at the current content size
+**Status:** Resolved in code 2026-10-09 (phase 2 of the scaling plan); post-change measurement pending
+
+**Resolved in:** bounded indicator (`maxIndicatorDots`, counter beyond it), visibility-gated loading
+(`TimelineCard.SetVisible` driven by `TimelineScreenview.UpdateVisibility`), and the App-only
+`TimelineTextureCache` with a 128–256 MiB soft budget. The projection was confirmed by the phase 1
+baseline on the 100-event / 1000-image dataset, measured by root in the editor: 10,000 dots and 11,169
+Graphics; first Show at 1496.5 ms synchronous; the framework cache at 1000 entries and 1745.5 MiB
+runtime after a scroll; a 20 s scroll at a 67.72 ms p95. See `docs/sessions/2026-10-09.md`.
 
 **Category:** Performance
 
@@ -4289,4 +4296,222 @@ The performance reviewer observed that Graphic.color marks image vertices dirty 
 **Status:** Resolved
 **Category:** Documentation
 Qualified the overview blend as exact for opaque images and aligned the session GPU tolerance with the measured probe (0.025 per channel). The GPU pending statement now points to completed root verification.
+
+---
+
+## `Assets/01_Scripts/App/Timeline/TimelineTextureCache.cs`
+
+New in phase 2 of the timeline scaling plan (2026-10-09). Client code, so no register ids. Root
+reviewed the first draft; every finding below was fixed before the file was first compiled. Each fix
+has a self-check case in `TimelineTextureCache.SelfCheck()`.
+
+### `TimelineTextureCache.Notify()` — leases granted one at a time, inside the callback loop
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Bug
+**Original location:** `Notify`, `Lease lease = success ? Grant(entry, t.priority) : null;` inside the `foreach`
+
+> Notify must pre-grant/pin all coalesced successful subscribers' leases BEFORE callbacks, otherwise
+> the first consumer's Dispose can Trim/evict the new texture before later visible callbacks.
+
+**Context:** The first callback disposing its lease left the new texture unpinned. If the cache was
+over budget, `Trim` evicted it, and the next subscriber got a lease whose `Texture` was null. Now
+every grant is made first, then delivered. Check: "all subscribers are pinned before the first
+callback runs", on a cache whose budget is half a texture.
+
+### `TimelineTextureCache.Notify()` / `Ticket.Cancel()` — a sibling cancelled mid-batch was still called back
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Bug
+**Original location:** `Ticket.Cancel` (`if (!IsDone)`) and the `Notify` loop, which set `IsDone` before each callback
+
+> cancelled tickets in a notification batch must skip the callback and dispose the pre-granted lease
+> if cancelled by an earlier callback (track cancellation separately from the IsDone delivery flag)
+
+**Context:** `Ticket.cancelled` is now separate from `IsDone`. `CancelTicket` no longer touches a
+ticket that has already left `waiting`. `Deliver` skips a cancelled ticket and disposes its grant.
+Check: "cancelled mid-batch: no callback, grant released, the others served".
+
+### `TimelineTextureCache.Notify()` / `Request()` — a throwing callback kept its lease
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Bug
+**Original location:** the `catch` in `Notify` (logged only), and the cached path in `Request`, which had no guard at all
+
+> a throwing callback MUST dispose its grant; the cached path also needs central guarded delivery
+
+**Context:** A throwing callback leaked a pin for the session. On the cached path, the throw also
+escaped into the card's visibility loop. Every delivery now goes through `Deliver`, which logs the
+exception first, disposes the grant and carries on. Checks: "uncached throw: grant released,
+sibling served" and "cached throw: grant released".
+
+### `TimelineTextureCache.Request()` — path normalization could throw out of the caller
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Potential Bug
+**Original location:** `string key = _normalize(path);`
+
+> a normalize failure must be caught, logged and answered with null; it must not abort the whole card
+> visibility pass
+
+**Context:** The production normalizer calls `Path.GetFullPath`, which throws on illegal characters
+in a CMS path. The throw would have escaped through `TimelineCard.SetVisible` and out of
+`TimelineScreenview.UpdateVisibility`, skipping every later card that frame, and the next. Now that
+one request fails (`Failures++`, callback null). Check: "normalize failure answered, nothing started".
+
+### `TimelineTextureCache.Pump()` / `LoadRoutine()` — a throwing loader leaked a slot; a throwing request leaked the request
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Bug
+**Original location:** `Action abort = _loader(...)`, unguarded; `LoadRoutine`, with no `finally`
+
+> a _loader throw must release _active and fail its subscribers; the production LoadRoutine must use
+> try/finally to always dispose the request and complete once on a SendWebRequest/GetContent failure
+
+**Context:**
+- **Slot leak:** a loader throw left `_active` incremented for good, so two throws would have stopped
+  every load.
+- **Complete once:** the loader's `done` is now wrapped. The slot is freed exactly once, and a texture
+  reported a second time is destroyed instead of leaking.
+- **Request leak:** `LoadRoutine` disposes the request and completes in a `finally`. That is not a
+  `catch`, because C# forbids one around a `yield`.
+- **Stopped coroutine:** a coroutine that Unity stops runs no `finally`. `Dispose` covers that case
+  by aborting and disposing every live request itself.
+
+Checks: "loader throw: slot freed, subscribers failed, queue progressed" and "a second completion is
+ignored and its texture destroyed".
+
+**Notes:** Max 2 holds through an abort, because an aborted load keeps its slot until its loader
+reports back. Check: "the last subscriber leaving aborts; the slot is held until it ends".
+
+### `TimelineTextureCache.OnLoaded()` — sizes captured once at load undercount residency
+
+**Status:** Resolved — 2026-10-09, phase 7 follow-up
+**Category:** Bug (budget accuracy)
+**Original location:** `entry.bytes = measure(texture);` in `OnLoaded`, never revisited
+
+> live remeasure found 283.344 MiB resident versus 255.782 MiB accounted, budget 256, for 162 entries;
+> bytes captured at OnLoaded precede some allocations
+
+**Context:**
+- **Measured by root:** the same 162 textures re-measured about 10.8% above their load-time figures,
+  so the cache believed itself under budget while it was over.
+- **Unknown cause:** the per-texture figure grew after its first sampling. Why it grew is **not
+  established**. GPU upload or mip allocation after first render is plausible, but unmeasured.
+- **Fix:** `ReconcileBytes()` re-measures every ready texture through the same `measure` delegate.
+  It counts a destroyed texture as 0, recomputes `ReadyBytes`, raises `HighWaterBytes`, and then
+  runs the normal `Trim`: unpinned first, least recently used first, then prefetch-only pins.
+  Visible pins are kept, and any excess they cause is reported once per crossing.
+- **Cost:** the screen calls it at 1 Hz from `LateUpdate`. It is one pass over at most ~150 entries
+  with no allocation. Callers may force it before asserting on the budget.
+- **Check:** "growth reconciled: unpinned evicted, pinned kept", plus the destroyed-texture case.
+
+**Notes:** Between a load and the next reconcile the total can undercount for up to about a second;
+this is documented in `overview.md`.
+
+### `TimelineTextureCache.SelfCheck()` — budget arithmetic built on an unstable profiler size
+
+**Status:** Resolved — 2026-10-09 (the check, not the cache)
+**Category:** Code Quality (test)
+**Original location:** `long unit = EstimateBytes(probe)`, with the budget set to `unit * 5 / 2`
+
+> Cache.SelfCheck FAILED: 'unpinned evicted first; pinned working set kept and reported once' -
+> expected Evictions 1, Entries 3, Leases b 1, OverBudgetEvents 1
+
+**Context:**
+- **Root cause:** the check took one texture's `Profiler.GetRuntimeMemorySizeLong` as the size of
+  every texture, but that figure is not stable for fresh, never-applied textures in the editor. If the
+  later textures measured smaller than the probe, the 2.5-unit budget held 3 or 4 of them. Then either
+  nothing was evicted, or the cache never went over budget and `OverBudgetEvents` stayed 0.
+- **Not a cache bug:** traced by hand, eviction order and reporting give exactly the expected values
+  when every texture counts as one unit. Each entry's size is captured once at load and subtracted at
+  eviction, so the accounting is consistent whatever the measure returns.
+- **Fix:** an internal `measure` delegate. It defaults to `EstimateBytes`, so production is unchanged,
+  and the checks set a fixed 100 bytes per texture. The assert is unchanged; its message now carries
+  the actual evictions, entries, leases, events and ready/budget bytes.
+
+**Notes:** Not measured here which way the probe drifted; the failing run's numbers were not captured.
+The new message will show them if the check ever fails again.
+
+---
+
+## `Assets/01_Scripts/App/Screenview/TimelineScreenview.cs` (phase 2)
+
+### `TimelineScreenview.BuildChrome()` / `OnDisable()` — load slots stranded when the screen is deactivated
+
+**Status:** Resolved — 2026-10-09, before first compile
+**Category:** Bug (HIGH)
+**Original location:** `new TimelineTextureCache(this, ...)` in `BuildChrome`; no `OnDisable`
+
+> the cache's coroutine host was the screen; deactivating the screen's GameObject stops its coroutines,
+> CancelTicket only calls Abort, and active slots are freed only when LoadRoutine completes - so the
+> slots are stranded on re-enable and loading stops for good
+
+**Context:**
+- **Host:** loads now run on the persistent `Core.main` (`MainController`). The screen is the host
+  only when no Core is running, i.e. in isolated editor checks.
+- **`OnDisable`:** new, and idempotent. It stops the listeners and releases every card, so every
+  ticket is cancelled and every lease released.
+- **Ownership:** the cache is still owned by the screen, and `OnDestroy` still releases the
+  consumers before calling `Dispose`.
+- **Reactivation:** `LateUpdate` marks the cards in view again, and they load on the persistent host.
+  `Show` re-adds the listeners.
+
+No framework change. See the lifecycle step in `docs/sessions/2026-10-09.md`, phase 2 test plan step 11.
+
+### `TimelineScreenview.ReleaseCards()` — pool return during the screen's own deactivation
+
+**Status:** Resolved — 2026-10-09, phase 7, before first compile (found by the worker while writing it)
+**Category:** Unity-specific
+**Original location:** the first draft of `ReleaseCards`, which `OnDisable` called and which always
+returned cards to the pool via `SetActive(false)`
+
+> calling SetActive on a child from the parent's OnDisable is refused by Unity mid-deactivation, so
+> the pool return would have failed exactly on the path that must clean up
+
+**Context:** `OnDisable` and `OnDestroy` now release in place with `ReleaseCards(false)`: requests
+cancelled, images cleared, leases released, and the card stays assigned to its event.
+`UpdateVisibility` calls `SetVisible(true)` on assigned cards in view, so they reload when the screen
+is reactivated. `Hide`, `Rebuild` and scrolling return cards to the pool. Phase 7 test step 7
+checks that no state-change error is logged.
+
+---
+
+## `Assets/01_Scripts/App/Timeline/TimelineCard.cs` (phase 2)
+
+### `TimelineCard.ReleaseImages()` / `OnDisable()` — stopping the slideshow looked like deactivation
+
+**Status:** Resolved — 2026-10-09, before first compile (found by the worker re-reading its own draft)
+**Category:** Bug
+**Original location:** `enabled = false` in `ReleaseImages`; `OnDisable` calling `Release`
+
+> setting enabled = false on an active card calls OnDisable synchronously, which ran Release and
+> marked the card not visible
+
+**Context:** In Play mode, `Bind` on a visible card would have blanked it, because the
+`if (_visible) Enter()` that followed found `_visible` false. Release also re-entered itself part-way
+through. Now a `_disabling` guard tells "slideshow stopped" from "card deactivated", and
+`enabled = false` is the last statement.
+
+
+## Native Editor crash — Library/TimelineCrash-2026-10-09/Editor.log
+
+### D3D12 graphics worker resource release
+**Status:** Open — crash confirmed, cause unverified
+**Category:** Unity-specific
+**Original location:** Editor.log native crash stack at GfxVersionList::Impl::ReleaseFromGfxVersionList / BufferD3D12 destructor
+
+The Editor crashed on its native D3D12 graphics worker immediately after the deliberately missing-file download check completed. The log also recorded imports of temporary test media under Assets. Neither observation proves a code or engine root cause. Preserved the crash dump/log, moved fixture downloads to Library to remove import churn, and prepared a temporary DX11 comparison. Project graphics settings were not changed; implementation stability is not yet certified.
+
+
+### Scaling documentation qualifications
+**Status:** Resolved
+**Category:** Documentation
+Corrected fixture CLI spacing, qualified pool growth as the historical peak simultaneous demand per geometry kind, and limited the no-allocation claim to the visibility scan; entering cards can allocate binding and request state.
+
+
+### Final session verification status
+**Status:** Resolved
+**Category:** Documentation
+Replaced the stale pending-verification line in the October 10 log with a pointer to the completed download, lifecycle, soak, decode and final-build results. The native DX12 crash remains explicitly unresolved.
 

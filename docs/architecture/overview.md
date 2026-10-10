@@ -454,38 +454,92 @@ chronological then image order, identical URLs kept once. A card opens on its ow
     it. The first image of a card appears without a fade.
   - **Stale callbacks:** a generation token means only the newest texture request can change the
     photo; older, destroyed-card or disabled-card callbacks are ignored.
-  - **Hold-back and disable:** the next slide waits for a running fade to finish. Disabling the card
-    (the Timeline's `Hide`) ends any fade and cancels the request in flight.
+  - **Hold-back and disable:** the next slide waits for a running fade, and for a load in flight, to
+    finish. Deactivating or destroying the card cancels its requests, clears both layers and the strip,
+    and releases every texture lease.
+  - **Visibility:** `TimelineScreenview` decides each frame in `LateUpdate` which cards are
+    in view, from each card's layout span and the scroll offset, widened by `visibilityMargin` (default
+    480 reference px) on both sides as a preload zone. It calls `TimelineCard.SetVisible`, which is
+    independent of `enabled`, so single-image cards are tracked too. The span scan allocates nothing;
+    entering cards can allocate binding and image-request state.
+  - **Virtualization:** every event is laid out, which fixes its width, position and content width,
+    but a card exists only while its event is in view or within the margin. An event leaving view
+    returns its card to a pool. The card is released first, so no request, image or lease survives,
+    and deactivated, and its shown slide is kept in the layout record. An event entering view takes a
+    pooled card of the same fixed geometry kind (narrow/wide × image top/bottom), which is moved,
+    activated before `Bind` (TMP measures the tag) and bound with the retained slide.
+  - **Pool size:** leaving cards are returned before arriving ones are taken, so the pool holds at
+    most the largest number of cards of one kind ever in view together. Scrolling or filtering can
+    raise that historical peak; otherwise existing cards are reused. Cards are destroyed only at teardown.
+  - **Prefetch:** only cards in view prefetch, and only the next slide, at low priority.
   - **Timing:** each card samples its own interval when it is bound, uniformly between
     `slideIntervalMin` and `slideIntervalMax` (default 4–8 s, unscaled time), so cards change out of
     step. A gap longer than one interval, such as a pause, restarts the timer rather than skipping
     several slides at once.
-  - **Lifecycle:** the card's `Update` runs only for a cycling gallery. Unity stops it when the card is
-    inactive or destroyed, and every rebuild destroys the cards. `TimelineScreenview.Hide`
-    deactivates the cards' container, so nothing cycles while the screen is hidden. `Show`
-    reactivates it just before rebuilding, so the cards appear fresh, with new intervals.
+  - **Lifecycle:** the card's `Update` runs only for a visible cycling gallery.
+    - **Rebuild** (a filter or language change) returns every card to the pool, recomputes the
+      layout, and binds cards only for the events in view. Slides restart from each event's own
+      image.
+    - **`Hide`** returns every card to the pool and deactivates the cards' container.
+    - **`OnDisable` / `OnDestroy`** release every card in place, because Unity refuses `SetActive`
+      while the screen itself is being deactivated. On reactivation the cards in view load again.
+    - A reused card's `Bind` cancels and releases whatever it held before binding.
 - **No interaction:** a drag anywhere on a card, the photo included, pans the timeline. The photo area
   has no graphic of its own, so nothing on it is a raycast target.
-- **Dots:** they appear only for a gallery of two or more, track the image actually on screen (not
-  one still loading), and shrink to fit
-  the card's width for large galleries. A single image and an empty gallery have no dots.
+- **Indicator:** bounded. A gallery of 2 to `maxIndicatorDots` (default 5) images gets one dot each.
+  A larger one gets a single `current / total` counter, and no dots. The dots and the counter are built
+  once per card and only shown, hidden and repositioned by each `Bind`. A single image and an empty
+  gallery get neither. The indicator tracks the image actually on screen, not one still loading. The
+  gallery itself is never truncated: every image of the category still cycles.
 - **Fit:** each image fills the photo area's full height at its own aspect ratio, left aligned,
   through a native `AspectRatioFitter` in `HeightControlsWidth` mode, one per layer. A `RectMask2D` clips a wide
   image on the right. The photo area has no background, so a narrow image leaves whatever is behind the
-  card showing on its right. Images are never centred and never cropped vertically. Textures come from
-`TextureCacheManager` and are owned by it. The dot discs and axis-marker rings are generated at
+  card showing on its right. Images are never centred and never cropped vertically.
+- **Textures:** they come from `TimelineTextureCache` (App only, no framework change), which
+  `TimelineScreenview` creates and owns, and `TimelineCard.Create` receives it.
+  - **Loading:** requests are queued Visible before Prefetch. Requests for the same file, after
+    normalizing the path, share one load, and a visible request joining a queued prefetch promotes it.
+    At most 2 loads run at once, and an aborted load keeps its slot until it reports back.
+  - **Leases:** each caller gets a disposable lease, and a leased texture is pinned. A card holds one
+    lease per layer, plus one for its prefetch, and releases a lease only after clearing the image
+    that shows it. The strip shares the outgoing layer's lease.
+  - **Cancellation:** a pending load is abandoned only when its last subscriber leaves. A late or
+    stale delivery disposes its lease.
+  - **Budget:** `textureBudgetMiB` (128–256, default 256) is soft. Eviction takes unpinned textures
+    first, least recently used first, then those pinned only by prefetch. Visible textures are never
+    destroyed: a visible working set over budget is kept and logged once per crossing. A prefetch is
+    never started while the cache is at or over budget.
+  - **Counting:** each texture counts as `max(Profiler.GetRuntimeMemorySizeLong, RGBA32 with a full
+    mip chain)`. This is taken when the texture loads and re-measured about once a second
+    (`ReconcileBytes`, from the screen's `LateUpdate`), because the runtime figure can grow after
+    load. This runs whenever the screen is active, hidden or not, so retained unpinned textures are
+    trimmed too. An inactive screen pauses it: its cards' leases are already released, and the
+    entries keep their last sizes until the next reconcile after reactivation. Between a load and the next reconcile, `ReadyBytes` and `HighWaterBytes` can briefly
+    undercount, for at most about a second.
+  - **Teardown:** `OnDestroy` releases the cards first, then disposes the cache.
+
+  `TextureCacheManager` is no longer used by the timeline. The dot discs and axis-marker rings are generated at
 runtime by `TimelineUi.MakeCircleSprite` (optionally with an interior colour) and destroyed by
 `TimelineScreenview`.
 
 **Content** is `appData.json`: `categories` (`id`, localized `name`) and `timeline` (`id`,
-`categoryId`, `year`, localized `content`, `images[].url`). It currently ships sample data: event
-text that is not from the client's design is prefixed "Exemplo:" / "Sample:", and every image is
-`placeholder.png` or `placeholder2.jpg`.
+`categoryId`, `year`, localized `content`, `images[].url`). It ships **generated scaling sample
+data**, written by `Assets/Editor/TimelineScalingDataset.cs` (*Gema → Timeline Scaling → Generate
+Dataset*, or `Generate(first, count)` in chunks from eval): the ten real categories and languages are
+kept from the file itself, and `timeline` is 100 events, ten per category, years spread 1920–2026,
+PT/EN text in three lengths prefixed "Exemplo NNN:" / "Sample NNN:". Each event lists ten images of
+its own, `scaling/c<cat>_e<NNN>_i<k>.png` under `StreamingAssets/assets/`, 1000 distinct opaque PNGs
+(landscape, portrait and square, longest side ≤ 512) labelled with their ids. Because galleries are
+per **category**, every card cycles a 100-image gallery, shown with a `n / 100` counter. The same content is written to
+`assets/scaling/appData.scaling.json` as the baseline fixture; `Validate()` checks both are
+byte-identical and every count. Generation is deterministic and idempotent and never deletes; it
+replaced the earlier 30-event placeholder sample. `placeholder.png`/`placeholder2.jpg` remain on disk,
+now unreferenced. The 1000 PNGs ship in any player build (StreamingAssets is copied verbatim).
 
 **Client config override:** `settings.json` ships `AppData.Cache.AssetDownload.isActive: false`,
 unlike the template's `true`. There is no asset host, so the download stage could only try a refresh
-of the two placeholders and log a failure. Card images do not depend on that stage: they load from
-`StreamingAssets/assets/` through `TextureCacheManager`, which has no gate of its own. A machine that
+of the local images and log failures. Card images do not depend on that stage: they load from
+`StreamingAssets/assets/` through the timeline's own `TimelineTextureCache`, which no setting gates. A machine that
 already holds a `PlayerPrefs["Settings"]` snapshot or a deployed `persistentDataPath` config keeps
 its own value. Clear Player Prefs and the deployed config to pick up the shipped one; this branch
 does not write either.
@@ -694,4 +748,3 @@ Full register with severities and locations: [known-issues.md](known-issues.md).
 
 ### Timeline project identity
 This project's Unity company name is Museu Salvador Caetano and product name is Timeline. The Windows config helper opens/seeds %USERPROFILE%/AppData/LocalLow/Museu Salvador Caetano/Timeline/StreamingAssets/config, matching that identity. Descriptor metadata names the museum and 2026.
-

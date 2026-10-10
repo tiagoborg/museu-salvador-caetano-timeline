@@ -72,8 +72,12 @@ Assets/StreamingAssets/videos/
 Assets/StreamingAssets/videos.unity.meta
 Assets/TextMesh Pro/Documentation/
 Assets/TextMesh Pro/Documentation.meta
-Assets/StreamingAssets/assets/
+Assets/StreamingAssets/assets/*
+!Assets/StreamingAssets/assets/scaling/
+!Assets/StreamingAssets/assets/scaling.meta
 Assets/StreamingAssets/assets.meta
+Assets/_Recovery/
+Assets/_Recovery.meta
 Assets/08_Examples/
 Assets/08_Examples.meta
 Assets/01_Scripts/App/DEMO
