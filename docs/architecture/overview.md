@@ -435,7 +435,13 @@ during screen fades.
   simply disappear, even with every category on.
 
 **Images are per event** (`TimelineLayout.Gallery`): only the event's own `images`, in order, empty
-URLs skipped and identical URLs kept once. An event with no images shows no photo and no slide
+URLs skipped and identical URLs kept once. Only URLs of a supported image type reach a gallery -
+`.png`, `.jpg`, `.jpeg` (any case), checked by `TimelineLayout.IsImageUrl` through
+`MediaFile.isValidImageFileType` - so a video, PDF, `.webp`, `.gif` or extension-less URL is never
+requested; each one is reported once per screen lifetime at `LogError` (`Timeline: event N (year) lists
+"url", which is not a supported image type`). An event whose only images are rejected is treated as
+having none. A URL with a query string (`x.jpg?v=2`) is rejected too, because the extension check
+reads the whole string; the live CMS sends none. An event with no images shows no photo and no slide
 indicator. Its slot geometry is unchanged, but its text section always sits at the **top** of the
 slot - on an image-on-top card too (`TimelineCard.PlaceTextSection`) - so it never floats under an
 empty photo area; the transparent photo area is simply left below it. No card

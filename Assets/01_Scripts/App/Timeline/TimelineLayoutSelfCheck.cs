@@ -74,6 +74,14 @@ public static class TimelineLayoutSelfCheck
         check(TimelineLayout.Gallery(Item(5, 0, 1960, "x.jpg", "x.jpg")).Count == 1, "a repeated url is kept once");
         check(TimelineLayout.Gallery(null).Count == 0, "null item: empty gallery");
 
+        // Only supported image types reach a gallery, so nothing else is ever requested. Counter-test:
+        // upper-case and jpeg/png urls, with spaces and accents as the CMS sends them, are kept.
+        List<string> typed = TimelineLayout.Gallery(Item(6, 0, 1960, "v.mp4", "doc.pdf", "noext", "a.webp",
+            "x.gif", "bad<|>\".jpg", "uploads/Imagens Cronologia/1 certidão.JPG", "b.jpeg", "c.png"));
+        check(typed.Count == 3 && typed[0] == "uploads/Imagens Cronologia/1 certidão.JPG" && typed[1] == "b.jpeg"
+            && typed[2] == "c.png", "only png/jpg/jpeg kept, got [" + string.Join(", ", typed) + "]");
+        check(!TimelineLayout.IsImageUrl(null) && !TimelineLayout.IsImageUrl(""), "null and empty are not images, no throw");
+
         // Cycling wraps both ways; an empty gallery stays at 0.
         check(TimelineLayout.Step(2, 3, 1) == 0 && TimelineLayout.Step(0, 3, -1) == 2, "step wraps");
         check(TimelineLayout.Step(0, 0, 1) == 0, "step on an empty gallery");

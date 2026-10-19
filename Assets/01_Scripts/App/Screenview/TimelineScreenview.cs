@@ -765,6 +765,17 @@ public class TimelineScreenview : ScreenView
             if (!TimelineLayout.IsSupportedYear(item.year))
                 Development.LogError($"Timeline: event {item.id} has year {item.year}, outside the supported "
                     + $"range {TimelineLayout.FirstDecade}-{TimelineLayout.LastSupportedYear}, so it is never shown.");
+
+            if (item.images == null)
+                continue;
+
+            foreach (MediaVO image in item.images)
+            {
+                string url = image != null ? image.url : null;
+                if (!string.IsNullOrEmpty(url) && !TimelineLayout.IsImageUrl(url))
+                    Development.LogError($"Timeline: event {item.id} ({item.year}) lists \"{url}\", which is not a "
+                        + "supported image type (png, jpg, jpeg), so it is skipped and never loaded.");
+            }
         }
     }
 

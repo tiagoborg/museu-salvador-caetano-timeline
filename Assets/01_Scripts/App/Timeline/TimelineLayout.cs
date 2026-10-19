@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EnigmaVirtual;
 
 /// <summary>
 /// The timeline's placement rules, with no Unity objects in them so <c>TimelineLayoutSelfCheck</c>
@@ -86,7 +87,8 @@ public static class TimelineLayout
     }
 
     /// <summary>
-    /// The event's own images, in order, with empty urls skipped and identical urls kept once (a
+    /// The event's own images, in order, keeping only urls of a supported image type (empty, video,
+    /// pdf or extension-less urls are skipped, so they are never requested) and identical urls once (a
     /// repeat would show as two identical slides). Empty when the event has no images - never another
     /// event's: a card must not show a photo that belongs to a different event.
     /// </summary>
@@ -100,11 +102,31 @@ public static class TimelineLayout
         foreach (MediaVO image in item.images)
         {
             string url = image != null ? image.url : null;
-            if (!string.IsNullOrEmpty(url) && seen.Add(url))
+            if (IsImageUrl(url) && seen.Add(url))
                 gallery.Add(url);
         }
 
         return gallery;
+    }
+
+    /// <summary>
+    /// Whether a CMS url names an image type the loader can decode (<see cref="MediaFile.isValidImageFileType"/>).
+    /// False for null or empty, which that method would throw on, and for a url
+    /// <c>Path.GetExtension</c> rejects (illegal path characters), so bad content never stops a rebuild.
+    /// </summary>
+    public static bool IsImageUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return false;
+
+        try
+        {
+            return MediaFile.isValidImageFileType(url);
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
     }
 
     /// <summary>Moves one slide and wraps at both ends.</summary>
