@@ -28,14 +28,14 @@
     "AppData":
     {
         "isActive": true,
-        "useLocalAppData": true,
+        "useLocalAppData": false,
         "doLogs": true,
         "timeout": 30,
         "Cache":
         {
             "AssetDownload":
             {
-                "isActive": false,
+                "isActive": true,
                 "doLogs": false,
                 "cleanUnlistedAssets": false,
                 "downloadThreads": 1,
@@ -57,8 +57,8 @@
         },
         "remoteSettings":
         {
-            "hostUrl": "",
-            "dataJsonPath": "api/entrance?pc=2",
+            "hostUrl": "https://salvadorcaetano.gemadigital.com/",
+            "dataJsonPath": "api/timeline/data",
             "assetsPath": "",
             "usePersistentDataPath": false
         },

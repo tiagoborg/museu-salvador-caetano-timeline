@@ -159,10 +159,10 @@ because this paragraph was wrong until v0.30.0 (H21):
 | `AppData.Cache.TextureCache.isActive` | `false` |
 | `AppData.oneCoreDataModel.isActive` | `false` |
 
-**This client branch overrides one of these.** The Museu Salvador Caetano project ships
-`AppData.Cache.AssetDownload.isActive: false`, because its content is offline sample data with no
-asset host (see the client subsection at the end of §5). The table describes the shared template,
-which still ships `true`, so the download stage below does **not** run in this project.
+**This client branch matches the template here, but for its own reason.** The Museu Salvador
+Caetano project ships `AppData.Cache.AssetDownload.isActive: true` because its content comes from the
+client's live CMS, whose images are downloaded from the same host (see the client subsection at the
+end of §5). From 2026-10-07 to v0.56.4 it shipped `false`, for offline sample data with no host.
 
 So the download stage **does** run out of the box and the texture-cache boot stage does not. Note the limit of that sentence, which
 M2 turned up: it is the *stages* that are gated, not the components. `TextureCacheManager` is created
@@ -436,7 +436,9 @@ during screen fades.
 
 **Images are per event** (`TimelineLayout.Gallery`): only the event's own `images`, in order, empty
 URLs skipped and identical URLs kept once. An event with no images shows no photo and no slide
-indicator; its photo area stays empty and transparent, so the card keeps its slot geometry. No card
+indicator. Its slot geometry is unchanged, but its text section always sits at the **top** of the
+slot - on an image-on-top card too (`TimelineCard.PlaceTextSection`) - so it never floats under an
+empty photo area; the transparent photo area is simply left below it. No card
 ever shows another event's image. (Before v0.56.3 the gallery was shared by every event of the
 category, so an image-less card opened on the category's first image.)
 - **Slideshow:** a gallery of two or more advances by itself, one slide at a time, wrapping from the
@@ -532,20 +534,25 @@ Dataset*, or `Generate(first, count)` in chunks from eval): the ten real categor
 kept from the file itself, and `timeline` is 100 events, ten per category, years spread 1920–2026,
 PT/EN text in three lengths prefixed "Exemplo NNN:" / "Sample NNN:". Each event lists ten images of
 its own, `scaling/c<cat>_e<NNN>_i<k>.png` under `StreamingAssets/assets/`, 1000 distinct opaque PNGs
-(landscape, portrait and square, longest side ≤ 512) labelled with their ids. Because galleries are
-per **category**, every card cycles a 100-image gallery, shown with a `n / 100` counter. The same content is written to
+(landscape, portrait and square, longest side ≤ 512) labelled with their ids. Galleries are per
+**event**, so with this dataset every card cycles its own ten images. The same content is written to
 `assets/scaling/appData.scaling.json` as the baseline fixture; `Validate()` checks both are
 byte-identical and every count. Generation is deterministic and idempotent and never deletes; it
 replaced the earlier 30-event placeholder sample. `placeholder.png`/`placeholder2.jpg` remain on disk,
 now unreferenced. The 1000 PNGs ship in any player build (StreamingAssets is copied verbatim).
 
-**Client config override:** `settings.json` ships `AppData.Cache.AssetDownload.isActive: false`,
-unlike the template's `true`. There is no asset host, so the download stage could only try a refresh
-of the local images and log failures. Card images do not depend on that stage: they load from
-`StreamingAssets/assets/` through the timeline's own `TimelineTextureCache`, which no setting gates. A machine that
-already holds a `PlayerPrefs["Settings"]` snapshot or a deployed `persistentDataPath` config keeps
-its own value. Clear Player Prefs and the deployed config to pick up the shipped one; this branch
-does not write either.
+**Client config (as of v0.56.4): live CMS.** `settings.json` ships `AppData.useLocalAppData: false`
+and `remoteSettings.hostUrl: https://salvadorcaetano.gemadigital.com/` with
+`dataJsonPath: api/timeline/data`, so the content above is fetched from the client's API at boot, and
+`AppData.Cache.AssetDownload.isActive: true` downloads the `uploads/...` image urls it lists from the
+same host. The shipped `appData.json` (the scaling sample) is no longer what a connected machine shows;
+it remains the local fallback content. The live data has 211 events and 30 images, at most one per
+event, so most cards are text only. Card images still load through the timeline's own
+`TimelineTextureCache`, which no setting gates. Measured in the editor on 2026-10-19: boot reaches
+`Core :: Boot complete.` against the live API and the image-carrying cards show their photos. **Not
+verified:** a first boot with no network, and a standalone player against the live host. A machine
+that already holds a `PlayerPrefs["Settings"]` snapshot or a deployed `persistentDataPath` config
+keeps its own values - clear both to pick up the shipped config; this branch writes neither.
 
 ## 5b. Breaking changes by version
 

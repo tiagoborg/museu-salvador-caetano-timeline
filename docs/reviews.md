@@ -4525,7 +4525,7 @@ through. Now a `_disabling` guard tells "slideshow stopped" from "card deactivat
 **Category:** Unity-specific
 **Original location:** Editor.log native crash stack at GfxVersionList::Impl::ReleaseFromGfxVersionList / BufferD3D12 destructor
 
-The Editor crashed on its native D3D12 graphics worker immediately after the deliberately missing-file download check completed. The log also recorded imports of temporary test media under Assets. Neither observation proves a code or engine root cause. Preserved the crash dump/log, moved fixture downloads to Library to remove import churn, and prepared a temporary DX11 comparison. Project graphics settings were not changed. The October 10 comparison passed cold/warm/missing/offline cases and a five-minute scrolling soak under the normal DX12 split-jobs configuration, with fixture downloads outside Assets. All13activecards had images afterwards. It did not reproduce the native crash; import churn remains a hypothesis, not an established cause. A 5.9-second diagnostic-interval stall also prevents treating this mixed-workload sample as clean performance qualification. Original crash cause and deployment stability remain unverified.
+The Editor crashed on its native D3D12 graphics worker immediately after the deliberately missing-file download check completed. The log also recorded imports of temporary test media under Assets. Neither observation proves a code or engine root cause. Preserved the crash dump/log, moved fixture downloads to Library to remove import churn, and prepared a temporary DX11 comparison. Project graphics settings were not changed. The October 10 comparison passed cold/warm/missing/offline cases and a five-minute scrolling soak under the normal DX12 split-jobs configuration, with fixture downloads outside Assets. All13activecards had images afterwards. It did not reproduce the native crash; import churn remains a hypothesis, not an established cause. A 5.9-second diagnostic-interval stall also prevents treating this mixed-workload sample as clean performance qualification. Original crash cause and deployment stability remain unverified. Subsequently, at10:41:59Lisbon on October10, unattended use crashed again with the same ReleaseFromGfxVersionList/BufferD3D12 stack and minidump readof0x10 (0xC0000005). Evidence is preserved in Library/TimelineCrash-2026-10-10. Isolating downloads outside Assets therefore did not prevent recurrence; the earlier short passing comparison is not stability qualification.
 
 
 ### Scaling documentation qualifications
@@ -4539,3 +4539,47 @@ Corrected fixture CLI spacing, qualified pool growth as the historical peak simu
 **Category:** Documentation
 Replaced the stale pending-verification line in the October 10 log with a pointer to the completed download, lifecycle, soak, decode and final-build results. The native DX12 crash remains explicitly unresolved.
 
+
+### Additional crash reports — Claude read-only diagnosis, October10
+**Status:** Open — native cause unverified
+**Category:** Unity-specific
+**Context:** Combined crash JSON, previous/current Editor and licensing logs corroborate the same DX12 buffer release stack. No concrete App lifetime defect established in reviewed card/cache/screen/call paths. Licensing disconnects occur after the crash; process committed memory2935MB alone does not establish memory exhaustion.
+**Notes:** Corrected the session's scene-restoration wording: the backup-scene load also occurs during Play startup. Roughly16minutes until failure is inferred from licensing timestamps, not a timed idle test. Prior five-minute passes are insufficient for comparison. Root verified the earlier load sequence and image-reference clearing before lease release. Longer backend/threading/slideshow comparisons remain necessary.
+
+### Forty-minute backend/threading comparison — October10
+**Status:** Open — original native crash cause remains unverified
+**Category:** Unity-specific
+**Context:** DX11 Threaded and DX12 Threaded/MultiThreaded (temporary-force-gfx-mt) each completed40minutes idle with slideshows running,13/13loadedcards,zero loader failures and finalcachebelow256MiB. Dedicatedlogs endednormally;no additionalcrashfolder appeared. Exact measurements and replay steps are in docs/sessions/2026-10-10.md; resultJSON/logs are preserved in Library/TimelineSoak-*.
+**Notes:** Two earlier crashes usedDX12SplitJobs. Passing alternatives support testing graphicsjobs-disabled as a workaround; they do not prove rootcause. Onlyone40-minuteEditorrun perconfiguration; realplayer/hardware and longerqualification remain open. No production code/configchange or DownloadableImage substitution applied.
+
+### Completed-comparison documentation review
+**Status:** Resolved
+**Category:** Documentation
+**Context:** Reviewer found two launch flags concatenated in replay instructions and an earlier unperformed-status sentence that had become ambiguous after completing the two runs.
+**Notes:** Corrected invocation to separate `-force-d3d12 -force-gfx-mt` arguments. Labelled the earlier proposal as historical and identified the remaining normal-DX12/frozen-slideshow/player comparisons. ResultJSONs support all recorded measurements; no rootcause proof claimed.
+
+### Claude final comparison review qualifications
+**Status:** Resolved
+**Category:** Documentation
+**Context:** Final worker review validated backend/threading/frame/card measurements and shutdown logs. Root qualified three interpretations: worker-only evidence lacked a final crash-folder listing but root checked it live; the backup-scene sequence is not a proven trigger; Profiler total allocated-memory delta is not a measured managed-allocation total.
+**Notes:** One40-minute run per alternative is a passing comparison, not a fix or proof that a build is safe to deploy. No permanent graphics configuration changed.
+
+## Development player visitor test — October10
+### Initial forty-minute interaction/idle observation
+**Status:** Resolved for mouse-panning test coverage — held OS gestures subsequently verified movement; physical touch and original native crash cause remain unverified
+**Category:** Other
+**Context:** NormalBuild/Timeline player usedDX12SplitJobs, survivedinitial40minutes with repeatcategory/navigation/PT-ENvisits and visiblyadvancingslideshows. EvidenceLibrary/TimelineVisitorTest.70processsamplescover34.5minutesafterinitialmanualchecks,allalive/responding;privatebytesrose12.8MiBbetweenfirst/lastsamples,notaleakdiagnosis.
+**Notes:** Injecteddraggesturesdidnotproduceobservedpan;wheelmovementwasminimal. Source-onlyreviewfoundnoobviousroutingdefect;noappbugorinputpassclaimed. SuspectedEnglishcopyomissionnotreproduced:Claudeverified100inallcontentcopies andfreshnativecapturepositivelyshowed100companies. No productionfixorgraphicsoverrideapplied. Heartbeatmonitoringcontinues withmeaningful-alertsonly.
+
+### Final visitor-log review
+**Status:** Open — startup video metadata notice, impact unverified
+**Category:** Other
+**Original location:** Library/TimelineVisitorTest/final-Player.log:157
+**Context:** WindowsMediaFoundation reports unknown/unsupportedcolorprimaries0 for bundledvideoresource duringstartup. Corebootcompletes andplayerremainsresponsive;novisiblecolorshiftestablished. D3D12infoqueueunavailableisaseparatestartupnotice,notanativecrash.
+**Notes:** Claudeverifiednoload/cachebudget/managedexception/nativecrashsignatureintherecordedrun. Noconversion/codefixmade. Clarifiedbothwheelaxesweretried;neithercertifiesusablepanning. Docreviewerapprovedthesampletimings/memoryanduncertaintylimits.
+
+### Held OS scrolling follow-up
+**Status:** Resolved — mouse-panning observation gap; no application fix
+**Category:** Other
+**Context:** Claude-authoredLibraryhelpers implementedtheprojectAGENTS heldOSmouse route. Rootexecuted40-minuteplayer scrollingrunandrecordedsupplementalboundarychecks;fullcaptures show1920->2026->1920 andloadedimages. 40scheduled/16supplementalgestures,81responding samples,zeromatchedlogerrors. Summary/evidence inLibrary/TimelineVisitorTest/scroll-soak-20261010T150520Z.
+**Notes:** Temporary captureDPIcontextcorrectedcroppedGDIimageswithoutchanginginputorbuild. Initialshortinjectedgesturefailuresdidnotproveappdefect. Actualphysicaltouch/FPS/GPUresidencyunmeasured;onepassingWindowsplayercase doesnotresolveearlierEditorDX12crash.

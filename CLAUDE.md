@@ -85,10 +85,11 @@ category that bites when a project flips `TextureCache.isActive` on. Note `Asset
 ships **`true`** — asset downloading is live out of the box, and has been since before anyone wrote
 otherwise here (H21).
 
-> **Client project note (Museu Salvador Caetano):** this branch overrides the template and ships
-> `AssetDownload.isActive: **false**`. Its content is offline sample data with no asset host. Every
-> "ships `true`" in this file and in `known-issues.md` describes the shared template, not this
-> project. See the client subsection at the end of `overview.md` §5.
+> **Client project note (Museu Salvador Caetano):** as of v0.56.4 this branch reads its content
+> from the client's live CMS (`hostUrl: https://salvadorcaetano.gemadigital.com/`,
+> `useLocalAppData: false`) and ships `AssetDownload.isActive: **true**`, like the template, to
+> download that CMS's images. Before v0.56.4 it shipped `false` for offline sample data. See the
+> client subsection at the end of `overview.md` §5.
 
 ## Review findings go in `docs/reviews.md` — never in a source comment
 

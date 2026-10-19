@@ -75,6 +75,7 @@ public class TimelineCard : MonoBehaviour
 
     private RectTransform _tagRect;
     private TextMeshProUGUI _tagText;
+    private RectTransform _textSection;
     private TextMeshProUGUI _yearText;
     private TextMeshProUGUI _contentText;
     // Two photo layers for the crossfade; _front is the one showing (or fading in). Each layer holds the
@@ -174,14 +175,15 @@ public class TimelineCard : MonoBehaviour
         Image body = TimelineUi.MakeImage(transform, "Body", null, Color.clear, true);
         TimelineUi.TopLeft(body.rectTransform, 0f, m.tagHeight + m.tagGap, width, m.cardHeight);
 
-        float textTop = imageOnTop ? m.ImageHeight : 0f;
         float imageTop = imageOnTop ? 0f : m.cardHeight - m.ImageHeight;
         float innerWidth = width - m.padding * 2f;
 
         // The text section: background fill, year, text, dots, and the frame last so it draws on top.
         // The frame surrounds this section only, never the photo.
+        // Positioned by PlaceTextSection on every bind, since it depends on whether the event has images.
         Image textSection = TimelineUi.MakeImage(body.transform, "Text", null, _style.backgroundColor, false);
-        TimelineUi.TopLeft(textSection.rectTransform, 0f, textTop, width, m.TextSectionHeight);
+        _textSection = textSection.rectTransform;
+        PlaceTextSection(true);
 
         _yearText = TimelineUi.MakeText(textSection.transform, "Year", _style.boldFont, m.yearFontSize,
             _style.textColor, TextAlignmentOptions.TopLeft);
@@ -257,6 +259,16 @@ public class TimelineCard : MonoBehaviour
     }
 
     /// <summary>
+    /// Below the photo on an image-on-top card; at the top of the card otherwise, including an image-on-top
+    /// card whose event has no images, so it does not float under an empty photo area.
+    /// </summary>
+    private void PlaceTextSection(bool hasImages)
+    {
+        float top = _imageOnTop && hasImages ? _metrics.ImageHeight : 0f;
+        TimelineUi.TopLeft(_textSection, 0f, top, _width, _metrics.TextSectionHeight);
+    }
+
+    /// <summary>
     /// The frame outline over the whole of <paramref name="parent"/>. Must be its last child to draw on
     /// top. Not a raycast target, so drags still reach the body (pan) below it, and no centre fill, so it
     /// never hides what it frames.
@@ -299,6 +311,7 @@ public class TimelineCard : MonoBehaviour
     {
         ReleaseImages();
         _gallery = gallery ?? new List<string>();
+        PlaceTextSection(_gallery.Count > 0);
         _cycles = TimelineLayout.CyclesSlides(_gallery.Count);
         BuildIndicator(_gallery.Count);
 
@@ -877,6 +890,18 @@ public class TimelineCard : MonoBehaviour
             card.OnTexture(card.BeginRequest(1), 1, "b", lease("b"));
             check(!card._fading && card._layers[card._front].texture == b && card._layers[card._front].color.a == 1f
                 && !card._layers[1 - card._front].enabled && cache.Leases("a") == 0, "duration 0 swaps at once and releases");
+
+            // Text placement: an image-on-top card moves its text to the top when the event has no images,
+            // and back below the photo when a pooled card is rebound to an event that has some.
+            TimelineCard top = Create(parent.transform, new TimelineStyle(), metrics, cache, 0f, 0f, false, true);
+            top.BindGallery(new List<string>(), 0);
+            check(top._textSection.anchoredPosition.y == 0f, "image-on-top card without images: text at the top");
+            top.BindGallery(new List<string> { "a" }, 0);
+            check(top._textSection.anchoredPosition.y == -metrics.ImageHeight, "image-on-top card with images: text below the photo");
+            card.BindGallery(new List<string>(), 0);
+            check(card._textSection.anchoredPosition.y == 0f, "image-below card without images: text stays at the top");
+            top.Release();
+            card.Release();
         }
         finally
         {
