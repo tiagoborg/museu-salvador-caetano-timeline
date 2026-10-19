@@ -4137,6 +4137,30 @@ with real touch.
 
 Client feature, reviewed before delivery. No register id.
 
+### `TimelineLayout.BuildGalleries()` / `StartSlide()` — cards showed other events' images
+
+**Status:** Resolved
+**Resolved in:** v0.56.3 (2026-10-19) — replaced by the per-event `TimelineLayout.Gallery(item)`
+**Category:** Bug
+**Original location:** `BuildGalleries` and `StartSlide`, called from `TimelineScreenview.Rebuild`
+and `TimelineCard.Bind`
+
+> images are being loaded from other timeline items: Fundador (category 0) 1937 has no images in
+> the live appData, but the app shows an image from the previous item
+
+**Context:** Reported by the client from the live server data
+(`salvadorcaetano.gemadigital.com/api/timeline/data`). Not a loading or caching fault: the gallery
+was built per *category* by design, and `StartSlide` returned 0 for an event without images, so the
+card opened on the category's first image - for Fundador, 1926's birth certificate on 1937, 1942,
+1944, 1946, 1949 and 1951. Cards with images opened on their own image but then cycled through every
+other image of the category. The live data has 181 of 211 events without images, so most cards were
+affected. The dummy content never showed it because every dummy event carried images.
+
+**Notes:** The card already handled an empty gallery (no layer enabled, no indicator), so the fix is
+only the gallery source. Verified in play mode against the live data: 14 visible cards, 10 empty with
+nothing shown, 4 with images all showing theirs. The two Performance findings above about the
+*category* gallery's size no longer apply in that form: a gallery is now one event's images.
+
 ### `TimelineLayout.LastDecade()` / `ItemsInDecade()` — the axis trusted any year in the JSON
 
 **Status:** Resolved — fixed 2026-10-07, before delivery

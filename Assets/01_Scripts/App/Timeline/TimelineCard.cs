@@ -278,9 +278,10 @@ public class TimelineCard : MonoBehaviour
     /// Binds an event. Safe on a reused card: its requests are cancelled, images cleared and leases
     /// released first, and the indicator reuses the same children. Call while the card is active.
     /// </summary>
-    /// <param name="gallery">The category's gallery, shared by every card of that category. Not modified.</param>
+    /// <param name="gallery">The event's own images (<see cref="TimelineLayout.Gallery"/>); empty shows no
+    /// photo and no indicator. Not modified.</param>
     /// <param name="initialSlide">The slide to open on, e.g. the one retained when the event left view;
-    /// -1 for the event's own first image.</param>
+    /// -1 for the first image.</param>
     public void Bind(TimelineItemVO item, string categoryName, List<string> gallery, float contentFontSize,
         int initialSlide = -1)
     {
@@ -290,7 +291,7 @@ public class TimelineCard : MonoBehaviour
         _contentText.fontSize = contentFontSize;
         _contentText.text = TimelineUi.Localized(item.content);
 
-        BindGallery(gallery, initialSlide >= 0 ? initialSlide : TimelineLayout.StartSlide(gallery, item));
+        BindGallery(gallery, initialSlide);
     }
 
     /// <summary>The image half of <see cref="Bind"/>. An out-of-range slide falls back to 0.</summary>

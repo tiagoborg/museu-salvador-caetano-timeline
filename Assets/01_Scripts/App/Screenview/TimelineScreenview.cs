@@ -522,7 +522,6 @@ public class TimelineScreenview : ScreenView
 
         TimelineItemVO[] all = data.timeline ?? new TimelineItemVO[0];
         Dictionary<int, CategoryVO> categories = CategoriesById();
-        Dictionary<int, List<string>> galleries = TimelineLayout.BuildGalleries(all);
         int lastDecade = TimelineLayout.LastDecade(all);
 
         // Content does not change after boot, so it is checked once rather than on every relayout.
@@ -570,13 +569,12 @@ public class TimelineScreenview : ScreenView
                     TimelineItemVO item = items[i];
                     float y = firstRowTop + TimelineLayout.RowOf(i) * rowPitch;
 
-                    galleries.TryGetValue(item.categoryId, out List<string> gallery);
                     _slots.Add(new EventSlot
                     {
                         item = item,
                         categoryName = categories.TryGetValue(item.categoryId, out CategoryVO category)
                             ? TimelineUi.Localized(category.name) : string.Empty,
-                        gallery = gallery,
+                        gallery = TimelineLayout.Gallery(item),
                         x = columnX,
                         y = y,
                         fontSize = fits[i].fontSize,

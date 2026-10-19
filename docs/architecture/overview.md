@@ -434,8 +434,11 @@ during screen fades.
   from `categories`, a year outside that range, a null entry) are reported at `LogError` once per screen lifetime. Without that report they
   simply disappear, even with every category on.
 
-**Images are a per-category gallery**, not per event: every image of the category's events in
-chronological then image order, identical URLs kept once. A card opens on its own first image.
+**Images are per event** (`TimelineLayout.Gallery`): only the event's own `images`, in order, empty
+URLs skipped and identical URLs kept once. An event with no images shows no photo and no slide
+indicator; its photo area stays empty and transparent, so the card keeps its slot geometry. No card
+ever shows another event's image. (Before v0.56.3 the gallery was shared by every event of the
+category, so an image-less card opened on the category's first image.)
 - **Slideshow:** a gallery of two or more advances by itself, one slide at a time, wrapping from the
   last image back to the first.
   - **Crossfade:** each change crossfades over `slideFadeDuration` (default 0.5 s, unscaled; 0 swaps

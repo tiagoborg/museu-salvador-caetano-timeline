@@ -47,8 +47,6 @@ public static class TimelineLayoutSelfCheck
         check(!TimelineLayout.IsSupportedYear(10000) && !TimelineLayout.IsSupportedYear(1919)
             && TimelineLayout.IsSupportedYear(1920) && TimelineLayout.IsSupportedYear(9999), "supported range is 1920-9999");
         check(TimelineLayout.ItemsInDecade(invalid, 1910, new HashSet<int> { 0 }).Count == 0, "1919 is not laid out");
-        check(!TimelineLayout.BuildGalleries(invalid)[0].Exists(url => url == "huge.jpg" || url == "max.jpg"
-            || url == "early.jpg"), "unsupported events add no gallery slides");
 
         // Two rows, filling top to bottom, then right.
         int[,] slots = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 }, { 2, 0 } };
@@ -65,17 +63,16 @@ public static class TimelineLayoutSelfCheck
         check(TimelineLayout.ItemsInDecade(all, 1950, new HashSet<int>()).Count == 0, "all categories off empties a decade");
         check(TimelineLayout.ItemsInDecade(all, 2010, new HashSet<int> { 0 }).Count == 0, "filtered-out decade is empty");
 
-        // Galleries: per category, chronological, image order kept, urls deduplicated, empties skipped.
-        Dictionary<int, List<string>> galleries = TimelineLayout.BuildGalleries(all);
-        List<string> figures = galleries[0];
-        check(figures.Count == 3 && figures[0] == "shared.png" && figures[1] == "a.jpg" && figures[2] == "e.jpg",
-            "category 0 gallery is [shared, a, e], got [" + string.Join(", ", figures) + "]");
-        check(galleries[1].Count == 1, "category 1 gallery has its single image");
-
-        // A card opens on its own first image; without images, on the first slide.
-        check(TimelineLayout.StartSlide(figures, a) == 1, "a starts on its first image");
-        check(TimelineLayout.StartSlide(figures, e) == 2, "e skips its empty url");
-        check(TimelineLayout.StartSlide(figures, d) == 0, "d has no images and starts at 0");
+        // Galleries: the event's own images only, in order, empties skipped, urls deduplicated. An event
+        // without images gets an empty gallery even when others in its category have some.
+        List<string> ga = TimelineLayout.Gallery(a);
+        check(ga.Count == 2 && ga[0] == "a.jpg" && ga[1] == "shared.png", "a's gallery is [a, shared], got ["
+            + string.Join(", ", ga) + "]");
+        check(TimelineLayout.Gallery(d).Count == 0, "d has no images: empty, nothing borrowed from a, b or e");
+        List<string> ge = TimelineLayout.Gallery(e);
+        check(ge.Count == 1 && ge[0] == "e.jpg", "e skips its empty url");
+        check(TimelineLayout.Gallery(Item(5, 0, 1960, "x.jpg", "x.jpg")).Count == 1, "a repeated url is kept once");
+        check(TimelineLayout.Gallery(null).Count == 0, "null item: empty gallery");
 
         // Cycling wraps both ways; an empty gallery stays at 0.
         check(TimelineLayout.Step(2, 3, 1) == 0 && TimelineLayout.Step(0, 3, -1) == 2, "step wraps");
@@ -118,7 +115,7 @@ public static class TimelineLayoutSelfCheck
         TimelineLayout.CardFit hugeFit = TimelineLayout.FitCard(measureOf(5000), 232f, 352f, 118f, 14f, 11f, 0.5f);
         check(hugeFit.wide && !hugeFit.fits && hugeFit.fontSize == 11f, "oversized text is reported as not fitting");
 
-        // Slide indicators on a narrow card's inner width (260 - 2 x 14). A 30-image category gallery
+        // Slide indicators on a narrow card's inner width (260 - 2 x 14). A 30-image gallery
         // must stay inside the card; a small one keeps the default 6 + 6 geometry, right-aligned.
         // Tolerance in pixels, for float rounding only: a thousandth of a pixel is never visible, while a
         // real overflow is whole pixels.

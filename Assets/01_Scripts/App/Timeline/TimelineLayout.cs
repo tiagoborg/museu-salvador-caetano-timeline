@@ -86,66 +86,25 @@ public static class TimelineLayout
     }
 
     /// <summary>
-    /// One gallery per category: every image of every event in that category, in event order and
-    /// then image order, with identical urls kept once. Deduplicated because placeholder content
-    /// reuses the same file, and a repeat would show as two identical slides.
+    /// The event's own images, in order, with empty urls skipped and identical urls kept once (a
+    /// repeat would show as two identical slides). Empty when the event has no images - never another
+    /// event's: a card must not show a photo that belongs to a different event.
     /// </summary>
-    public static Dictionary<int, List<string>> BuildGalleries(IEnumerable<TimelineItemVO> all)
+    public static List<string> Gallery(TimelineItemVO item)
     {
-        Dictionary<int, List<string>> galleries = new Dictionary<int, List<string>>();
-        Dictionary<int, HashSet<string>> seen = new Dictionary<int, HashSet<string>>();
+        List<string> gallery = new List<string>();
+        if (item == null || item.images == null)
+            return gallery;
 
-        if (all == null)
-            return galleries;
-
-        // An event that is never shown does not contribute slides either.
-        List<TimelineItemVO> ordered = new List<TimelineItemVO>();
-        foreach (TimelineItemVO item in all)
-        {
-            if (item != null && IsSupportedYear(item.year))
-                ordered.Add(item);
-        }
-        ordered.Sort(Compare);
-
-        foreach (TimelineItemVO item in ordered)
-        {
-            if (!galleries.TryGetValue(item.categoryId, out List<string> gallery))
-            {
-                gallery = new List<string>();
-                galleries[item.categoryId] = gallery;
-                seen[item.categoryId] = new HashSet<string>(StringComparer.Ordinal);
-            }
-
-            if (item.images == null)
-                continue;
-
-            foreach (MediaVO image in item.images)
-            {
-                string url = image != null ? image.url : null;
-                if (!string.IsNullOrEmpty(url) && seen[item.categoryId].Add(url))
-                    gallery.Add(url);
-            }
-        }
-
-        return galleries;
-    }
-
-    /// <summary>The slide a card opens on: its own first image, or the gallery's first when it has none.</summary>
-    public static int StartSlide(IList<string> gallery, TimelineItemVO item)
-    {
-        if (gallery == null || item == null || item.images == null)
-            return 0;
-
+        HashSet<string> seen = new HashSet<string>(StringComparer.Ordinal);
         foreach (MediaVO image in item.images)
         {
-            if (image == null || string.IsNullOrEmpty(image.url))
-                continue;
-
-            int index = gallery.IndexOf(image.url);
-            return index >= 0 ? index : 0;
+            string url = image != null ? image.url : null;
+            if (!string.IsNullOrEmpty(url) && seen.Add(url))
+                gallery.Add(url);
         }
 
-        return 0;
+        return gallery;
     }
 
     /// <summary>Moves one slide and wraps at both ends.</summary>
