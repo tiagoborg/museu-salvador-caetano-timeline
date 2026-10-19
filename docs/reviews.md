@@ -4583,3 +4583,46 @@ Replaced the stale pending-verification line in the October 10 log with a pointe
 **Category:** Other
 **Context:** Claude-authoredLibraryhelpers implementedtheprojectAGENTS heldOSmouse route. Rootexecuted40-minuteplayer scrollingrunandrecordedsupplementalboundarychecks;fullcaptures show1920->2026->1920 andloadedimages. 40scheduled/16supplementalgestures,81responding samples,zeromatchedlogerrors. Summary/evidence inLibrary/TimelineVisitorTest/scroll-soak-20261010T150520Z.
 **Notes:** Temporary captureDPIcontextcorrectedcroppedGDIimageswithoutchanginginputorbuild. Initialshortinjectedgesturefailuresdidnotproveappdefect. Actualphysicaltouch/FPS/GPUresidencyunmeasured;onepassingWindowsplayercase doesnotresolveearlierEditorDX12crash.
+
+## `Assets/01_Scripts/App/Timeline/SingleTouchInput.cs`
+
+Client feature (v0.57.0): the timeline accepts one touch only. Reviewed by `code-reviewer` before delivery, twice. No register id.
+
+### `SingleTouchInput.Install()` — fingers already down at install never released
+
+**Status:** Resolved
+**Resolved in:** v0.57.0, correction round 1
+**Category:** Bug
+**Original location:** `Install`, which swapped `inputOverride` synchronously
+
+> a finger already down when Install runs is never exposed, so the module never sees it lift; a Home
+> Selectable stays pointer-down (pressed tint) or a ScrollRect stays dragging
+
+**Context:** `Show` runs inside the Home category button's click, i.e. inside `ProcessTouchEvents`. A second
+finger held on Home had pointer data with `pointerPress`/`pointerDrag`; after the swap it is not `Began`,
+so it was never exposed again and its up/endDrag never fired.
+**Notes:** Fixed by reporting every raw finger not Ended/Canceled once as `Canceled` on the frame after
+the swap; uGUI then sends pointerUp/endDrag and removes the pointer data. Not exercised on hardware.
+
+### `SingleTouchInput.Install()` / `Uninstall()` — input swapped inside the module's touch loop
+
+**Status:** Resolved
+**Resolved in:** v0.57.0, correction round 1
+**Category:** Potential Bug
+**Original location:** `TimelineScreenview` Show/StopListening → `Install`/`Uninstall`
+
+> the swap happens mid-iteration of `for (i < input.touchCount)`, so the remaining iterations mix two
+> touch sources in one pass
+
+**Notes:** Install/Uninstall now only record intent; the swap happens in `LateUpdate`, after
+`EventSystem.Update`. A missing event system or module, previously a silent null, now logs at `LogError`.
+
+### Test coverage of the install-time cancel path
+
+**Status:** Open
+**Category:** Other
+
+> SelfCheck covers only Select; the cancel path in LateUpdate/Refresh has no check, and no run held a
+> finger across the swap
+
+**Notes:** Needs real touch hardware: the pipeline cannot inject touches here (legacy Input Manager).

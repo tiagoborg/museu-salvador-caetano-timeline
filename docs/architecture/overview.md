@@ -497,6 +497,13 @@ category, so an image-less card opened on the category's first image.)
     - A reused card's `Bind` cancels and releases whatever it held before binding.
 - **No interaction:** a drag anywhere on a card, the photo included, pans the timeline. The photo area
   has no graphic of its own, so nothing on it is a raycast target.
+- **Single touch only:** while the timeline is shown, `SingleTouchInput` (a `BaseInput`) is the event
+  system module's `inputOverride`. It exposes only the first finger to touch down, until it lifts;
+  every other finger is ignored, including one still held when the first lifts, and the mouse reads as
+  absent while any finger is down. `TimelineScreenview` installs it in `Show` and removes it in
+  `StopListening` (Hide/OnDisable/OnDestroy); the swap takes effect in `LateUpdate`, and fingers already
+  down at install are reported once as cancelled so Home's pressed state is released. Other screens keep
+  Unity's default multi-touch. A missing event system is logged at `LogError`.
 - **Indicator:** bounded. A gallery of 2 to `maxIndicatorDots` (default 5) images gets one dot each.
   A larger one gets a single `current / total` counter, and no dots. The dots and the counter are built
   once per card and only shown, hidden and repositioned by each `Bind`. A single image and an empty

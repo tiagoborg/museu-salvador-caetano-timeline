@@ -94,6 +94,8 @@ public class TimelineScreenview : ScreenView
     private int[] _pendingCategories;
     private bool _built;
     private bool _listening;
+    // Installed while shown, alongside the listeners; null when no event system was found.
+    private SingleTouchInput _singleTouch;
     private bool _contentValidated;
     private readonly HashSet<string> _reportedOverflow = new HashSet<string>();
 
@@ -177,6 +179,8 @@ public class TimelineScreenview : ScreenView
         {
             backButton.onClick.AddListener(OnBackButtonClicked);
             Core.LanguageChangedEvent += OnLanguageChanged;
+            // Simultaneous touches are not supported here: only the first finger reaches the UI.
+            _singleTouch = SingleTouchInput.Install();
             _listening = true;
         }
 
@@ -232,6 +236,9 @@ public class TimelineScreenview : ScreenView
         if (backButton != null)
             backButton.onClick.RemoveListener(OnBackButtonClicked);
         Core.LanguageChangedEvent -= OnLanguageChanged;
+        if (_singleTouch != null)
+            _singleTouch.Uninstall();
+        _singleTouch = null;
         _listening = false;
     }
 
