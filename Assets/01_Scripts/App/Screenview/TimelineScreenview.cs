@@ -5,6 +5,8 @@ using EnigmaVirtual.Screens.Navigation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Lease = TimelineTextureCache.Lease;
+using Ticket = TimelineTextureCache.Ticket;
 
 /// <summary>
 /// The horizontal timeline. Every decade from 1920 to the last one in the complete content is on
@@ -106,6 +108,28 @@ public class TimelineScreenview : ScreenView
     private RectTransform _footer;
     private TextMeshProUGUI _header;
     private TextMeshProUGUI _measure;
+    private RectTransform _scrollHint;
+
+    private RectTransform _galleryOverlay;
+    private RectTransform _galleryViewport;
+    private RectTransform _galleryContent;
+    private ScrollRect _galleryScroll;
+    private TextMeshProUGUI _galleryCounter;
+    private readonly List<GalleryPage> _galleryPages = new List<GalleryPage>();
+    private int _galleryCurrentPage;
+    private int _galleryGeneration;
+    private bool _galleryOpen;
+
+    private sealed class GalleryPage
+    {
+        public string url;
+        public RawImage image;
+        public AspectRatioFitter fitter;
+        public Lease lease;
+        public Ticket ticket;
+        public bool loading;
+        public bool failed;
+    }
 
     private TimelineTextureCache _textureCache;
     private float _nextReconcile;
@@ -196,6 +220,7 @@ public class TimelineScreenview : ScreenView
     public override void Hide()
     {
         StopListening();
+        CloseImageGallery(false);
 
         // Hide only fades the screen, so without this every card's slideshow kept running - and loading
         // textures - while invisible. Releasing first cancels queued loads and frees every lease.
@@ -211,12 +236,14 @@ public class TimelineScreenview : ScreenView
         // Deactivated without Hide: cancel every request and free every lease. On reactivation LateUpdate
         // marks the cards in view again; Show re-adds the listeners.
         StopListening();
+        CloseImageGallery(false);
         ReleaseCards(false);
     }
 
     private void OnDestroy()
     {
         StopListening();
+        CloseImageGallery(false);
 
         // Consumers first, so no RawImage still shows a texture the cache is about to destroy.
         ReleaseCards(false);
@@ -244,11 +271,18 @@ public class TimelineScreenview : ScreenView
 
     private void OnBackButtonClicked()
     {
+        if (_galleryOpen)
+        {
+            CloseImageGallery();
+            return;
+        }
+
         Controller.NavigateTo(new NavigationItem(ScreenType.Home));
     }
 
     private void OnLanguageChanged()
     {
+        CloseImageGallery(false);
         // Card widths depend on the rendered text, so a language change is a relayout.
         RefreshLabels();
         Rebuild(false);
@@ -311,6 +345,10 @@ public class TimelineScreenview : ScreenView
         _scroll.movementType = ScrollRect.MovementType.Elastic;
         _scroll.inertia = true;
 
+        // Sits above the scrolling content but before fixed screen chrome, which is added below. The
+        // header, footer and back control therefore stay visible over the dimmed timeline.
+        BuildGalleryOverlay();
+
         // Header: a short rule from the left edge, then the title. Drawn over the scroll area.
         Image rule = TimelineUi.MakeImage(transform, "Header Rule", null, style.lineColor, false);
         TimelineUi.TopLeft(rule.rectTransform, 0f, headerY - lineWidth * 0.5f, 110f, lineWidth);
@@ -357,14 +395,14 @@ public class TimelineScreenview : ScreenView
     /// <summary>The decorative double arrow, top right. Not interactive.</summary>
     private void BuildScrollHint()
     {
-        RectTransform hint = TimelineUi.Rect(transform, "Scroll Hint");
-        hint.anchorMin = hint.anchorMax = hint.pivot = new Vector2(1f, 1f);
-        hint.anchoredPosition = new Vector2(-60f, -(headerY - scrollHintSize.y * 0.5f));
-        hint.sizeDelta = scrollHintSize;
+        _scrollHint = TimelineUi.Rect(transform, "Scroll Hint");
+        _scrollHint.anchorMin = _scrollHint.anchorMax = _scrollHint.pivot = new Vector2(1f, 1f);
+        _scrollHint.anchoredPosition = new Vector2(-60f, -(headerY - scrollHintSize.y * 0.5f));
+        _scrollHint.sizeDelta = scrollHintSize;
 
         if (scrollHintSprite != null)
         {
-            Image image = TimelineUi.MakeImage(hint, "Image", scrollHintSprite, style.textColor, false);
+            Image image = TimelineUi.MakeImage(_scrollHint, "Image", scrollHintSprite, style.textColor, false);
             image.preserveAspect = true;
             TimelineUi.Stretch(image.rectTransform);
             return;
@@ -376,7 +414,7 @@ public class TimelineScreenview : ScreenView
         // Two copies of the left-pointing arrow, the right one mirrored, meeting in the middle.
         for (int side = 0; side < 2; side++)
         {
-            Image arrow = TimelineUi.MakeImage(hint, side == 0 ? "Left" : "Right", style.arrowSprite, style.textColor, false);
+            Image arrow = TimelineUi.MakeImage(_scrollHint, side == 0 ? "Left" : "Right", style.arrowSprite, style.textColor, false);
             arrow.preserveAspect = true;
             RectTransform rt = arrow.rectTransform;
             rt.anchorMin = new Vector2(side * 0.5f, 0f);
@@ -387,6 +425,243 @@ public class TimelineScreenview : ScreenView
             if (side == 1)
                 rt.localScale = new Vector3(-1f, 1f, 1f);
         }
+    }
+
+    private void BuildGalleryOverlay()
+    {
+        // This transparent full-screen graphic blocks taps from reaching the timeline. The backdrop fills
+        // the whole screen; OpenImageGallery raises this overlay above the timeline chrome.
+        Image blocker = TimelineUi.MakeImage(transform, "Image Gallery Overlay", null, Color.clear, true);
+        _galleryOverlay = blocker.rectTransform;
+        TimelineUi.Stretch(_galleryOverlay);
+        _galleryOverlay.gameObject.SetActive(false);
+
+        Color veil = style.backgroundColor;
+        veil.a = 0.92f;
+        Image panel = TimelineUi.MakeImage(_galleryOverlay, "Gallery Backdrop", null, veil, false);
+        TimelineUi.Stretch(panel.rectTransform);
+
+        Image viewportImage = TimelineUi.MakeImage(_galleryOverlay, "Gallery Viewport", null, Color.clear, true);
+        _galleryViewport = viewportImage.rectTransform;
+        _galleryViewport.anchorMin = new Vector2(0.12f, 0.125f);
+        _galleryViewport.anchorMax = new Vector2(0.88f, 0.875f);
+        _galleryViewport.pivot = new Vector2(0.5f, 0.5f);
+        _galleryViewport.anchoredPosition = Vector2.zero;
+        _galleryViewport.sizeDelta = Vector2.zero;
+        _galleryViewport.gameObject.AddComponent<RectMask2D>();
+
+        _galleryContent = TimelineUi.Rect(_galleryViewport, "Gallery Images");
+        _galleryContent.anchorMin = _galleryContent.anchorMax = new Vector2(0f, 1f);
+        _galleryContent.pivot = new Vector2(0f, 1f);
+        _galleryContent.anchoredPosition = Vector2.zero;
+        _galleryContent.sizeDelta = Vector2.zero;
+
+        _galleryScroll = _galleryViewport.gameObject.AddComponent<ScrollRect>();
+        _galleryScroll.viewport = _galleryViewport;
+        _galleryScroll.content = _galleryContent;
+        _galleryScroll.horizontal = true;
+        _galleryScroll.vertical = false;
+        _galleryScroll.movementType = ScrollRect.MovementType.Clamped;
+        _galleryScroll.inertia = true;
+        _galleryScroll.scrollSensitivity = 40f;
+        _galleryScroll.onValueChanged.AddListener(OnGalleryScrolled);
+
+        _galleryCounter = TimelineUi.MakeText(_galleryOverlay, "Gallery Counter", style.boldFont, 16f,
+            style.textColor, TextAlignmentOptions.Center);
+        RectTransform counterRect = _galleryCounter.rectTransform;
+        counterRect.anchorMin = new Vector2(0.08f, 0.1f);
+        counterRect.anchorMax = new Vector2(0.92f, 0.1f);
+        counterRect.pivot = new Vector2(0.5f, 0.5f);
+        counterRect.anchoredPosition = Vector2.zero;
+        counterRect.sizeDelta = new Vector2(0f, 32f);
+        _galleryCounter.textWrappingMode = TextWrappingModes.NoWrap;
+        _galleryCounter.gameObject.SetActive(false);
+    }
+
+    private void OpenImageGallery(List<string> gallery, int startSlide)
+    {
+        if (!_built || _galleryOpen || gallery == null || gallery.Count == 0 || _textureCache == null)
+            return;
+
+        List<string> images = new List<string>();
+        HashSet<string> seen = new HashSet<string>(System.StringComparer.Ordinal);
+        foreach (string url in gallery)
+            if (TimelineLayout.IsImageUrl(url) && seen.Add(url))
+                images.Add(url);
+
+        if (images.Count == 0)
+            return;
+
+        _galleryOpen = true;
+        _galleryGeneration++;
+        _galleryCurrentPage = Mathf.Clamp(startSlide, 0, images.Count - 1);
+        _galleryOverlay.gameObject.SetActive(true);
+        _galleryOverlay.SetAsLastSibling();
+        // The overlay covers every screen element; keep only the timeline back control above it so it
+        // remains available as the gallery's close button.
+        if (backButton != null)
+            backButton.transform.SetAsLastSibling();
+        if (_scrollHint != null)
+            _scrollHint.gameObject.SetActive(false);
+        foreach (TextMeshProUGUI label in _footerLabels.Values)
+        {
+            Button toggle = label.GetComponent<Button>();
+            if (toggle != null)
+                toggle.interactable = false;
+        }
+
+        _scroll.StopMovement();
+        _scroll.enabled = false;
+        foreach (EventSlot slot in _slots)
+            if (slot.view != null)
+                slot.view.SetPaused(true);
+
+        float pageWidth = _galleryViewport.rect.width;
+        float pageHeight = _galleryViewport.rect.height;
+        _galleryContent.sizeDelta = new Vector2(pageWidth * images.Count, pageHeight);
+        for (int i = 0; i < images.Count; i++)
+        {
+            RectTransform pageRect = TimelineUi.Rect(_galleryContent, "Image " + (i + 1));
+            pageRect.anchorMin = pageRect.anchorMax = new Vector2(0f, 1f);
+            pageRect.pivot = new Vector2(0f, 1f);
+            pageRect.anchoredPosition = new Vector2(i * pageWidth, 0f);
+            pageRect.sizeDelta = new Vector2(pageWidth, pageHeight);
+
+            RawImage image = TimelineUi.Rect(pageRect, "Photo").gameObject.AddComponent<RawImage>();
+            TimelineUi.Stretch(image.rectTransform);
+            image.raycastTarget = false;
+            image.enabled = false;
+            AspectRatioFitter fitter = image.gameObject.AddComponent<AspectRatioFitter>();
+            fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+
+            _galleryPages.Add(new GalleryPage { url = images[i], image = image, fitter = fitter });
+        }
+
+        _galleryContent.anchoredPosition = new Vector2(-_galleryCurrentPage * pageWidth, 0f);
+        _galleryCounter.text = (_galleryCurrentPage + 1) + " / " + _galleryPages.Count;
+        _galleryCounter.gameObject.SetActive(_galleryPages.Count > 1);
+        _galleryScroll.StopMovement();
+        RequestNearbyGalleryImages();
+    }
+
+    private void CloseImageGallery(bool resumeTimeline = true)
+    {
+        if (!_galleryOpen)
+            return;
+
+        _galleryOpen = false;
+        _galleryGeneration++;
+        _galleryScroll.StopMovement();
+        foreach (GalleryPage page in _galleryPages)
+        {
+            ReleaseGalleryPage(page);
+            if (page.image != null)
+                Destroy(page.image.transform.parent.gameObject);
+        }
+        _galleryPages.Clear();
+        _galleryContent.sizeDelta = Vector2.zero;
+        _galleryContent.anchoredPosition = Vector2.zero;
+        _galleryCounter.gameObject.SetActive(false);
+        _galleryOverlay.gameObject.SetActive(false);
+        if (_scrollHint != null)
+            _scrollHint.gameObject.SetActive(true);
+
+        foreach (EventSlot slot in _slots)
+            if (slot.view != null)
+                slot.view.SetPaused(false);
+
+        _scroll.enabled = true;
+        foreach (TextMeshProUGUI label in _footerLabels.Values)
+        {
+            Button toggle = label.GetComponent<Button>();
+            if (toggle != null)
+                toggle.interactable = true;
+        }
+
+        if (resumeTimeline && _cards != null && _cards.gameObject.activeSelf && _slots.Count > 0)
+            UpdateVisibility();
+    }
+
+    private void OnGalleryScrolled(Vector2 position)
+    {
+        if (!_galleryOpen || _galleryPages.Count == 0)
+            return;
+
+        float pageWidth = _galleryViewport.rect.width;
+        if (pageWidth <= 0f)
+            return;
+
+        int page = Mathf.Clamp(Mathf.RoundToInt(-_galleryContent.anchoredPosition.x / pageWidth), 0,
+            _galleryPages.Count - 1);
+        if (page == _galleryCurrentPage)
+            return;
+
+        _galleryCurrentPage = page;
+        _galleryCounter.text = (page + 1) + " / " + _galleryPages.Count;
+        RequestNearbyGalleryImages();
+    }
+
+    private void RequestNearbyGalleryImages()
+    {
+        for (int i = 0; i < _galleryPages.Count; i++)
+        {
+            GalleryPage page = _galleryPages[i];
+            if (Mathf.Abs(i - _galleryCurrentPage) <= 1)
+            {
+                if (page.lease == null && !page.loading && !page.failed)
+                    RequestGalleryPage(page);
+            }
+            else
+            {
+                ReleaseGalleryPage(page);
+            }
+        }
+    }
+
+    private void RequestGalleryPage(GalleryPage page)
+    {
+        int generation = _galleryGeneration;
+        page.loading = true;
+        Ticket ticket = _textureCache.Request(page.url, TimelineTextureCache.Priority.Visible, lease =>
+        {
+            page.ticket = null;
+            page.loading = false;
+            if (!_galleryOpen || generation != _galleryGeneration)
+            {
+                lease?.Dispose();
+                return;
+            }
+
+            Texture2D texture = lease != null ? lease.Texture : null;
+            if (texture == null)
+            {
+                lease?.Dispose();
+                page.failed = true;
+                Development.LogWarning($"Timeline image gallery: could not display [{page.url}].");
+                return;
+            }
+
+            page.image.texture = texture;
+            page.fitter.aspectRatio = texture.height > 0 ? (float)texture.width / texture.height : 1f;
+            page.image.enabled = true;
+            page.lease = lease;
+        });
+
+        // The cache may invoke the callback synchronously for an already loaded image.
+        if (page.loading)
+            page.ticket = ticket;
+    }
+
+    private static void ReleaseGalleryPage(GalleryPage page)
+    {
+        page.ticket?.Cancel();
+        page.ticket = null;
+        page.loading = false;
+        page.image.texture = null;
+        page.image.enabled = false;
+        page.lease?.Dispose();
+        page.lease = null;
+        page.failed = false;
     }
 
     private void BuildFooter()
@@ -621,8 +896,11 @@ public class TimelineScreenview : ScreenView
 
     private void LateUpdate()
     {
+        if (_galleryOpen && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace)))
+            CloseImageGallery();
+
         // Hidden: Hide released the cards and they stay out of view until the next Show rebuilds them.
-        if (_cards != null && _cards.gameObject.activeSelf && _slots.Count > 0)
+        if (!_galleryOpen && _cards != null && _cards.gameObject.activeSelf && _slots.Count > 0)
             UpdateVisibility();
 
         // Also while hidden but active: the retained unpinned textures must fit the budget too. A texture's
@@ -686,6 +964,7 @@ public class TimelineScreenview : ScreenView
         // Active before Bind: the tag is measured with TMP. Bind releases anything the view still held.
         view.gameObject.SetActive(true);
         view.MoveTo(slot.x, slot.y);
+        view.ImageClicked = OpenImageGallery;
         view.Bind(slot.item, slot.categoryName, slot.gallery, slot.fontSize, slot.retainedSlide);
         view.SetVisible(true);
         slot.view = view;

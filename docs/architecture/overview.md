@@ -414,6 +414,10 @@ during screen fades.
   the same category remain separate.
 - Images sit at the bottom in a decade's first column and on top in its second, alternating, and the
   count restarts in each decade.
+- Clicking a displayed card image opens a full-screen dimmed overlay above the timeline UI. The selected item's full
+  gallery scrolls horizontally through centered images inside a viewport 75% of the screen height;
+  the current image fits without cropping. The timeline back control stays above the overlay and
+  dismisses it.
 - A card's `Body` is an invisible raycast area over the whole card, so a drag outside the photo pans
   the timeline. Only the card's **text section** and the category **tag** are filled with
   `TimelineStyle.backgroundColor` (`#191919`), so the axis lines never show through them.
@@ -494,7 +498,10 @@ the category's first image.)
     `slideIntervalMin` and `slideIntervalMax` (default 4–8 s, unscaled time), so cards change out of
     step. A gap longer than one interval, such as a pause, restarts the timer rather than skipping
     several slides at once.
-  - **Lifecycle:** the card's `Update` runs only for a visible cycling gallery.
+  - **Lifecycle:** only visible cards remain active. `Update` advances slides only for a cycling gallery;
+    a visible single-image card stays enabled to receive image clicks, and its `Update` returns immediately.
+    Opening the detail viewer pauses card slideshows and fades while retaining their displayed texture
+    leases, so the timeline remains visible underneath. Closing it resumes the remaining slide/fade timing.
     - **Rebuild** (a filter or language change) returns every card to the pool, recomputes the
       layout, and binds cards only for the events in view. Slides restart from each event's own
       image.
@@ -502,8 +509,8 @@ the category's first image.)
     - **`OnDisable` / `OnDestroy`** release every card in place, because Unity refuses `SetActive`
       while the screen itself is being deactivated. On reactivation the cards in view load again.
     - A reused card's `Bind` cancels and releases whatever it held before binding.
-- **No interaction:** a drag anywhere on a card, the photo included, pans the timeline. The photo area
-  has no graphic of its own, so nothing on it is a raycast target.
+- **Card interaction:** clicking a displayed photo opens its event gallery. The photo layers have no
+  raycast targets of their own; the invisible `Body` routes clicks to the card and drags to the timeline.
 - **Single touch only:** while the timeline is shown, `SingleTouchInput` (a `BaseInput`) is the event
   system module's `inputOverride`. It exposes only the first finger to touch down, until it lifts;
   every other finger is ignored, including one still held when the first lifts, and the mouse reads as

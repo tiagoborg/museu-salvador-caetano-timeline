@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EnigmaVirtual;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Lease = TimelineTextureCache.Lease;
 using Ticket = TimelineTextureCache.Ticket;
@@ -54,7 +55,7 @@ public class TimelineCardMetrics
 }
 
 /// <summary>
-/// One timeline event: category tag, year, text, and the category's image gallery.
+/// One timeline card: category tag, year, text, and its image gallery.
 /// Built entirely in code by <see cref="Create"/>; there is no prefab.
 /// </summary>
 /// <remarks>
@@ -63,7 +64,7 @@ public class TimelineCardMetrics
 /// cancels loads, clears the layers and releases every texture lease, keeping the slide on screen so
 /// re-entry resumes it.
 /// </remarks>
-public class TimelineCard : MonoBehaviour
+public class TimelineCard : MonoBehaviour, IPointerClickHandler
 {
     /// <summary>The category tag never grows past this share of the card's width.</summary>
     private const float MaxTagWidthFraction = 0.9f;
@@ -76,6 +77,7 @@ public class TimelineCard : MonoBehaviour
     private RectTransform _tagRect;
     private TextMeshProUGUI _tagText;
     private RectTransform _textSection;
+    private RectTransform _photoArea;
     private TextMeshProUGUI _yearText;
     private TextMeshProUGUI _contentText;
     // Two photo layers for the crossfade; _front is the one showing (or fading in). Each layer holds the
@@ -101,6 +103,7 @@ public class TimelineCard : MonoBehaviour
     private List<string> _gallery = new List<string>();
     private bool _cycles;
     private bool _visible;
+    private bool _paused;
     private bool _disabling;
     // The slide last requested; the one on screen can lag behind it while a texture loads. Kept while
     // out of view, so re-entry resumes it.
@@ -112,8 +115,16 @@ public class TimelineCard : MonoBehaviour
     private Ticket _ticket;
     private Ticket _prefetchTicket;
     private Lease _prefetchLease;
+    private Lease _pausedLease;
+    private int _pausedToken;
+    private int _pausedIndex;
+    private string _pausedUrl;
     private float _interval;
     private float _nextSlide;
+    private float _pausedAt;
+
+    /// <summary>Raised when the visitor clicks the currently displayed photo.</summary>
+    public Action<List<string>, int> ImageClicked;
 
     /// <summary>The slide whose image is on screen, or -1 when none is.</summary>
     public int Slide { get { return _shownSlide; } }
@@ -217,15 +228,15 @@ public class TimelineCard : MonoBehaviour
         // The photo area: a transparent mask holding two RawImages, so one image can crossfade into the
         // next. Each is fitted to the area's full height at its own source aspect, left aligned. A wide
         // image is clipped on the right; a narrow one leaves the area empty on the right, showing
-        // whatever is behind the card. Never centred, never cropped vertically. Not interactive: the area
-        // has no graphic of its own, so a drag here falls through to the Body and pans the timeline.
-        RectTransform photoArea = TimelineUi.Rect(body.transform, "Photo");
-        TimelineUi.TopLeft(photoArea, 0f, imageTop, width, m.ImageHeight);
-        photoArea.gameObject.AddComponent<RectMask2D>();
+        // whatever is behind the card. Never centred, never cropped vertically. Clicks open the detail
+        // gallery; a drag still reaches the ScrollRect and pans the timeline.
+        _photoArea = TimelineUi.Rect(body.transform, "Photo");
+        TimelineUi.TopLeft(_photoArea, 0f, imageTop, width, m.ImageHeight);
+        _photoArea.gameObject.AddComponent<RectMask2D>();
 
         for (int i = 0; i < 2; i++)
         {
-            RawImage layer = TimelineUi.Rect(photoArea, "Texture " + i).gameObject.AddComponent<RawImage>();
+            RawImage layer = TimelineUi.Rect(_photoArea, "Texture " + i).gameObject.AddComponent<RawImage>();
             // Stretched vertically and pinned to the left edge; the fitter sets only the width, from the
             // height, so it follows the holder if the holder is resized.
             RectTransform layerRt = layer.rectTransform;
@@ -245,7 +256,7 @@ public class TimelineCard : MonoBehaviour
         }
 
         // Positioned per fade by BeginStrip; full height, left anchored, no fitter of its own.
-        _strip = TimelineUi.Rect(photoArea, "Texture Strip").gameObject.AddComponent<RawImage>();
+        _strip = TimelineUi.Rect(_photoArea, "Texture Strip").gameObject.AddComponent<RawImage>();
         RectTransform stripRt = _strip.rectTransform;
         stripRt.anchorMin = new Vector2(0f, 0f);
         stripRt.anchorMax = new Vector2(0f, 1f);
@@ -256,6 +267,20 @@ public class TimelineCard : MonoBehaviour
 
         // No slideshow until Bind has a gallery and the screen marks the card visible.
         enabled = false;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData == null || eventData.button != PointerEventData.InputButton.Left
+            || _shownSlide < 0 || _gallery.Count == 0 || ImageClicked == null)
+            return;
+
+        Camera eventCamera = eventData.pressEventCamera;
+        RectTransform visibleImage = _layers[_front].rectTransform;
+        if (visibleImage != null && _layers[_front].enabled
+            && RectTransformUtility.RectangleContainsScreenPoint(_photoArea, eventData.position, eventCamera)
+            && RectTransformUtility.RectangleContainsScreenPoint(visibleImage, eventData.position, eventCamera))
+            ImageClicked(_gallery, _shownSlide);
     }
 
     /// <summary>
@@ -290,8 +315,8 @@ public class TimelineCard : MonoBehaviour
     /// Binds an event. Safe on a reused card: its requests are cancelled, images cleared and leases
     /// released first, and the indicator reuses the same children. Call while the card is active.
     /// </summary>
-    /// <param name="gallery">The event's own images (<see cref="TimelineLayout.Gallery"/>); empty shows no
-    /// photo and no indicator. Not modified.</param>
+    /// <param name="gallery">The event's images (<see cref="TimelineLayout.Gallery"/>), or the merged
+    /// images of a combined card; empty shows no photo and no indicator. Not modified.</param>
     /// <param name="initialSlide">The slide to open on, e.g. the one retained when the event left view;
     /// -1 for the first image.</param>
     public void Bind(TimelineItemVO item, string categoryName, List<string> gallery, float contentFontSize,
@@ -340,6 +365,35 @@ public class TimelineCard : MonoBehaviour
             ReleaseImages();
     }
 
+    /// <summary>Pauses slideshow timing and fades without releasing the currently displayed image.</summary>
+    internal void SetPaused(bool paused)
+    {
+        if (paused == _paused)
+            return;
+
+        if (paused)
+        {
+            _paused = true;
+            _pausedAt = Time.unscaledTime;
+            return;
+        }
+
+        float pausedDuration = Mathf.Max(0f, Time.unscaledTime - _pausedAt);
+        _paused = false;
+        _nextSlide += pausedDuration;
+        if (_fading)
+            _fadeStart += pausedDuration;
+
+        Lease pending = _pausedLease;
+        int token = _pausedToken;
+        int index = _pausedIndex;
+        string url = _pausedUrl;
+        _pausedLease = null;
+        _pausedUrl = null;
+        if (pending != null)
+            OnTexture(token, index, url, pending);
+    }
+
     /// <summary>Out of view for good: before a rebuild destroys the card, or when the screen hides. Idempotent.</summary>
     public void Release()
     {
@@ -350,12 +404,17 @@ public class TimelineCard : MonoBehaviour
     private void Enter()
     {
         _nextSlide = Time.unscaledTime + _interval;
-        enabled = _cycles;
+        // A single-image card has no slideshow to advance, but this component also handles its image
+        // click. Keep it enabled while an image exists so the detail gallery remains clickable.
+        enabled = _gallery.Count > 0;
         RequestSlide(_slide);
     }
 
     private void Update()
     {
+        if (_paused || !_cycles)
+            return;
+
         // A running fade or a load in flight holds the next slide back: the current image stays until its
         // successor is on screen. The overdue advance happens afterwards, once.
         if (_fading)
@@ -387,6 +446,7 @@ public class TimelineCard : MonoBehaviour
     /// <summary>Cancels requests, clears both layers and the strip, then releases every lease. Idempotent.</summary>
     private void ReleaseImages()
     {
+        _paused = false;
         if (_shownSlide >= 0)
             _slide = _shownSlide;
 
@@ -394,6 +454,7 @@ public class TimelineCard : MonoBehaviour
         _ticket?.Cancel();
         _ticket = null;
         ClearPrefetch();
+        ClearPausedImage();
         ResetLayers();
 
         // Stopping the slideshow is not leaving view: keep OnDisable from treating it as deactivation.
@@ -506,6 +567,16 @@ public class TimelineCard : MonoBehaviour
             return;
         }
 
+        if (_paused)
+        {
+            ClearPausedImage();
+            _pausedLease = lease;
+            _pausedToken = token;
+            _pausedIndex = index;
+            _pausedUrl = url;
+            return;
+        }
+
         if (_fading)
             ApplyFade(float.MaxValue);
 
@@ -547,6 +618,13 @@ public class TimelineCard : MonoBehaviour
         _leases[layer] = lease;
         if (old != null && old != lease)
             old.Dispose();
+    }
+
+    private void ClearPausedImage()
+    {
+        _pausedLease?.Dispose();
+        _pausedLease = null;
+        _pausedUrl = null;
     }
 
     /// <summary>
