@@ -551,13 +551,17 @@ public class TimelineScreenview : ScreenView
         {
             DrawBoundary(x, decade);
 
-            List<TimelineItemVO> items = TimelineLayout.ItemsInDecade(all, decade, _activeCategories);
+            List<TimelineItemVO> decadeItems = TimelineLayout.ItemsInDecade(all, decade, _activeCategories);
+            List<TimelineLayout.DisplayItem> items = TimelineLayout.MergeSameYearAndContent(decadeItems,
+                item => TimelineUi.Localized(item.content), categoryId =>
+                    categories.TryGetValue(categoryId, out CategoryVO category)
+                        ? TimelineUi.Localized(category.name) : string.Empty);
             List<TimelineLayout.CardFit> fits = new List<TimelineLayout.CardFit>(items.Count);
             columnWidths.Clear();
 
             for (int i = 0; i < items.Count; i++)
             {
-                TimelineLayout.CardFit fit = Fit(items[i]);
+                TimelineLayout.CardFit fit = Fit(items[i].item);
                 fits.Add(fit);
 
                 float width = fit.wide ? card.wideWidth : card.narrowWidth;
@@ -573,15 +577,14 @@ public class TimelineScreenview : ScreenView
             {
                 for (; i < items.Count && TimelineLayout.ColumnOf(i) == column; i++)
                 {
-                    TimelineItemVO item = items[i];
+                    TimelineLayout.DisplayItem displayItem = items[i];
                     float y = firstRowTop + TimelineLayout.RowOf(i) * rowPitch;
 
                     _slots.Add(new EventSlot
                     {
-                        item = item,
-                        categoryName = categories.TryGetValue(item.categoryId, out CategoryVO category)
-                            ? TimelineUi.Localized(category.name) : string.Empty,
-                        gallery = TimelineLayout.Gallery(item),
+                        item = displayItem.item,
+                        categoryName = displayItem.categoryName,
+                        gallery = displayItem.gallery,
                         x = columnX,
                         y = y,
                         fontSize = fits[i].fontSize,

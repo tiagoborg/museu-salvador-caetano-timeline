@@ -86,6 +86,116 @@ public static class TimelineLayout
         return result;
     }
 
+    public struct DisplayItem
+    {
+        public TimelineItemVO item;
+        public string categoryName;
+        public List<string> gallery;
+    }
+
+    /// <summary>
+    /// Combines same-year items with identical displayed text when they belong to different categories.
+    /// Their category labels and supported image URLs are joined in item order; URLs appear once.
+    /// </summary>
+    public static List<DisplayItem> MergeSameYearAndContent(IList<TimelineItemVO> items,
+        Func<TimelineItemVO, string> contentOf, Func<int, string> categoryNameOf)
+    {
+        List<DisplayItem> result = new List<DisplayItem>();
+        if (items == null || contentOf == null || categoryNameOf == null)
+            return result;
+
+        Dictionary<int, Dictionary<string, List<TimelineItemVO>>> groupsByYear =
+            new Dictionary<int, Dictionary<string, List<TimelineItemVO>>>();
+        foreach (TimelineItemVO item in items)
+        {
+            if (item == null)
+                continue;
+
+            string content = contentOf(item) ?? string.Empty;
+            if (!groupsByYear.TryGetValue(item.year, out Dictionary<string, List<TimelineItemVO>> byContent))
+            {
+                byContent = new Dictionary<string, List<TimelineItemVO>>(StringComparer.Ordinal);
+                groupsByYear.Add(item.year, byContent);
+            }
+
+            if (!byContent.TryGetValue(content, out List<TimelineItemVO> group))
+            {
+                group = new List<TimelineItemVO>();
+                byContent.Add(content, group);
+            }
+            group.Add(item);
+        }
+
+        HashSet<TimelineItemVO> emitted = new HashSet<TimelineItemVO>();
+        foreach (TimelineItemVO item in items)
+        {
+            if (item == null || emitted.Contains(item))
+                continue;
+
+            List<TimelineItemVO> group = groupsByYear[item.year][contentOf(item) ?? string.Empty];
+            HashSet<int> groupCategories = new HashSet<int>();
+            foreach (TimelineItemVO groupedItem in group)
+                groupCategories.Add(groupedItem.categoryId);
+
+            // Repeated events in one category remain separate. Pair this event with at most one event
+            // from each other active category; later repetitions can form another cross-category card.
+            if (groupCategories.Count < 2)
+            {
+                emitted.Add(item);
+                result.Add(new DisplayItem
+                {
+                    item = item,
+                    categoryName = categoryNameOf(item.categoryId) ?? string.Empty,
+                    gallery = Gallery(item),
+                });
+                continue;
+            }
+
+            List<string> categoryNames = new List<string>();
+            HashSet<int> namedCategories = new HashSet<int>();
+            List<TimelineItemVO> mergedItems = new List<TimelineItemVO> { item };
+            namedCategories.Add(item.categoryId);
+            foreach (TimelineItemVO groupedItem in group)
+            {
+                if (!emitted.Contains(groupedItem) && namedCategories.Add(groupedItem.categoryId))
+                    mergedItems.Add(groupedItem);
+            }
+
+            if (mergedItems.Count < 2)
+            {
+                emitted.Add(item);
+                result.Add(new DisplayItem
+                {
+                    item = item,
+                    categoryName = categoryNameOf(item.categoryId) ?? string.Empty,
+                    gallery = Gallery(item),
+                });
+                continue;
+            }
+
+            List<string> gallery = new List<string>();
+            HashSet<string> imageUrls = new HashSet<string>(StringComparer.Ordinal);
+            foreach (TimelineItemVO groupedItem in mergedItems)
+            {
+                emitted.Add(groupedItem);
+                categoryNames.Add(categoryNameOf(groupedItem.categoryId) ?? string.Empty);
+
+                foreach (string url in Gallery(groupedItem))
+                    if (imageUrls.Add(url))
+                        gallery.Add(url);
+            }
+
+            result.Add(new DisplayItem
+            {
+                item = item,
+                categoryName = string.Join(", ", categoryNames),
+                gallery = gallery,
+            });
+        }
+
+        return result;
+    }
+
     /// <summary>
     /// The event's own images, in order, keeping only urls of a supported image type (empty, video,
     /// pdf or extension-less urls are skipped, so they are never requested) and identical urls once (a

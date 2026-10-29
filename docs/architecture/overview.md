@@ -408,6 +408,10 @@ during screen fades.
 - A decade with no event in an active category collapses to a narrow strip. All categories off is
   allowed and collapses every decade.
 - Two rows. Items fill top to bottom, then right, ordered by year then id.
+- When active categories have events in the same year with identical localized card text, those events
+  share one card. The tag lists each contributing category name, and the gallery combines their
+  supported image URLs in event order with duplicate URLs shown once. Repeated matching events from
+  the same category remain separate.
 - Images sit at the bottom in a decade's first column and on top in its second, alternating, and the
   count restarts in each decade.
 - A card's `Body` is an invisible raycast area over the whole card, so a drag outside the photo pans
@@ -435,7 +439,9 @@ during screen fades.
   simply disappear, even with every category on.
 
 **Images are per event** (`TimelineLayout.Gallery`): only the event's own `images`, in order, empty
-URLs skipped and identical URLs kept once. Only URLs of a supported image type reach a gallery -
+URLs skipped and identical URLs kept once. When matching events from different categories share a
+card, that card's gallery is the ordered union of those events' images, with duplicate URLs removed.
+Only URLs of a supported image type reach a gallery -
 `.png`, `.jpg`, `.jpeg` (any case), checked by `TimelineLayout.IsImageUrl` through
 `MediaFile.isValidImageFileType` - so a video, PDF, `.webp`, `.gif` or extension-less URL is never
 requested; each one is reported once per screen lifetime at `LogError` (`Timeline: event N (year) lists
@@ -444,9 +450,10 @@ having none. A URL with a query string (`x.jpg?v=2`) is rejected too, because th
 reads the whole string; the live CMS sends none. An event with no images shows no photo and no slide
 indicator. Its slot geometry is unchanged, but its text section always sits at the **top** of the
 slot - on an image-on-top card too (`TimelineCard.PlaceTextSection`) - so it never floats under an
-empty photo area; the transparent photo area is simply left below it. No card
-ever shows another event's image. (Before v0.56.3 the gallery was shared by every event of the
-category, so an image-less card opened on the category's first image.)
+empty photo area; the transparent photo area is simply left below it. A card shows another event's
+images only when those events are merged by matching year and localized text across active categories.
+(Before v0.56.3 the gallery was shared by every event of the category, so an image-less card opened on
+the category's first image.)
 - **Slideshow:** a gallery of two or more advances by itself, one slide at a time, wrapping from the
   last image back to the first.
   - **Crossfade:** each change crossfades over `slideFadeDuration` (default 0.5 s, unscaled; 0 swaps
