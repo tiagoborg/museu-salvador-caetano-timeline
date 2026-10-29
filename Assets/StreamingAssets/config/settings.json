@@ -72,10 +72,10 @@
     },
     "Activity":
     {
-        "isActive": false,
+        "isActive": true,
         "useMouse": true,
         "useKeyBoard": true,
-        "timeOut": 10
+        "timeOut": 120
     },
     "Sockets":
     {
@@ -355,7 +355,7 @@
     },
     "System":
     {
-        "frameRate": "60",
+        "frameRate": "120",
         "doLogs": false,
         "mouseVisibility": true,
         "showImageDownloadError": true,
