@@ -417,7 +417,7 @@ during screen fades.
 - Clicking a displayed card image opens a full-screen dimmed overlay above the timeline UI. The selected item's full
   gallery scrolls horizontally through centered images inside a viewport 75% of the screen height;
   the current image fits without cropping. The timeline back control stays above the overlay and
-  dismisses it.
+  dismisses it. Clicking the backdrop outside the displayed image also dismisses the gallery.
 - A card's `Body` is an invisible raycast area over the whole card, so a drag outside the photo pans
   the timeline. Only the card's **text section** and the category **tag** are filled with
   `TimelineStyle.backgroundColor` (`#191919`), so the axis lines never show through them.

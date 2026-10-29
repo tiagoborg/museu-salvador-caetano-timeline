@@ -4,6 +4,7 @@ using EnigmaVirtual.Screens;
 using EnigmaVirtual.Screens.Navigation;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Lease = TimelineTextureCache.Lease;
 using Ticket = TimelineTextureCache.Ticket;
@@ -434,6 +435,10 @@ public class TimelineScreenview : ScreenView
         Image blocker = TimelineUi.MakeImage(transform, "Image Gallery Overlay", null, Color.clear, true);
         _galleryOverlay = blocker.rectTransform;
         TimelineUi.Stretch(_galleryOverlay);
+        EventTrigger trigger = blocker.gameObject.AddComponent<EventTrigger>();
+        EventTrigger.Entry backdropClick = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
+        backdropClick.callback.AddListener(OnGalleryBackdropClicked);
+        trigger.triggers.Add(backdropClick);
         _galleryOverlay.gameObject.SetActive(false);
 
         Color veil = style.backgroundColor;
@@ -599,6 +604,29 @@ public class TimelineScreenview : ScreenView
         _galleryCurrentPage = page;
         _galleryCounter.text = (page + 1) + " / " + _galleryPages.Count;
         RequestNearbyGalleryImages();
+    }
+
+    private void OnGalleryBackdropClicked(BaseEventData eventData)
+    {
+        PointerEventData pointer = eventData as PointerEventData;
+        if (!_galleryOpen || pointer == null || pointer.button != PointerEventData.InputButton.Left)
+            return;
+
+        Camera eventCamera = pointer.pressEventCamera;
+        if (RectTransformUtility.RectangleContainsScreenPoint(_galleryViewport, pointer.position, eventCamera))
+        {
+            // The viewport includes letterboxed margins; only a tap on the actual displayed image should
+            // leave the gallery open. A tap on its surrounding backdrop dismisses it like the back arrow.
+            foreach (GalleryPage page in _galleryPages)
+            {
+                if (page.image != null && page.image.enabled && page.image.texture != null
+                    && RectTransformUtility.RectangleContainsScreenPoint(page.image.rectTransform,
+                        pointer.position, eventCamera))
+                    return;
+            }
+        }
+
+        CloseImageGallery();
     }
 
     private void RequestNearbyGalleryImages()
