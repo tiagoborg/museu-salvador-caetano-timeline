@@ -116,6 +116,10 @@ public class TimelineScreenview : ScreenView
     private RectTransform _galleryContent;
     private ScrollRect _galleryScroll;
     private TextMeshProUGUI _galleryCounter;
+    private Button _galleryPreviousButton;
+    private Button _galleryNextButton;
+    private Image _galleryPreviousArrow;
+    private Image _galleryNextArrow;
     private readonly List<GalleryPage> _galleryPages = new List<GalleryPage>();
     private int _galleryCurrentPage;
     private int _galleryGeneration;
@@ -481,6 +485,40 @@ public class TimelineScreenview : ScreenView
         counterRect.sizeDelta = new Vector2(0f, 32f);
         _galleryCounter.textWrappingMode = TextWrappingModes.NoWrap;
         _galleryCounter.gameObject.SetActive(false);
+
+        _galleryPreviousButton = BuildGalleryArrowButton("Previous Image", false, out _galleryPreviousArrow);
+        _galleryNextButton = BuildGalleryArrowButton("Next Image", true, out _galleryNextArrow);
+    }
+
+    private Button BuildGalleryArrowButton(string buttonName, bool pointsRight, out Image arrow)
+    {
+        arrow = null;
+        Image hitArea = TimelineUi.MakeImage(_galleryOverlay, buttonName, null, Color.clear, true);
+        hitArea.raycastPadding = new Vector4(-8f, -8f, -8f, -8f);
+        RectTransform buttonRect = hitArea.rectTransform;
+        float side = pointsRight ? 0.94f : 0.06f;
+        buttonRect.anchorMin = buttonRect.anchorMax = buttonRect.pivot = new Vector2(side, 0.5f);
+        buttonRect.anchoredPosition = Vector2.zero;
+        buttonRect.sizeDelta = new Vector2(80f, 80f);
+
+        if (style.arrowSprite != null)
+        {
+            arrow = TimelineUi.MakeImage(hitArea.transform, "Arrow", style.arrowSprite, style.textColor, false);
+            arrow.preserveAspect = true;
+            RectTransform arrowRect = arrow.rectTransform;
+            arrowRect.anchorMin = arrowRect.anchorMax = arrowRect.pivot = new Vector2(0.5f, 0.5f);
+            arrowRect.sizeDelta = new Vector2(32f, 32f);
+            if (pointsRight)
+                arrowRect.localScale = new Vector3(-1f, 1f, 1f);
+        }
+
+        Button button = hitArea.gameObject.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = hitArea;
+        button.interactable = false;
+        button.onClick.AddListener(() => NavigateGallery(pointsRight ? 1 : -1));
+        hitArea.gameObject.SetActive(false);
+        return button;
     }
 
     private void OpenImageGallery(List<string> gallery, int startSlide)
@@ -545,6 +583,10 @@ public class TimelineScreenview : ScreenView
         _galleryContent.anchoredPosition = new Vector2(-_galleryCurrentPage * pageWidth, 0f);
         _galleryCounter.text = (_galleryCurrentPage + 1) + " / " + _galleryPages.Count;
         _galleryCounter.gameObject.SetActive(_galleryPages.Count > 1);
+        bool canNavigate = _galleryPages.Count > 1;
+        _galleryPreviousButton.gameObject.SetActive(canNavigate);
+        _galleryNextButton.gameObject.SetActive(canNavigate);
+        UpdateGalleryArrowState();
         _galleryScroll.StopMovement();
         RequestNearbyGalleryImages();
     }
@@ -567,6 +609,8 @@ public class TimelineScreenview : ScreenView
         _galleryContent.sizeDelta = Vector2.zero;
         _galleryContent.anchoredPosition = Vector2.zero;
         _galleryCounter.gameObject.SetActive(false);
+        _galleryPreviousButton.gameObject.SetActive(false);
+        _galleryNextButton.gameObject.SetActive(false);
         _galleryOverlay.gameObject.SetActive(false);
         if (_scrollHint != null)
             _scrollHint.gameObject.SetActive(true);
@@ -601,9 +645,52 @@ public class TimelineScreenview : ScreenView
         if (page == _galleryCurrentPage)
             return;
 
-        _galleryCurrentPage = page;
-        _galleryCounter.text = (page + 1) + " / " + _galleryPages.Count;
+        SetGalleryPage(page);
+    }
+
+    private void NavigateGallery(int direction)
+    {
+        if (!_galleryOpen || _galleryPages.Count <= 1)
+            return;
+
+        SetGalleryPage(_galleryCurrentPage + direction);
+    }
+
+    private void SetGalleryPage(int page)
+    {
+        if (_galleryPages.Count <= 1)
+            return;
+
+        _galleryCurrentPage = Mathf.Clamp(page, 0, _galleryPages.Count - 1);
+        _galleryScroll.StopMovement();
+        float pageWidth = _galleryViewport.rect.width;
+        if (pageWidth > 0f)
+            _galleryContent.anchoredPosition = new Vector2(-_galleryCurrentPage * pageWidth, 0f);
+
+        _galleryCounter.text = (_galleryCurrentPage + 1) + " / " + _galleryPages.Count;
+        UpdateGalleryArrowState();
         RequestNearbyGalleryImages();
+    }
+
+    private void UpdateGalleryArrowState()
+    {
+        if (_galleryPages.Count <= 1)
+            return;
+
+        _galleryPreviousButton.interactable = _galleryCurrentPage > 0;
+        _galleryNextButton.interactable = _galleryCurrentPage < _galleryPages.Count - 1;
+        SetGalleryArrowAlpha(_galleryPreviousArrow, _galleryPreviousButton.interactable);
+        SetGalleryArrowAlpha(_galleryNextArrow, _galleryNextButton.interactable);
+    }
+
+    private static void SetGalleryArrowAlpha(Image arrow, bool enabled)
+    {
+        if (arrow == null)
+            return;
+
+        Color color = arrow.color;
+        color.a = enabled ? 1f : 0.35f;
+        arrow.color = color;
     }
 
     private void OnGalleryBackdropClicked(BaseEventData eventData)
@@ -613,6 +700,12 @@ public class TimelineScreenview : ScreenView
             return;
 
         Camera eventCamera = pointer.pressEventCamera;
+        if (RectTransformUtility.RectangleContainsScreenPoint(_galleryPreviousButton.transform as RectTransform,
+                pointer.position, eventCamera)
+            || RectTransformUtility.RectangleContainsScreenPoint(_galleryNextButton.transform as RectTransform,
+                pointer.position, eventCamera))
+            return;
+
         if (RectTransformUtility.RectangleContainsScreenPoint(_galleryViewport, pointer.position, eventCamera))
         {
             // The viewport includes letterboxed margins; only a tap on the actual displayed image should
@@ -924,8 +1017,15 @@ public class TimelineScreenview : ScreenView
 
     private void LateUpdate()
     {
-        if (_galleryOpen && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace)))
-            CloseImageGallery();
+        if (_galleryOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
+                CloseImageGallery();
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                NavigateGallery(-1);
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+                NavigateGallery(1);
+        }
 
         // Hidden: Hide released the cards and they stay out of view until the next Show rebuilds them.
         if (!_galleryOpen && _cards != null && _cards.gameObject.activeSelf && _slots.Count > 0)

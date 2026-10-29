@@ -416,7 +416,9 @@ during screen fades.
   count restarts in each decade.
 - Clicking a displayed card image opens a full-screen dimmed overlay above the timeline UI. The selected item's full
   gallery scrolls horizontally through centered images inside a viewport 75% of the screen height;
-  the current image fits without cropping. The timeline back control stays above the overlay and
+  the current image fits without cropping. Multi-image galleries have previous/next arrow controls and
+  support the keyboard arrow keys; the controls dim and disable at the first or last image. The timeline
+  back control stays above the overlay and
   dismisses it. Clicking the backdrop outside the displayed image also dismisses the gallery.
 - A card's `Body` is an invisible raycast area over the whole card, so a drag outside the photo pans
   the timeline. Only the card's **text section** and the category **tag** are filled with
